@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import FloorView from '../basic/floorView'
+import Blueprint from '../basic/blueprint'
 /**
  * 二维坐标系以左上角为原点
  * 三维坐标系以俯视图左上角为原点，Z轴指向屏幕外
@@ -15,7 +15,7 @@ import FloorView from '../basic/floorView'
 export default {
   name: 'ThreeView',
   mounted() {
-    const floorView = new FloorView({
+    const blueprint = new Blueprint({
       container: '#root',
       width: 500,
       height: 500,
@@ -51,7 +51,7 @@ export default {
           realWidth: 7380.99,
           realHeight: 215.98,
           repeatX: {
-            space: [0, 7380.99, 7380.99 * 2],
+            space: 0,
           },
           transfer: {
             x: 0,
@@ -74,7 +74,7 @@ export default {
       ],
     })
 
-    floorView.render()
+    blueprint.render()
   },
 }
 </script>

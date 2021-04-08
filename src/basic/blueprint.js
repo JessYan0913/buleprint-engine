@@ -106,7 +106,7 @@ class Part {
   }
 }
 
-export default class {
+class Blueprint {
   /**
    * 生成平面图
    * @param {*} props
@@ -186,3 +186,5 @@ export default class {
     });
   }
 }
+
+export default Blueprint;
