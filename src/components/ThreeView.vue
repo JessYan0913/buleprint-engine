@@ -27,36 +27,31 @@ export default {
           image: 'structure_1.svg',
           realWidth: 730,
           realHeight: 14050,
-          repeat: {
-            x: {
-              // space: 6300,
-              space: 6300,
-            },
+          repeatX: {
+            space: 6300,
           },
           transfer: {
             x: 0,
             y: 0,
           },
         },
-        // {
-        //   name: 'beam',
-        //   image: 'beam_1.svg',
-        //   realWidth: 1340,
-        //   realHeight: 12845,
-        //   transfer: {
-        //     x: 562,
-        //     y: 562,
-        //   },
-        // },
+        {
+          name: 'beam',
+          image: 'beam_1.svg',
+          realWidth: 1340,
+          realHeight: 12845,
+          transfer: {
+            x: 562,
+            y: 562,
+          },
+        },
         {
           name: 'runwayTop',
           image: 'runway_1.svg',
           realWidth: 7380.99,
           realHeight: 215.98,
-          repeat: {
-            x: {
-              space: 0,
-            },
+          repeatX: {
+            space: [0, 7380.99, 7380.99 * 2],
           },
           transfer: {
             x: 0,
@@ -68,10 +63,8 @@ export default {
           image: 'runway_1.svg',
           realWidth: 7380.99,
           realHeight: 215.98,
-          repeat: {
-            x: {
-              space: 0,
-            },
+          repeatX: {
+            space: 0,
           },
           transfer: {
             x: 0,
