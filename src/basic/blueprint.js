@@ -1,9 +1,7 @@
 import { max, min } from "d3-array";
 import { svg } from "d3-fetch";
 import { select } from "d3-selection";
-import "../assets/structure_1.svg";
-import "../assets/beam_1.svg";
-import "../assets/runway_1.svg";
+import "../assets";
 
 function isArray(o) {
   return Object.prototype.toString.call(o) == "[object Array]";
