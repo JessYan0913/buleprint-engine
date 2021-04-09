@@ -1,5 +1,10 @@
 import { linearSlope, linearDistancePoint } from "./utils/math-util";
 
+const MarkerPosition = {
+  inner: ({ slope, x, y, h }) => linearDistancePoint(slope, x, y, h),
+  outer: ({ slope, x, y, h }) => linearDistancePoint(slope, x, y, -h),
+};
+
 const ArrowType = {
   //线条开始处的箭头，对应 marker-start 属性
   start: {
@@ -51,13 +56,13 @@ class Marker {
       sizeNum,
       start = {},
       end = {},
-      repeat = false,
+      position = "outer",
       scale,
       container,
     } = props;
     this.name = name;
     this.sizeNum = sizeNum;
-    this.repeat = repeat;
+    this.position = MarkerPosition[position];
     this.scale = scale;
     this.container = container;
 
@@ -90,43 +95,25 @@ class Marker {
     });
   }
 
-  extensionLine() {
+  extensionLine(x, y) {
+    const targetPoint = this.position({
+      slope: -1 / this.markerSlope,
+      h: 500 * this.scale,
+      x,
+      y
+    })
     const extensionLineGroup = this.container.append("g");
-    extensionLineGroup.append("line");
+    extensionLineGroup
+      .append("line")
+      .attr("x1", x)
+      .attr("y1", y)
+      .attr("x2", targetPoint.x)
+      .attr("y2", targetPoint.y)
+      .attr("stroke", "red");
   }
 
   render() {
-    const arrowGroup = this.container.append("g");
-
-    const targetPoint1 = linearDistancePoint(
-      -1 / this.markerSlope,
-      this.endX,
-      this.endY,
-      1000 * this.scale
-    );
-    arrowGroup
-      .append("line")
-      .attr("x1", this.endX)
-      .attr("y1", this.endY)
-      .attr("x2", targetPoint1[0])
-      .attr("y2", targetPoint1[1])
-      .attr("stroke", "red");
-    // .attr("marker-end", `url(#${this.endArrowId})`);
-
-    const targetPoint = linearDistancePoint(
-      -1 / this.markerSlope,
-      this.startX,
-      this.startY,
-      1000 * this.scale
-    );
-    arrowGroup
-      .append("line")
-      .attr("x1", this.startX)
-      .attr("y1", this.startY)
-      .attr("x2", targetPoint[0])
-      .attr("y2", targetPoint[1])
-      .attr("stroke", "red");
-    // .attr("marker-end", `url(#${this.endArrowId})`);
+    this.extensionLine(this.startX, this.startY);    
   }
 }
 

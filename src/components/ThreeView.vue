@@ -90,17 +90,18 @@ export default {
             y: 14050,
           },
           type: 'linear',
+          direction: 'outward',
           sizeNum: '223mm',
         },
         {
           name: 'structureMarkerTop',
           start: {
             x: 730,
-            y: 1000,
+            y: 0,
           },
           end: {
-            x: 6300,
-            y: 1000,
+            x: 6300 + 730,
+            y: 0,
           },
           type: 'linear',
           sizeNum: '223mm',
