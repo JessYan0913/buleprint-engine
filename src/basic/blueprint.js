@@ -114,6 +114,7 @@ class Blueprint {
       container,
       width,
       height,
+      margin = { top: 40, left: 40, bottom: 40, right: 40 },
       realWidth,
       realHeight,
       parts = [],
@@ -121,6 +122,7 @@ class Blueprint {
     this.container = container;
     this.width = width;
     this.height = height;
+    this.margin = margin;
     this.realWidth = realWidth;
     this.realHeight = realHeight;
     this.parts = parts || [];
@@ -130,6 +132,13 @@ class Blueprint {
       .attr("style", "background: lightgrey")
       .attr("width", width)
       .attr("height", height);
+
+    this.innerWidth = width - margin.left - margin.right;
+    this.innerHeight = height - margin.top - margin.bottom;
+
+    this.container = this.svg
+      .append("g")
+      .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
 
     const mergeArray = (sourceArr, targetArr) =>
       sourceArr.reduce((pre, cur) => {
@@ -148,7 +157,10 @@ class Blueprint {
 
     const maxrealWidth = max(widths);
     const maxrealHeight = max(heights);
-    this.scale = min([width / maxrealWidth, height / maxrealHeight]);
+    this.scale = min([
+      this.innerWidth / maxrealWidth,
+      this.innerHeight / maxrealHeight,
+    ]);
   }
 
   /**
@@ -158,7 +170,7 @@ class Blueprint {
    * @param {*} transferY
    */
   drawingPart(selection, transferX, transferY) {
-    this.svg
+    this.container
       .append("g")
       .attr("transform", `translate(${transferX} ${transferY})`)
       .append(selection);

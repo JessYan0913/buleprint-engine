@@ -47,7 +47,7 @@ export default {
           realWidth: 1340,
           realHeight: 12845,
           transfer: {
-            x: 562,
+            x: 762,
             y: 562,
           },
         },
@@ -105,8 +105,8 @@ export default {
         {
           name: 'beam',
           image: 'beam_2.svg',
-          realWidth: 1040,
-          realHeight: 745,
+          realWidth: 1340,
+          realHeight: 945,
           transfer: {
             x: 962,
             y: 262,
