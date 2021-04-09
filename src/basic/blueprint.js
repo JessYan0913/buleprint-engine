@@ -7,6 +7,13 @@ function isArray(o) {
   return Object.prototype.toString.call(o) == "[object Array]";
 }
 
+function mergeArray(arr1, arr2) {
+  return arr1.reduce((pre, cur) => {
+    pre.push(cur);
+    return pre;
+  }, arr2);
+}
+
 class Part {
   /**
    * 三视图拼接组件
@@ -139,12 +146,6 @@ class Blueprint {
     this.container = this.svg
       .append("g")
       .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
-
-    const mergeArray = (sourceArr, targetArr) =>
-      sourceArr.reduce((pre, cur) => {
-        pre.push(cur);
-        return pre;
-      }, targetArr);
 
     const widths = mergeArray(
       parts.map((item) => item.width),
