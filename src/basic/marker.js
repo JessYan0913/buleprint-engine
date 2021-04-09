@@ -10,14 +10,14 @@ const ArrowType = {
   start: {
     id: "markerStartArrow",
     path: "M24,2 L2,5 L24,8 L20,5 Z",
-    refX: 6,
+    refX: 4,
     refY: 5,
   },
   //线条结束处的箭头，对应 marker-end 属性
   end: {
     id: "markerEndArrow",
     path: "M2,2 L24,5 L2,8 L6,5 Z",
-    refX: 6,
+    refX: 22,
     refY: 5,
   },
 };
@@ -36,7 +36,7 @@ function arrow(props) {
     .attr("markerUnits", "strokeWidth")
     .attr("markerWidth", size * 4)
     .attr("markerHeight", size)
-    .attr("viewBox", "0 0 12 12")
+    .attr("viewBox", "0 0 24 24")
     .attr("refX", refX)
     .attr("refY", refY)
     .attr("orient", "auto")
@@ -95,25 +95,57 @@ class Marker {
     });
   }
 
-  extensionLine(x, y) {
-    const targetPoint = this.position({
+  calculateTargetPoint(x, y, h = 500) {
+    return this.position({
       slope: -1 / this.markerSlope,
-      h: 500 * this.scale,
+      h: h * this.scale,
       x,
-      y
-    })
-    const extensionLineGroup = this.container.append("g");
-    extensionLineGroup
+      y,
+    });
+  }
+
+  drawingLine(container, x1, y1, x2, y2) {
+    container
       .append("line")
-      .attr("x1", x)
-      .attr("y1", y)
-      .attr("x2", targetPoint.x)
-      .attr("y2", targetPoint.y)
-      .attr("stroke", "red");
+      .attr("x1", x1)
+      .attr("y1", y1)
+      .attr("x2", x2)
+      .attr("y2", y2)
+      .attr("stroke", "black");
   }
 
   render() {
-    this.extensionLine(this.startX, this.startY);    
+    //绘制界线
+    const extensionLineGroup = this.container.append("g");
+    const extensionStartPoint = this.calculateTargetPoint(this.startX, this.startY);
+    this.drawingLine(
+      extensionLineGroup,
+      this.startX,
+      this.startY,
+      extensionStartPoint.x,
+      extensionStartPoint.y
+    );
+    const extensionEndPoint = this.calculateTargetPoint(this.endX, this.endY);
+    this.drawingLine(
+      extensionLineGroup,
+      this.endX,
+      this.endY,
+      extensionEndPoint.x,
+      extensionEndPoint.y
+    );
+
+    const sizeLineGroup = this.container.append("g");
+    const arrowStartPoint = this.calculateTargetPoint(this.startX, this.startY, 450);
+    const arrowEndPoint = this.calculateTargetPoint(this.endX, this.endY, 450);
+    sizeLineGroup
+      .append("line")
+      .attr("x1", arrowStartPoint.x)
+      .attr("y1", arrowStartPoint.y)
+      .attr("x2", arrowEndPoint.x)
+      .attr("y2", arrowEndPoint.y)
+      .attr("stroke", "black")
+      .attr('marker-start', `url(#${ArrowType.start.id})`)
+      .attr('marker-end', `url(#${ArrowType.end.id})`);
   }
 }
 
