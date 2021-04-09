@@ -78,6 +78,20 @@ export default {
         //   },
         // },
       ],
+      markers: [
+        {
+          start: {
+            x: 100,
+            y: 10,
+          },
+          end: {
+            x: 100,
+            y: 90,
+          },
+          type: 'linear',
+          sizeNum: '223mm',
+        },
+      ],
     })
 
     verticalView.render()

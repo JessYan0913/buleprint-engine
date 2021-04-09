@@ -1,115 +1,9 @@
-import { max, min } from "d3-array";
-import { svg } from "d3-fetch";
-import { select } from "d3-selection";
 import "../assets";
-
-function isArray(o) {
-  return Object.prototype.toString.call(o) == "[object Array]";
-}
-
-function mergeArray(arr1, arr2) {
-  return arr1.reduce((pre, cur) => {
-    pre.push(cur);
-    return pre;
-  }, arr2);
-}
-
-class Part {
-  /**
-   * 三视图拼接组件
-   * @param {*} props
-   */
-  constructor(props) {
-    const {
-      name,
-      image,
-      realWidth,
-      realHeight,
-      repeatX = {},
-      repeatY = {},
-      transfer = {},
-      scale,
-    } = props;
-    this.name = name;
-    this.image = `/img/${image}`;
-    this.realWidth = realWidth;
-    this.realHeight = realHeight;
-    this.scale = scale;
-
-    this.transferX = transfer.x * scale;
-    this.transferY = transfer.y * scale;
-
-    this.repeatX = repeatX;
-    this.repeatY = repeatY;
-  }
-
-  /**
-   * 计算每个重复组件到坐标系的垂直距离
-   * @param {*} space
-   * @param {*} realLength
-   * @param {*} totalLength
-   * @returns
-   */
-  calculateSpaces(space, realLength, totalLength) {
-    if (isArray(space)) {
-      return space.map((item) => this.scale * item);
-    }
-    const realSpace = space + realLength;
-    const repeatNum = Math.ceil(totalLength / realSpace);
-    const spaces = [];
-    for (let index = 0; index < repeatNum; index++) {
-      spaces.push(realSpace * this.scale * index);
-    }
-    return spaces;
-  }
-
-  /**
-   * 组件重复时，x方向和y方法的间距
-   * @param {Number} totalWidth
-   * @param {Number} totalHeight
-   * @returns {Array} [xSpaces, ySpaces]
-   */
-  spaces(totalWidth, totalHeight) {
-    let xSpaces = [];
-    let ySpaces = [];
-    if (this.repeatX) {
-      xSpaces = this.calculateSpaces(
-        this.repeatX.space,
-        this.realWidth,
-        totalWidth
-      );
-    }
-    if (this.repeatY) {
-      ySpaces = this.calculateSpaces(
-        this.repeatY.space,
-        this.realHeight,
-        totalHeight
-      );
-    }
-    if (xSpaces.length === 0 && ySpaces.length === 0) {
-      xSpaces.push(0);
-    }
-    return [xSpaces, ySpaces];
-  }
-
-  /**
-   * 读取svg图，并按照比例缩放
-   *
-   * @returns {documentElement} node
-   */
-  async node() {
-    const partSvg = await svg(this.image);
-    const partGroup = select(partSvg.documentElement);
-    partGroup
-      .attr(
-        "viewBox",
-        `0 0 ${partGroup.attr("width")} ${partGroup.attr("height")}`
-      )
-      .attr("width", this.scale * this.realWidth)
-      .attr("height", this.scale * this.realHeight);
-    return partGroup.node();
-  }
-}
+import { max, min } from "d3-array";
+import { select } from "d3-selection";
+import { mergeArray } from "./utils/array-util";
+import Marker from "./mark";
+import Part from "./part";
 
 class Blueprint {
   /**
@@ -164,6 +58,21 @@ class Blueprint {
     ]);
   }
 
+  drawingArrow() {
+    const mark = new Marker({
+      svg: this.svg,
+      start: {
+        x: 100,
+        y: 10,
+      },
+      end: {
+        x: 100,
+        y: 90,
+      },
+    });
+    mark.render();
+  }
+
   /**
    * 绘制组件到视图中
    * @param {*} selection
@@ -181,6 +90,7 @@ class Blueprint {
    * 渲染平面图
    */
   render() {
+    this.drawingArrow();
     this.parts.forEach((item) => {
       const part = new Part({ ...item, scale: this.scale });
       const spaces = part.spaces(this.realWidth, this.realHeight);
