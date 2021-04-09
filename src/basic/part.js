@@ -58,7 +58,7 @@ class Part {
    * @param {Number} totalHeight
    * @returns {Array} [xSpaces, ySpaces]
    */
-  spaces(totalWidth, totalHeight) {
+  repeatSpaces(totalWidth, totalHeight) {
     let xSpaces = [];
     let ySpaces = [];
     if (this.repeatX) {
@@ -85,7 +85,6 @@ class Part {
 
   /**
    * 读取svg图，并按照比例缩放
-   *
    * @returns {documentElement} node
    */
   async node() {

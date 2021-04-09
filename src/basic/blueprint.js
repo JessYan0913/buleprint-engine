@@ -60,21 +60,6 @@ class Blueprint {
     ]);
   }
 
-  drawingArrow() {
-    const mark = new Marker({
-      svg: this.svg,
-      start: {
-        x: 100,
-        y: 10,
-      },
-      end: {
-        x: 100,
-        y: 90,
-      },
-    });
-    mark.render();
-  }
-
   /**
    * 绘制组件到视图中
    * @param {*} selection
@@ -92,20 +77,29 @@ class Blueprint {
    * 渲染平面图
    */
   render() {
-    this.drawingArrow();
+    //绘制组件
     this.parts.forEach((item) => {
       const part = new Part({ ...item, scale: this.scale });
-      const spaces = part.spaces(this.realWidth, this.realHeight);
-      spaces[0].forEach(async (xSpace) => {
+      const repeatSpaces = part.repeatSpaces(this.realWidth, this.realHeight);
+      //绘制x方向的该组件
+      repeatSpaces[0].forEach(async (xSpace) => {
         const partNode = await part.node();
         const transferX = part.transferX + xSpace;
         this.drawingPart(() => partNode, transferX, part.transferY);
       });
-      spaces[1].forEach(async (ySpace) => {
+      //绘制y方向的该组件
+      repeatSpaces[1].forEach(async (ySpace) => {
         const partNode = await part.node();
         const transferY = part.transferY + ySpace;
         this.drawingPart(() => partNode, part.transferX, transferY);
       });
+    });
+
+    //绘制标记
+    this.markers.forEach((item) => {
+      // const mark = new Marker({ ...item });
+      // mark.render();
+      console.log(item);
     });
   }
 }
