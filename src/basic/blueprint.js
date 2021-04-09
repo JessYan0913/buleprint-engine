@@ -39,10 +39,6 @@ class Blueprint {
     this.innerWidth = width - margin.left - margin.right;
     this.innerHeight = height - margin.top - margin.bottom;
 
-    this.container = this.svg
-      .append("g")
-      .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
-
     const widths = mergeArray(
       parts.map((item) => item.width),
       [realWidth]
@@ -61,45 +57,35 @@ class Blueprint {
   }
 
   /**
-   * 绘制组件到视图中
-   * @param {*} selection
-   * @param {*} transferX
-   * @param {*} transferY
-   */
-  drawingPart(selection, transferX, transferY) {
-    this.container
-      .append("g")
-      .attr("transform", `translate(${transferX} ${transferY})`)
-      .append(selection);
-  }
-
-  /**
    * 渲染平面图
    */
   render() {
+    const partContainer = this.svg
+      .append("g")
+      .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+
     //绘制组件
     this.parts.forEach((item) => {
-      const part = new Part({ ...item, scale: this.scale });
-      const repeatSpaces = part.repeatSpaces(this.realWidth, this.realHeight);
-      //绘制x方向的该组件
-      repeatSpaces[0].forEach(async (xSpace) => {
-        const partNode = await part.node();
-        const transferX = part.transferX + xSpace;
-        this.drawingPart(() => partNode, transferX, part.transferY);
+      const part = new Part({
+        ...item,
+        scale: this.scale,
+        container: partContainer,
       });
-      //绘制y方向的该组件
-      repeatSpaces[1].forEach(async (ySpace) => {
-        const partNode = await part.node();
-        const transferY = part.transferY + ySpace;
-        this.drawingPart(() => partNode, part.transferX, transferY);
-      });
+      part.render(this.realWidth, this.realHeight);
     });
 
+    const markerContainer = this.svg
+      .append("g")
+      .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+    Marker.generateArrow(markerContainer);
     //绘制标记
     this.markers.forEach((item) => {
-      // const mark = new Marker({ ...item });
-      // mark.render();
-      console.log(item);
+      const mark = new Marker({
+        ...item,
+        scale: this.scale,
+        container: markerContainer,
+      });
+      mark.render();
     });
   }
 }

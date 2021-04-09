@@ -41,16 +41,16 @@ export default {
             y: 0,
           },
         },
-        // {
-        //   name: 'beam',
-        //   image: 'beam_1.svg',
-        //   realWidth: 1340,
-        //   realHeight: 12845,
-        //   transfer: {
-        //     x: 762,
-        //     y: 562,
-        //   },
-        // },
+        {
+          name: 'beam',
+          image: 'beam_1.svg',
+          realWidth: 1340,
+          realHeight: 12845,
+          transfer: {
+            x: 762,
+            y: 562,
+          },
+        },
         // {
         //   name: 'runwayTop',
         //   image: 'runway_1.svg',
@@ -80,13 +80,27 @@ export default {
       ],
       markers: [
         {
+          name: 'structureMarkerLeft',
           start: {
-            x: 100,
+            x: 0,
             y: 10,
           },
           end: {
-            x: 100,
-            y: 90,
+            x: 0,
+            y: 14050,
+          },
+          type: 'linear',
+          sizeNum: '223mm',
+        },
+        {
+          name: 'structureMarkerTop',
+          start: {
+            x: 730,
+            y: 1000,
+          },
+          end: {
+            x: 6300,
+            y: 1000,
           },
           type: 'linear',
           sizeNum: '223mm',
