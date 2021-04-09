@@ -2,7 +2,7 @@ import "../assets";
 import { max, min } from "d3-array";
 import { select } from "d3-selection";
 import { mergeArray } from "./utils/array-util";
-import Marker from "./mark";
+import Marker from "./marker";
 import Part from "./part";
 
 class Blueprint {
@@ -19,6 +19,7 @@ class Blueprint {
       realWidth,
       realHeight,
       parts = [],
+      markers = [],
     } = props;
     this.container = container;
     this.width = width;
@@ -26,7 +27,8 @@ class Blueprint {
     this.margin = margin;
     this.realWidth = realWidth;
     this.realHeight = realHeight;
-    this.parts = parts || [];
+    this.parts = parts;
+    this.markers = markers;
 
     this.svg = select(container)
       .append("svg")
