@@ -26,7 +26,7 @@ export default {
       width: 500,
       height: 500,
       realWidth: 14761.98 * 2,
-      realHeight: 14050 * 2,
+      realHeight: 14050,
       parts: [
         {
           name: 'structure',
@@ -92,7 +92,7 @@ export default {
           text: '223mm',
         },
         {
-          name: 'structureMarkerTop',
+          name: 'structureMarkerTop1',
           start: {
             x: 6300 + 730,
             y: 0,
@@ -101,7 +101,41 @@ export default {
             x: 730,
             y: 0,
           },
-          text: '223mm',
+        },
+        {
+          name: 'structureMarkerTop2',
+          start: {
+            x: 6300 + 730 + 6300 + 730,
+            y: 14050,
+          },
+          end: {
+            x: 6300 + 730 + 730,
+            y: 14050,
+          },
+          position: 'inner'
+        },
+        {
+          name: 'structureMarkerTop3',
+          start: {
+            x: 6300 + 730 + 6300 + 730 + 6300 + 730,
+            y: 0,
+          },
+          end: {
+            x: 6300 + 730 + 6300 + 730 + 730,
+            y: 0,
+          },
+        },
+        {
+          name: 'structureMarkerTop4',
+          start: {
+            x: 6300 + 730 + 6300 + 730 + 6300 + 730 + 6300 + 730,
+            y: 14050,
+          },
+          end: {
+            x: 6300 + 730 + 6300 + 730 + 6300 + 730 + 730,
+            y: 14050,
+          },
+          position: 'inner'
         },
       ],
     })

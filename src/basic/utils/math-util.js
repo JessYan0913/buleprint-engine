@@ -1,3 +1,5 @@
+import { isArray } from "./array-util";
+
 /**
  * 计算两点间直线的斜率
  * @param {Number} x1
@@ -38,9 +40,38 @@ export function linearDistancePoint(slope, x1, y1, h) {
   };
 }
 
+/**
+ * 计算两点的终点
+ * @param {*} x1
+ * @param {*} y1
+ * @param {*} x2
+ * @param {*} y2
+ * @returns
+ */
 export function midpoint(x1, y1, x2, y2) {
   return {
     x: (x1 + x2) / 2,
     y: (y1 + y2) / 2,
   };
+}
+
+/**
+ * 计算每个重复组件到坐标系的垂直距离
+ * @param {*} space
+ * @param {*} scale
+ * @param {*} realLength
+ * @param {*} totalLength
+ * @returns
+ */
+export function calculateSpaces(space, scale, realLength, totalLength) {
+  if (isArray(space)) {
+    return space.map((item) => scale * item);
+  }
+  const realSpace = space + realLength;
+  const repeatNum = Math.ceil(totalLength / realSpace);
+  const spaces = [];
+  for (let index = 0; index < repeatNum; index++) {
+    spaces.push(realSpace * scale * index);
+  }
+  return spaces;
 }

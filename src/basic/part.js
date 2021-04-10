@@ -1,27 +1,6 @@
 import { svg } from "d3-fetch";
 import { select } from "d3-selection";
-import { isArray } from "./utils/array-util";
-
-/**
- * 计算每个重复组件到坐标系的垂直距离
- * @param {*} space
- * @param {*} scale
- * @param {*} realLength
- * @param {*} totalLength
- * @returns
- */
-function calculateSpaces(space, scale, realLength, totalLength) {
-  if (isArray(space)) {
-    return space.map((item) => scale * item);
-  }
-  const realSpace = space + realLength;
-  const repeatNum = Math.ceil(totalLength / realSpace);
-  const spaces = [];
-  for (let index = 0; index < repeatNum; index++) {
-    spaces.push(realSpace * scale * index);
-  }
-  return spaces;
-}
+import { calculateSpaces } from "./utils/math-util";
 
 class Part {
   /**

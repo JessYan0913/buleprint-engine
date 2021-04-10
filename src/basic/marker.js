@@ -1,4 +1,8 @@
-import { linearSlope, linearDistancePoint } from "./utils/math-util";
+import {
+  linearSlope,
+  linearDistancePoint,
+  twoPointsDistance,
+} from "./utils/math-util";
 
 const MarkerPosition = {
   inner: ({ slope, x, y, h }) => linearDistancePoint(slope, x, y, h),
@@ -57,12 +61,15 @@ class Marker {
       start = {},
       end = {},
       position = "outer",
+      repaetX = {},
+      repaetY = {},
       scale,
       container,
     } = props;
     this.name = name;
-    this.text = text;
     this.position = MarkerPosition[position];
+    this.repeatX = repaetX;
+    this.repeatY = repaetY;
     this.scale = scale;
     this.container = container;
 
@@ -71,6 +78,10 @@ class Marker {
     this.startY = start.y * scale;
     this.endX = end.x * scale;
     this.endY = end.y * scale;
+
+    this.markerDistance = twoPointsDistance(start.x, start.y, end.x, end.y);
+
+    this.text = text || this.markerDistance;
 
     //计算尺寸线的斜率
     this.markerSlope = linearSlope(
