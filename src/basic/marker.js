@@ -60,7 +60,7 @@ class Marker {
       text,
       start = {},
       end = {},
-      height = 1000,
+      height = 500,
       position = "outer",
       repaetX = {},
       repaetY = {},
@@ -68,7 +68,8 @@ class Marker {
       container,
     } = props;
     this.name = name;
-    this.height = Math.max(height, 1000);
+    //TODO: 高度可以通过代码计算是否需要抬高，例如：记录同一斜率和同一高度的标记是否已经存在，如果已经存在，则*2
+    this.height = Math.max(height, 500);
     this.position = MarkerPosition[position];
     this.repeatX = repaetX;
     this.repeatY = repaetY;

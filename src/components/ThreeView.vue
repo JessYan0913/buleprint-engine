@@ -25,7 +25,11 @@ export default {
       container: '#verticalView',
       width: 500,
       height: 500,
-      realWidth: 14761.98 * 2,
+      margin: {
+        top: 100,
+        left: 100
+      },
+      realWidth: 14761.98,
       realHeight: 14050,
       parts: [
         {
@@ -102,7 +106,7 @@ export default {
             y: 14050,
           },
           text: '223',
-          height: 2000
+          height: 1000
         },
         {
           name: 'structureMarkerTop1',
@@ -127,42 +131,6 @@ export default {
           },
           position: 'inner'
         },
-        {
-          name: 'structureMarkerTop3',
-          start: {
-            x: 6300 + 730 + 6300 + 730 + 6300 + 730,
-            y: 0,
-          },
-          end: {
-            x: 6300 + 730 + 6300 + 730 + 730,
-            y: 0,
-          },
-        },
-        {
-          name: 'structureMarkerTop4',
-          start: {
-            x: 6300 + 730 + 6300 + 730 + 6300 + 730 + 6300 + 730,
-            y: 14050,
-          },
-          end: {
-            x: 6300 + 730 + 6300 + 730 + 6300 + 730 + 730,
-            y: 14050,
-          },
-          position: 'inner'
-        },
-        {
-          name: 'structureMarkerTop5',
-          start: {
-            x: 6300 + 730 + 6300 + 730 + 6300 + 730 + 6300 + 730 + 730,
-            y: 14050,
-          },
-          end: {
-            x: 6300 + 730 + 6300 + 730 + 6300 + 730,
-            y: 14050,
-          },
-          position: 'inner',
-          height: 2000
-        },
       ],
     })
 
@@ -172,8 +140,8 @@ export default {
       container: '#frontView',
       width: 500,
       height: 500,
-      realWidth: 14761.98 * 2,
-      realHeight: 14050 * 2,
+      realWidth: 14761.98,
+      realHeight: 14050,
       parts: [
         {
           name: 'structure',
