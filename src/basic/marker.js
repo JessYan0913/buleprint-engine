@@ -1,4 +1,4 @@
-import { linearSlope, linearDistancePoint, midpoint } from "./utils/math-util";
+import { linearSlope, linearDistancePoint } from "./utils/math-util";
 
 const MarkerPosition = {
   inner: ({ slope, x, y, h }) => linearDistancePoint(slope, x, y, h),
@@ -23,7 +23,7 @@ const ArrowType = {
 };
 
 /**
- * 绘制箭头
+ * 定义箭头
  * @param {*} props
  */
 function arrow(props) {
@@ -72,6 +72,7 @@ class Marker {
     this.endX = end.x * scale;
     this.endY = end.y * scale;
 
+    //计算尺寸线的斜率
     this.markerSlope = linearSlope(
       this.startX,
       this.startY,
@@ -80,6 +81,10 @@ class Marker {
     );
   }
 
+  /**
+   * 添加箭头到容器，以备绘图使用
+   * @param {*} container 
+   */
   static generateArrow(container) {
     const arrowConfig = {
       selection: container,
@@ -95,6 +100,14 @@ class Marker {
     });
   }
 
+  /**
+   * 计算过点 (x,y) 与 尺寸线垂直的直线上，距离 h 的点的坐标
+   * 理论上存在两个这样的对称点，根据参数 position 决定取哪个点
+   * @param {*} x 
+   * @param {*} y 
+   * @param {*} h 
+   * @returns 
+   */
   calculateTargetPoint(x, y, h = 500) {
     return this.position({
       slope: -1 / this.markerSlope,
@@ -104,6 +117,15 @@ class Marker {
     });
   }
 
+  /**
+   * 绘制一条直线
+   * @param {*} container 
+   * @param {*} x1 
+   * @param {*} y1 
+   * @param {*} x2 
+   * @param {*} y2 
+   * @returns 
+   */
   drawingLine(container, x1, y1, x2, y2) {
     const line = container
       .append("line")
@@ -116,8 +138,9 @@ class Marker {
   }
 
   render() {
-    //绘制界线
+    //绘制尺寸界线
     const extensionLineGroup = this.container.append("g");
+    //以标记起点为起始尺寸界线的起点，计算起始尺寸界线的终点
     const extensionStartPoint = this.calculateTargetPoint(
       this.startX,
       this.startY
@@ -129,6 +152,7 @@ class Marker {
       extensionStartPoint.x,
       extensionStartPoint.y
     );
+    //以标记终点为终点尺寸界线的起点，计算终点尺寸界线的终点
     const extensionEndPoint = this.calculateTargetPoint(this.endX, this.endY);
     this.drawingLine(
       extensionLineGroup,
@@ -138,34 +162,42 @@ class Marker {
       extensionEndPoint.y
     );
 
+    //绘制尺寸线
     const sizeLineGroup = this.container.append("g");
-    const arrowStartPoint = this.calculateTargetPoint(
+    //计算尺寸线起点
+    const sizeStartPoint = this.calculateTargetPoint(
       this.startX,
       this.startY,
       450
     );
-    const arrowEndPoint = this.calculateTargetPoint(this.endX, this.endY, 450);
-    this.drawingLine(
-      sizeLineGroup,
-      arrowStartPoint.x,
-      arrowStartPoint.y,
-      arrowEndPoint.x,
-      arrowEndPoint.y
-    )
+    //计算尺寸线终点
+    const sizeEndPoint = this.calculateTargetPoint(this.endX, this.endY, 450);
+    
+    //定义尺寸线
+    const sizeLineDefs = sizeLineGroup.append("defs");
+    sizeLineDefs
+      .append("path")
+      .attr("id", this.name)
+      .attr(
+        "d",
+        `M ${sizeEndPoint.x} ${sizeEndPoint.y} L ${sizeStartPoint.x} ${sizeStartPoint.y}`
+      );
+    //绘制尺寸线
+    sizeLineGroup
+      .append("use")
+      .attr("xlink:href", `#${this.name}`)
+      .attr("fill", "none")
+      .attr("stroke", "black")
       .attr("marker-start", `url(#${ArrowType.start.id})`)
       .attr("marker-end", `url(#${ArrowType.end.id})`);
-    const arrowMidpoint = midpoint(
-      arrowStartPoint.x,
-      arrowStartPoint.y,
-      arrowEndPoint.x,
-      arrowEndPoint.y
-    );
+    //绘制尺寸文本
     sizeLineGroup
       .append("text")
-      .attr("x", arrowMidpoint.x)
-      .attr("y", arrowMidpoint.y)
+      .attr("font-family", "Verdana")
+      .append("textPath")
+      .attr("xlink:href", `#${this.name}`)
       .attr("text-anchor", "middle")
-      // .attr('transform', `rotate(270, ${arrowMidpoint.x + (17.8125/4)} ${arrowMidpoint.y + (18.015625/4)})`)
+      .attr("startOffset", "50%")
       .text("dd");
   }
 }

@@ -95,11 +95,11 @@ export default {
         {
           name: 'structureMarkerTop',
           start: {
-            x: 730,
+            x: 6300 + 730,
             y: 0,
           },
           end: {
-            x: 6300 + 730,
+            x: 730,
             y: 0,
           },
           type: 'linear',
