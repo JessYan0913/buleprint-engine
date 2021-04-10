@@ -39,10 +39,12 @@ class Blueprint {
     this.innerWidth = width - margin.left - margin.right;
     this.innerHeight = height - margin.top - margin.bottom;
 
+    //获取所有宽度
     const widths = mergeArray(
       parts.map((item) => item.width),
       [realWidth]
     );
+    //获取所有高度
     const heights = mergeArray(
       parts.map((item) => item.height),
       [realHeight]

@@ -53,7 +53,7 @@ class Marker {
   constructor(props) {
     const {
       name,
-      sizeNum,
+      text,
       start = {},
       end = {},
       position = "outer",
@@ -61,7 +61,7 @@ class Marker {
       container,
     } = props;
     this.name = name;
-    this.sizeNum = sizeNum;
+    this.text = text;
     this.position = MarkerPosition[position];
     this.scale = scale;
     this.container = container;
@@ -83,7 +83,7 @@ class Marker {
 
   /**
    * 添加箭头到容器，以备绘图使用
-   * @param {*} container 
+   * @param {*} container
    */
   static generateArrow(container) {
     const arrowConfig = {
@@ -103,10 +103,10 @@ class Marker {
   /**
    * 计算过点 (x,y) 与 尺寸线垂直的直线上，距离 h 的点的坐标
    * 理论上存在两个这样的对称点，根据参数 position 决定取哪个点
-   * @param {*} x 
-   * @param {*} y 
-   * @param {*} h 
-   * @returns 
+   * @param {*} x
+   * @param {*} y
+   * @param {*} h
+   * @returns
    */
   calculateTargetPoint(x, y, h = 500) {
     return this.position({
@@ -119,12 +119,12 @@ class Marker {
 
   /**
    * 绘制一条直线
-   * @param {*} container 
-   * @param {*} x1 
-   * @param {*} y1 
-   * @param {*} x2 
-   * @param {*} y2 
-   * @returns 
+   * @param {*} container
+   * @param {*} x1
+   * @param {*} y1
+   * @param {*} x2
+   * @param {*} y2
+   * @returns
    */
   drawingLine(container, x1, y1, x2, y2) {
     const line = container
@@ -137,6 +137,9 @@ class Marker {
     return line;
   }
 
+  /**
+   * 绘制尺寸标注
+   */
   render() {
     //绘制尺寸界线
     const extensionLineGroup = this.container.append("g");
@@ -172,7 +175,7 @@ class Marker {
     );
     //计算尺寸线终点
     const sizeEndPoint = this.calculateTargetPoint(this.endX, this.endY, 450);
-    
+
     //定义尺寸线
     const sizeLineDefs = sizeLineGroup.append("defs");
     sizeLineDefs
@@ -198,7 +201,8 @@ class Marker {
       .attr("xlink:href", `#${this.name}`)
       .attr("text-anchor", "middle")
       .attr("startOffset", "50%")
-      .text("dd");
+      .attr("font-size", 12)
+      .text(this.text);
   }
 }
 

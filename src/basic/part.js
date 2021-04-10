@@ -117,7 +117,7 @@ class Part {
   }
 
   /**
-   *
+   * 绘制组件
    * @param {Number} totalWidth 大组件的整体宽度
    * @param {Number} totalHeight 大组件的整体高度
    */

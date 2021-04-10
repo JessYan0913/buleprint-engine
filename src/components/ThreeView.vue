@@ -25,8 +25,8 @@ export default {
       container: '#verticalView',
       width: 500,
       height: 500,
-      realWidth: 14761.98,
-      realHeight: 14050,
+      realWidth: 14761.98 * 2,
+      realHeight: 14050 * 2,
       parts: [
         {
           name: 'structure',
@@ -89,8 +89,7 @@ export default {
             x: 0,
             y: 14050,
           },
-          type: 'linear',
-          sizeNum: '223mm',
+          text: '223mm',
         },
         {
           name: 'structureMarkerTop',
@@ -102,61 +101,60 @@ export default {
             x: 730,
             y: 0,
           },
-          type: 'linear',
-          sizeNum: '223mm',
+          text: '223mm',
         },
       ],
     })
 
     verticalView.render()
 
-    // const frontView = new Blueprint({
-    //   container: '#frontView',
-    //   width: 500,
-    //   height: 500,
-    //   realWidth: 14761.98,
-    //   realHeight: 14050,
-    //   parts: [
-    //     {
-    //       name: 'structure',
-    //       image: 'structure_2.svg',
-    //       realWidth: 730,
-    //       realHeight: 14050,
-    //       repeatX: {
-    //         space: 6300,
-    //       },
-    //       transfer: {
-    //         x: 0,
-    //         y: 0,
-    //       },
-    //     },
-    //     {
-    //       name: 'beam',
-    //       image: 'beam_2.svg',
-    //       realWidth: 1340,
-    //       realHeight: 945,
-    //       transfer: {
-    //         x: 962,
-    //         y: 262,
-    //       },
-    //     },
-    //     {
-    //       name: 'runwayTop',
-    //       image: 'runway_2.svg',
-    //       realWidth: 7380.99,
-    //       realHeight: 215.98,
-    //       repeatX: {
-    //         space: 0,
-    //       },
-    //       transfer: {
-    //         x: 0,
-    //         y: 300,
-    //       },
-    //     },
-    //   ],
-    // })
+    const frontView = new Blueprint({
+      container: '#frontView',
+      width: 500,
+      height: 500,
+      realWidth: 14761.98 * 2,
+      realHeight: 14050 * 2,
+      parts: [
+        {
+          name: 'structure',
+          image: 'structure_2.svg',
+          realWidth: 730,
+          realHeight: 14050,
+          repeatX: {
+            space: 6300,
+          },
+          transfer: {
+            x: 0,
+            y: 0,
+          },
+        },
+        {
+          name: 'beam',
+          image: 'beam_2.svg',
+          realWidth: 1340,
+          realHeight: 945,
+          transfer: {
+            x: 962,
+            y: 262,
+          },
+        },
+        {
+          name: 'runwayTop',
+          image: 'runway_2.svg',
+          realWidth: 7380.99,
+          realHeight: 215.98,
+          repeatX: {
+            space: 0,
+          },
+          transfer: {
+            x: 0,
+            y: 300,
+          },
+        },
+      ],
+    })
 
-    // frontView.render()
+    frontView.render()
 
     // const sideView = new Blueprint({
     //   container: '#sideView',
