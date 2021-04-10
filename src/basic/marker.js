@@ -1,4 +1,4 @@
-import { linearSlope, linearDistancePoint } from "./utils/math-util";
+import { linearSlope, linearDistancePoint, midpoint } from "./utils/math-util";
 
 const MarkerPosition = {
   inner: ({ slope, x, y, h }) => linearDistancePoint(slope, x, y, h),
@@ -105,19 +105,23 @@ class Marker {
   }
 
   drawingLine(container, x1, y1, x2, y2) {
-    container
+    const line = container
       .append("line")
       .attr("x1", x1)
       .attr("y1", y1)
       .attr("x2", x2)
       .attr("y2", y2)
       .attr("stroke", "black");
+    return line;
   }
 
   render() {
     //绘制界线
     const extensionLineGroup = this.container.append("g");
-    const extensionStartPoint = this.calculateTargetPoint(this.startX, this.startY);
+    const extensionStartPoint = this.calculateTargetPoint(
+      this.startX,
+      this.startY
+    );
     this.drawingLine(
       extensionLineGroup,
       this.startX,
@@ -135,17 +139,34 @@ class Marker {
     );
 
     const sizeLineGroup = this.container.append("g");
-    const arrowStartPoint = this.calculateTargetPoint(this.startX, this.startY, 450);
+    const arrowStartPoint = this.calculateTargetPoint(
+      this.startX,
+      this.startY,
+      450
+    );
     const arrowEndPoint = this.calculateTargetPoint(this.endX, this.endY, 450);
+    this.drawingLine(
+      sizeLineGroup,
+      arrowStartPoint.x,
+      arrowStartPoint.y,
+      arrowEndPoint.x,
+      arrowEndPoint.y
+    )
+      .attr("marker-start", `url(#${ArrowType.start.id})`)
+      .attr("marker-end", `url(#${ArrowType.end.id})`);
+    const arrowMidpoint = midpoint(
+      arrowStartPoint.x,
+      arrowStartPoint.y,
+      arrowEndPoint.x,
+      arrowEndPoint.y
+    );
     sizeLineGroup
-      .append("line")
-      .attr("x1", arrowStartPoint.x)
-      .attr("y1", arrowStartPoint.y)
-      .attr("x2", arrowEndPoint.x)
-      .attr("y2", arrowEndPoint.y)
-      .attr("stroke", "black")
-      .attr('marker-start', `url(#${ArrowType.start.id})`)
-      .attr('marker-end', `url(#${ArrowType.end.id})`);
+      .append("text")
+      .attr("x", arrowMidpoint.x)
+      .attr("y", arrowMidpoint.y)
+      .attr("text-anchor", "middle")
+      // .attr('transform', `rotate(270, ${arrowMidpoint.x + (17.8125/4)} ${arrowMidpoint.y + (18.015625/4)})`)
+      .text("dd");
   }
 }
 

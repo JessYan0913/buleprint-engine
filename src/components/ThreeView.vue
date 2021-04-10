@@ -51,32 +51,32 @@ export default {
             y: 562,
           },
         },
-        // {
-        //   name: 'runwayTop',
-        //   image: 'runway_1.svg',
-        //   realWidth: 7380.99,
-        //   realHeight: 215.98,
-        //   repeatX: {
-        //     space: 0,
-        //   },
-        //   transfer: {
-        //     x: 0,
-        //     y: 1250,
-        //   },
-        // },
-        // {
-        //   name: 'runwayBottom',
-        //   image: 'runway_1.svg',
-        //   realWidth: 7380.99,
-        //   realHeight: 215.98,
-        //   repeatX: {
-        //     space: 0,
-        //   },
-        //   transfer: {
-        //     x: 0,
-        //     y: 12550,
-        //   },
-        // },
+        {
+          name: 'runwayTop',
+          image: 'runway_1.svg',
+          realWidth: 7380.99,
+          realHeight: 215.98,
+          repeatX: {
+            space: 0,
+          },
+          transfer: {
+            x: 0,
+            y: 1250,
+          },
+        },
+        {
+          name: 'runwayBottom',
+          image: 'runway_1.svg',
+          realWidth: 7380.99,
+          realHeight: 215.98,
+          repeatX: {
+            space: 0,
+          },
+          transfer: {
+            x: 0,
+            y: 12550,
+          },
+        },
       ],
       markers: [
         {
@@ -90,7 +90,6 @@ export default {
             y: 14050,
           },
           type: 'linear',
-          direction: 'outward',
           sizeNum: '223mm',
         },
         {
