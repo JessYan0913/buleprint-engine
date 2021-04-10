@@ -80,6 +80,18 @@ export default {
       ],
       markers: [
         {
+          name: 'runWayLeft',
+          start: {
+            x: 0,
+            y: 1250 + 215.98,
+          },
+          end: {
+            x: 0,
+            y: 12550,
+          },
+          text: '223mm',
+        },
+        {
           name: 'structureMarkerLeft',
           start: {
             x: 0,
@@ -89,7 +101,8 @@ export default {
             x: 0,
             y: 14050,
           },
-          text: '223mm',
+          text: '223',
+          height: 2000
         },
         {
           name: 'structureMarkerTop1',
@@ -136,6 +149,19 @@ export default {
             y: 14050,
           },
           position: 'inner'
+        },
+        {
+          name: 'structureMarkerTop5',
+          start: {
+            x: 6300 + 730 + 6300 + 730 + 6300 + 730 + 6300 + 730 + 730,
+            y: 14050,
+          },
+          end: {
+            x: 6300 + 730 + 6300 + 730 + 6300 + 730,
+            y: 14050,
+          },
+          position: 'inner',
+          height: 2000
         },
       ],
     })

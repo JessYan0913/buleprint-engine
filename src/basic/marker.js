@@ -60,6 +60,7 @@ class Marker {
       text,
       start = {},
       end = {},
+      height = 1000,
       position = "outer",
       repaetX = {},
       repaetY = {},
@@ -67,6 +68,7 @@ class Marker {
       container,
     } = props;
     this.name = name;
+    this.height = Math.max(height, 1000);
     this.position = MarkerPosition[position];
     this.repeatX = repaetX;
     this.repeatY = repaetY;
@@ -119,7 +121,7 @@ class Marker {
    * @param {*} h
    * @returns
    */
-  calculateTargetPoint(x, y, h = 500) {
+  calculateTargetPoint(x, y, h = this.height) {
     return this.position({
       slope: -1 / this.markerSlope,
       h: h * this.scale,
@@ -182,10 +184,14 @@ class Marker {
     const sizeStartPoint = this.calculateTargetPoint(
       this.startX,
       this.startY,
-      450
+      this.height - 100
     );
     //计算尺寸线终点
-    const sizeEndPoint = this.calculateTargetPoint(this.endX, this.endY, 450);
+    const sizeEndPoint = this.calculateTargetPoint(
+      this.endX,
+      this.endY,
+      this.height - 100
+    );
 
     //定义尺寸线
     const sizeLineDefs = sizeLineGroup.append("defs");
