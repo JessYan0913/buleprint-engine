@@ -4,7 +4,7 @@ import { calculateSpaces } from "./utils/math-util";
 
 class Part {
   /**
-   * 拼接三视图的零件
+   * 拼接视图的零件，已经绘制好的svg图
    * @param {*} props
    */
   constructor(props) {

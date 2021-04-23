@@ -2,12 +2,12 @@ import "../assets";
 import { max, min } from "d3-array";
 import { select } from "d3-selection";
 import { mergeArray } from "./utils/array-util";
-import Marker from "./marker";
+import { LinearMarker, defMarkerArrow, SmallSizeMarker } from "./marker";
 import Part from "./part";
 
 class Blueprint {
   /**
-   * 生成平面图
+   * 平面图
    * @param {*} props
    */
   constructor(props) {
@@ -79,10 +79,22 @@ class Blueprint {
     const markerContainer = this.svg
       .append("g")
       .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
-    Marker.generateArrow(markerContainer);
+    //在尺寸线的容器中添加箭头定义
+    defMarkerArrow({
+      container: markerContainer,
+    });
     //绘制标记
     this.markers.forEach((item) => {
-      const mark = new Marker({
+      if (item.type === "small") {
+        const mark = new SmallSizeMarker({
+          ...item,
+          scale: this.scale,
+          container: markerContainer,
+        });
+        mark.render();
+        return;
+      }
+      const mark = new LinearMarker({
         ...item,
         scale: this.scale,
         container: markerContainer,

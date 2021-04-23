@@ -27,7 +27,9 @@ export default {
       height: 500,
       margin: {
         top: 100,
-        left: 100
+        left: 100,
+        bottom: 100,
+        right: 100
       },
       realWidth: 14761.98,
       realHeight: 14050,
@@ -102,10 +104,11 @@ export default {
             y: 10,
           },
           end: {
-            x: 0,
-            y: 14050,
+            x: 720,
+            y: 10,
           },
           text: '223',
+          type: 'small',
           height: 1000
         },
         {
@@ -142,6 +145,12 @@ export default {
       height: 500,
       realWidth: 14761.98,
       realHeight: 14050,
+      margin: {
+        top: 100,
+        left: 100,
+        bottom: 100,
+        right: 100
+      },
       parts: [
         {
           name: 'structure',

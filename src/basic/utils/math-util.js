@@ -41,7 +41,7 @@ export function linearDistancePoint(slope, x1, y1, h) {
 }
 
 /**
- * 计算两点的终点
+ * 计算两点的中点
  * @param {*} x1
  * @param {*} y1
  * @param {*} x2

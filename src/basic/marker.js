@@ -1,4 +1,5 @@
 import {
+  midpoint,
   linearSlope,
   linearDistancePoint,
   twoPointsDistance,
@@ -30,23 +31,28 @@ const ArrowType = {
  * 定义箭头
  * @param {*} props
  */
-function arrow(props) {
-  const { selection, size, type = ArrowType.end } = props;
-  const { id, path, refX, refY } = type;
-  const defs = selection.append("defs");
-  defs
-    .append("marker")
-    .attr("id", id)
-    .attr("markerUnits", "strokeWidth")
-    .attr("markerWidth", size * 4)
-    .attr("markerHeight", size)
-    .attr("viewBox", "0 0 24 24")
-    .attr("refX", refX)
-    .attr("refY", refY)
-    .attr("orient", "auto")
-    .append("path")
-    .attr("d", path)
-    .attr("fill", "#000");
+function defMarkerArrow(props) {
+  const { container, size = 12 } = props;
+  const defs = container.append("defs");
+
+  for (const key in ArrowType) {
+    if (Object.hasOwnProperty.call(ArrowType, key)) {
+      const { id, path, refX, refY } = ArrowType[key];
+      defs
+        .append("marker")
+        .attr("id", id)
+        .attr("markerUnits", "strokeWidth")
+        .attr("markerWidth", size * 4)
+        .attr("markerHeight", size)
+        .attr("viewBox", "0 0 24 24")
+        .attr("refX", refX)
+        .attr("refY", refY)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", path)
+        .attr("fill", "#000");
+    }
+  }
 }
 
 class Marker {
@@ -96,25 +102,6 @@ class Marker {
   }
 
   /**
-   * 添加箭头到容器，以备绘图使用
-   * @param {*} container
-   */
-  static generateArrow(container) {
-    const arrowConfig = {
-      selection: container,
-      size: 12,
-    };
-    arrow({
-      ...arrowConfig,
-      type: ArrowType.end,
-    });
-    arrow({
-      ...arrowConfig,
-      type: ArrowType.start,
-    });
-  }
-
-  /**
    * 计算过点 (x,y) 与 尺寸线垂直的直线上，距离 h 的点的坐标
    * 理论上存在两个这样的对称点，根据参数 position 决定取哪个点
    * @param {*} x
@@ -152,9 +139,9 @@ class Marker {
   }
 
   /**
-   * 绘制尺寸标注
+   * 绘制尺寸界线
    */
-  render() {
+  drawingLengthBoundaryLine() {
     //绘制尺寸界线
     const extensionLineGroup = this.container.append("g");
     //以标记起点为起始尺寸界线的起点，计算起始尺寸界线的终点
@@ -178,6 +165,22 @@ class Marker {
       extensionEndPoint.x,
       extensionEndPoint.y
     );
+  }
+}
+
+class LinearMarker extends Marker {
+  /**
+   * 线性尺寸标注
+   * 可用于标注：线性的长度，例如：长度、宽度、高度、弦长等
+   * @param {*} props
+   */
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    //绘制长度尺寸界线
+    this.drawingLengthBoundaryLine();
 
     //绘制尺寸线
     const sizeLineGroup = this.container.append("g");
@@ -224,4 +227,79 @@ class Marker {
   }
 }
 
-export default Marker;
+class SmallSizeMarker extends Marker {
+  /**
+   * 小尺寸标注
+   * 可用于标注：没有足够空间时，箭头可画在外面，尺寸数字也可写在外面或引出标注
+   * @param {*} props
+   */
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    //绘制长度尺寸界线
+    this.drawingLengthBoundaryLine();
+
+    //绘制尺寸线
+    const sizeLineGroup = this.container.append("g");
+    //计算尺寸线1的起点
+    const size1StartPoint = this.calculateTargetPoint(
+      this.startX,
+      this.startY,
+      this.height - 100
+    );
+    //计算尺寸线1的终点
+    const size1EndPoint = linearDistancePoint(
+      this.markerSlope,
+      size1StartPoint.x,
+      size1StartPoint.y,
+      -20
+    );
+    this.drawingLine(
+      sizeLineGroup,
+      size1StartPoint.x,
+      size1StartPoint.y,
+      size1EndPoint.x,
+      size1EndPoint.y
+    ).attr("marker-start", `url(#${ArrowType.start.id})`);
+    //计算尺寸线2的起点
+    const size2StartPoint = this.calculateTargetPoint(
+      this.endX,
+      this.endY,
+      this.height - 100
+    );
+    //计算尺寸线2的终点
+    const size2EndPoint = linearDistancePoint(
+      this.markerSlope,
+      size2StartPoint.x,
+      size2StartPoint.y,
+      20
+    );
+    this.drawingLine(
+      sizeLineGroup,
+      size2StartPoint.x,
+      size2StartPoint.y,
+      size2EndPoint.x,
+      size2EndPoint.y
+    ).attr("marker-start", `url(#${ArrowType.start.id})`);
+
+    //计算尺寸线2的中点
+    const textPoint = midpoint(
+      size2StartPoint.x,
+      size2StartPoint.y,
+      size2EndPoint.x,
+      size2EndPoint.y
+    );
+    sizeLineGroup
+      .append("text")
+      .attr("font-family", "Verdana")
+      .attr("startOffset", "50%")
+      .attr("font-size", 12)
+      .attr("x", textPoint.x)
+      .attr("y", textPoint.y-1)
+      .text(this.text);
+  }
+}
+
+export { defMarkerArrow, LinearMarker, SmallSizeMarker };
