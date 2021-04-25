@@ -2,7 +2,7 @@ import "../assets";
 import { max, min } from "d3-array";
 import { select } from "d3-selection";
 import { mergeArray } from "./utils/array-util";
-import { LinearMarker, defMarkerArrow, SmallSizeMarker } from "./marker";
+import { AlignMarker, defMarkerArrow, SmallSizeMarker } from "./marker";
 import Part from "./part";
 
 class Blueprint {
@@ -93,7 +93,7 @@ class Blueprint {
         mark.render();
         return;
       }
-      const mark = new LinearMarker({
+      const mark = new AlignMarker({
         ...item,
         scale: this.scale,
         container: markerContainer,

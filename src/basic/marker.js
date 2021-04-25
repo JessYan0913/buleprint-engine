@@ -77,7 +77,7 @@ class Marker {
     this.name = name;
     //TODO: 高度可以通过代码计算是否需要抬高，例如：记录同一斜率和同一高度的标记是否已经存在，如果已经存在，则*2
     //TODO: 判断两条线段是否在同一直线上，并判断两条直线是否重叠
-    this.height =height;
+    this.height = height;
     this.position = MarkerPosition[position];
     this.repeatX = repaetX;
     this.repeatY = repaetY;
@@ -101,7 +101,7 @@ class Marker {
       this.startX,
       this.startY
     );
-    
+
     //尺寸线到尺寸界线顶点的距离
     this.sizeLineToExtensionLineTop = 4;
   }
@@ -173,7 +173,7 @@ class Marker {
   }
 }
 
-class LinearMarker extends Marker {
+class AlignMarker extends Marker {
   /**
    * 线性尺寸标注
    * 可用于标注：线性的长度，例如：长度、宽度、高度、弦长等
@@ -220,15 +220,15 @@ class LinearMarker extends Marker {
       sizeEndPoint.x,
       sizeEndPoint.y
     );
+    //计算尺寸线与X的夹脚
+    const sizeLineAngle = slope2Angle(this.markerSlope);
     //绘制尺寸文本
     sizeLineGroup
       .append("text")
       .attr("font-family", "Verdana")
       .attr(
         "transform",
-        `translate(${textPoint.x},${textPoint.y}) rotate(${slope2Angle(
-          this.markerSlope
-        )})`
+        `translate(${textPoint.x},${textPoint.y}) rotate(${sizeLineAngle > 0 ? sizeLineAngle + 180 : sizeLineAngle})`
       )
       .attr("text-anchor", "middle")
       .attr("startOffset", "50%")
@@ -312,4 +312,4 @@ class SmallSizeMarker extends Marker {
   }
 }
 
-export { defMarkerArrow, LinearMarker, SmallSizeMarker };
+export { defMarkerArrow, AlignMarker, SmallSizeMarker };
