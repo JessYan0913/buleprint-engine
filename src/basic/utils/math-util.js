@@ -25,7 +25,7 @@ export function twoPointsDistance(x1, y1, x2, y2) {
 }
 
 /**
- * 求直线上距离起点 (x1,y1) h距离的点
+ * 求直线上距离起点A(x1,y1) 距离h的点
  * @param {Number} slope 斜率
  * @param {Number} x1 起点坐标
  * @param {Number} y1 起点坐标
@@ -74,4 +74,42 @@ export function calculateSpaces(space, scale, realLength, totalLength) {
     spaces.push(realSpace * scale * index);
   }
   return spaces;
+}
+
+/**
+ * 角度转弧度
+ * @param {*} angle 
+ * @returns 
+ */
+export function angle2Radian(angle) {
+  //弧度 = π / 180 * 角度
+  return (Math.PI / 180) * angle;
+}
+
+/**
+ * 弧度转角度
+ * @param {*} radian 
+ * @returns 
+ */
+export function radian2Angle(radian) {
+  //角度 = 180 / π * 弧度
+  return (180 / Math.PI) * radian;
+}
+
+/**
+ * 斜率转弧度
+ * @param {*} slope 
+ * @returns 
+ */
+export function slope2Radian(slope) {
+  return Math.atan(slope);
+}
+
+/**
+ * 斜率转角度
+ * @param {*} slope 
+ * @returns 
+ */
+export function slope2Angle(slope) {
+  return radian2Angle(slope2Radian(slope));
 }

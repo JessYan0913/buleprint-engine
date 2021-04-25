@@ -1,9 +1,8 @@
-import './beam_1.svg'
-import './beam_2.svg'
-import './beam_3.svg'
-import './runway_1.svg'
-import './runway_2.svg'
-import './runway_3.svg'
-import './structure_1.svg'
-import './structure_2.svg'
-import './structure_3.svg'
+const files = require.context("./", false, /\.svg$/);
+const modules = {};
+
+files.keys().forEach((key) => {
+    modules[key.replace(/(\.\/|\.svg)/g, '')] = files(key).default
+});
+
+export default modules;

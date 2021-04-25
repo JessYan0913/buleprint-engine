@@ -1,16 +1,35 @@
 <template>
   <div>
-    <div id="verticalView">
-    </div>
-    <div id="frontView">
-    </div>
-    <div id="sideView">
+    <vue-html2pdf :show-layout="true"
+                  :float-layout="false"
+                  :enable-download="true"
+                  :preview-modal="true"
+                  :paginate-elements-by-height="1400"
+                  :pdf-quality="2"
+                  :manual-pagination="false"
+                  pdf-format="a4"
+                  pdf-orientation="landscape"
+                  pdf-content-width="1400px"
+                  ref="html2Pdf"
+                  :style="{ marginLeft: '100px' }">
+      <div slot="pdf-content">
+        <div id="verticalView">
+        </div>
+        <div id="frontView">
+        </div>
+        <div id="sideView">
+        </div>
+      </div>
+    </vue-html2pdf>
+    <div>
+      <button @click="handleDownloadPdf">下载PDF</button>
     </div>
   </div>
 </template>
 
 <script>
 import Blueprint from '../basic/blueprint'
+import VueHtml2pdf from 'vue-html2pdf'
 /**
  * 二维坐标系以左上角为原点
  * 三维坐标系以俯视图左上角为原点，Z轴指向屏幕外
@@ -20,6 +39,9 @@ import Blueprint from '../basic/blueprint'
  */
 export default {
   name: 'ThreeView',
+  components: {
+    VueHtml2pdf,
+  },
   mounted() {
     const verticalView = new Blueprint({
       container: '#verticalView',
@@ -29,7 +51,7 @@ export default {
         top: 100,
         left: 100,
         bottom: 100,
-        right: 100
+        right: 100,
       },
       realWidth: 14761.98,
       realHeight: 14050,
@@ -109,7 +131,7 @@ export default {
           },
           text: '223',
           type: 'small',
-          height: 1000
+          height: 20,
         },
         {
           name: 'structureMarkerTop1',
@@ -125,14 +147,15 @@ export default {
         {
           name: 'structureMarkerTop2',
           start: {
+            x: 6300 + 730 + 730,
+            y: 14050,
+            
+          },
+          end: {
             x: 6300 + 730 + 6300 + 730,
             y: 14050,
           },
-          end: {
-            x: 6300 + 730 + 730,
-            y: 14050,
-          },
-          position: 'inner'
+          position: 'inner',
         },
       ],
     })
@@ -149,7 +172,7 @@ export default {
         top: 100,
         left: 100,
         bottom: 100,
-        right: 100
+        right: 100,
       },
       parts: [
         {
@@ -224,6 +247,11 @@ export default {
     // })
 
     // sideView.render()
+  },
+  methods: {
+    handleDownloadPdf() {
+      this.$refs.html2Pdf.generatePdf()
+    },
   },
 }
 </script>
