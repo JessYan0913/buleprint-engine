@@ -120,7 +120,7 @@ export default {
             y: 10,
           },
           end: {
-            x: 720,
+            x: 730,
             y: 10,
           },
           text: '223',
