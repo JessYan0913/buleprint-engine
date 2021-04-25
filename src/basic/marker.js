@@ -33,7 +33,7 @@ const ArrowType = {
  * @param {*} props
  */
 function defMarkerArrow(props) {
-  const { container, size = 12 } = props;
+  const { container, size = 16 } = props;
   const defs = container.append("defs");
 
   for (const key in ArrowType) {
@@ -101,6 +101,9 @@ class Marker {
       this.startX,
       this.startY
     );
+    
+    //尺寸线到尺寸界线顶点的距离
+    this.sizeLineToExtensionLineTop = 4;
   }
 
   /**
@@ -190,13 +193,13 @@ class LinearMarker extends Marker {
     const sizeStartPoint = this.calculateTargetPoint(
       this.startX,
       this.startY,
-      this.height - 2
+      this.height - this.sizeLineToExtensionLineTop
     );
     //计算尺寸线终点
     const sizeEndPoint = this.calculateTargetPoint(
       this.endX,
       this.endY,
-      this.height - 2
+      this.height - this.sizeLineToExtensionLineTop
     );
 
     //绘制尺寸线
@@ -254,14 +257,14 @@ class SmallSizeMarker extends Marker {
     const size1StartPoint = this.calculateTargetPoint(
       this.startX,
       this.startY,
-      this.height - 2
+      this.height - this.sizeLineToExtensionLineTop
     );
     //计算尺寸线1的终点
     const size1EndPoint = linearDistancePoint(
       this.markerSlope,
       size1StartPoint.x,
       size1StartPoint.y,
-      -20
+      -16 * 2
     );
     this.drawingLine(
       sizeLineGroup,
@@ -274,14 +277,14 @@ class SmallSizeMarker extends Marker {
     const size2StartPoint = this.calculateTargetPoint(
       this.endX,
       this.endY,
-      this.height - 2
+      this.height - this.sizeLineToExtensionLineTop
     );
     //计算尺寸线2的终点
     const size2EndPoint = linearDistancePoint(
       this.markerSlope,
       size2StartPoint.x,
       size2StartPoint.y,
-      20
+      16 * 2
     );
     this.drawingLine(
       sizeLineGroup,

@@ -32,7 +32,6 @@ class Blueprint {
 
     this.svg = select(container)
       .append("svg")
-      .attr("style", "background: lightgrey")
       .attr("width", width)
       .attr("height", height);
 
@@ -81,7 +80,7 @@ class Blueprint {
       .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
     //在尺寸线的容器中添加箭头定义
     defMarkerArrow({
-      container: markerContainer,
+      container: markerContainer
     });
     //绘制标记
     this.markers.forEach((item) => {

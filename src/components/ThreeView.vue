@@ -45,15 +45,15 @@ export default {
   mounted() {
     const verticalView = new Blueprint({
       container: '#verticalView',
-      width: 500,
-      height: 500,
+      width: 1000,
+      height: 1000,
       margin: {
         top: 100,
         left: 100,
         bottom: 100,
         right: 100,
       },
-      realWidth: 14761.98,
+      realWidth: 14761,
       realHeight: 14050,
       parts: [
         {
@@ -82,11 +82,8 @@ export default {
         {
           name: 'runwayTop',
           image: 'runway_1.svg',
-          realWidth: 7380.99,
+          realWidth: 14761,
           realHeight: 215.98,
-          repeatX: {
-            space: 0,
-          },
           transfer: {
             x: 0,
             y: 1250,
@@ -95,11 +92,8 @@ export default {
         {
           name: 'runwayBottom',
           image: 'runway_1.svg',
-          realWidth: 7380.99,
+          realWidth: 14761,
           realHeight: 215.98,
-          repeatX: {
-            space: 0,
-          },
           transfer: {
             x: 0,
             y: 12550,
@@ -131,7 +125,7 @@ export default {
           },
           text: '223',
           type: 'small',
-          height: 20,
+          height: 40,
         },
         {
           name: 'structureMarkerTop1',
