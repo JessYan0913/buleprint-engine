@@ -177,7 +177,7 @@ class Marker {
 
 class AlignMarker extends Marker {
   /**
-   * 对齐尺寸标注
+   * 对齐标注
    * 可用于标注：对齐的长度，例如：长度、宽度、高度、弦长等
    * @param {*} props
    */
@@ -327,6 +327,9 @@ class AlignMarker extends Marker {
       );
   }
 
+  /**
+   * 绘制对齐标注
+   */
   render() {
     //绘制长度尺寸界线
     this.drawingLengthBoundaryLine();
