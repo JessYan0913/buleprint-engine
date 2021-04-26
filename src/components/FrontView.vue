@@ -1,7 +1,7 @@
 <template>
   <div>
-    俯视图
-    <div id="verticalView">
+    正视图
+    <div id="frontView">
     </div>
   </div>
 </template>
@@ -10,7 +10,7 @@
 import Blueprint from '../basic/blueprint'
 
 export default {
-  name: 'VerticalView',
+  name: 'FrontView',
   props: {
     width: {
       type: Number,
@@ -154,23 +154,17 @@ export default {
     },
   },
   mounted() {
-    const verticalView = new Blueprint({
-      container: '#verticalView',
+    const frontView = new Blueprint({
+      container: '#frontView',
       width: this.width,
       height: this.height,
-      margin: {
-        top: 60,
-        left: 60,
-        bottom: 60,
-        right: 60,
-      },
       realWidth: this.totalLength,
       realHeight: this.totalWidth,
       parts: this.parts,
       markers: this.markers,
     })
 
-    verticalView.render()
+    frontView.render()
   },
 }
 </script>

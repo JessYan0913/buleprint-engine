@@ -40,18 +40,16 @@ class Blueprint {
 
     //获取所有宽度
     const widths = mergeArray(
-      parts.map((item) => item.width),
+      parts.map((item) => item.realWidth),
       [realWidth]
     );
     //获取所有高度
     const heights = mergeArray(
-      parts.map((item) => item.height),
+      parts.map((item) => item.realHeight),
       [realHeight]
     );
 
-    //TODO： 最大的宽度 = 部件的宽度 + 移动的 x
     const maxrealWidth = max(widths);
-    //TODO： 最大的高度 = 部件的高度 + 移动的 y
     const maxrealHeight = max(heights);
     this.scale = min([
       this.innerWidth / maxrealWidth,
@@ -82,7 +80,7 @@ class Blueprint {
       .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
     //在尺寸线的容器中添加箭头定义
     defMarkerArrow({
-      container: markerContainer
+      container: markerContainer,
     });
     //绘制标记
     this.markers.forEach((item) => {

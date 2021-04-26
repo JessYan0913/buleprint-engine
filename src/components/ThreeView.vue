@@ -7,16 +7,31 @@
                   :float-layout="false"
                   :enable-download="true"
                   :preview-modal="true"
-                  :paginate-elements-by-height="1400"
+                  :paginate-elements-by-height="5600"
                   :pdf-quality="2"
                   :manual-pagination="false"
                   pdf-format="a3"
                   pdf-orientation="landscape"
-                  pdf-content-width="1400px"
+                  pdf-content-width="5600px"
                   ref="html2Pdf"
-                  :style="{ marginLeft: '100px' }">
+                  :style="{ marginLeft: '10px' }">
       <div slot="pdf-content">
         <vertical-view :creanData="{
+          totalLength,
+          totalWidth,
+          supportSpan,
+          supportDistances,
+          beams
+        }" />
+        <side-view :creanData="{
+          totalLength,
+          totalWidth,
+          totalHeight,
+          supportSpan,
+          supportDistances,
+          beams
+        }" />
+        <front-view :creanData="{
           totalLength,
           totalWidth,
           supportSpan,
@@ -31,6 +46,8 @@
 <script>
 import VueHtml2pdf from 'vue-html2pdf'
 import VerticalView from './VerticalView'
+import SideView from './SideView'
+import FrontView from './FrontView'
 
 /**
  * 二维坐标系以左上角为原点
@@ -44,6 +61,8 @@ export default {
   components: {
     VueHtml2pdf,
     VerticalView,
+    SideView,
+    FrontView,
   },
   data() {
     return {
@@ -54,10 +73,7 @@ export default {
       supportDistances: [6000, 6000, 4500],
       beams: [
         {
-          length: 5000,
-        },
-        {
-          length: 6000,
+          length: 5600,
         },
       ],
     }

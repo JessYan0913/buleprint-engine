@@ -1,7 +1,7 @@
 <template>
   <div>
-    俯视图
-    <div id="verticalView">
+    侧视图
+    <div id="sideView">
     </div>
   </div>
 </template>
@@ -10,7 +10,7 @@
 import Blueprint from '../basic/blueprint'
 
 export default {
-  name: 'VerticalView',
+  name: 'SideView',
   props: {
     width: {
       type: Number,
@@ -18,7 +18,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 500,
+      default: 800,
     },
     creanData: {
       type: Object,
@@ -28,7 +28,7 @@ export default {
       type: Object,
       default() {
         return {
-          image: 'structure_1.svg',
+          image: 'structure_2.svg',
           realWidth: 350,
         }
       },
@@ -37,8 +37,9 @@ export default {
       type: Object,
       default() {
         return {
-          image: 'beam_1.svg',
+          image: 'beam_2.svg',
           realWidth: 550,
+          realHeight: 400,
         }
       },
     },
@@ -46,7 +47,8 @@ export default {
       type: Object,
       default() {
         return {
-          image: 'runway_1.svg',
+          image: 'runway_2.svg',
+          realWidth: 6000,
           realHeight: 200,
         }
       },
@@ -65,7 +67,7 @@ export default {
           name: 'structure',
           image: this.support.image,
           realWidth: this.support.realWidth,
-          realHeight: this.supportSpan,
+          realHeight: this.totalHeight,
           transfer: {
             x: pre + cur,
             y: 0,
@@ -77,7 +79,7 @@ export default {
         name: 'beam',
         image: this.beam.image,
         realWidth: this.beam.realWidth,
-        realHeight: item.length,
+        realHeight: this.beam.realHeight,
         transfer: {
           x: 3000 * (index * 2.4 + 1),
           y: (this.totalWidth - item.length) / 2,
@@ -88,74 +90,50 @@ export default {
         {
           name: 'runwayTop',
           image: this.runway.image,
-          realWidth: this.totalLength,
+          realWidth: this.runway.realWidth,
           realHeight: this.runway.realHeight,
-          transfer: {
-            x: 0,
-            y: 450,
+          repeatX: {
+            space: 0
           },
-        },
-        {
-          name: 'runwayBottom',
-          image: this.runway.image,
-          realWidth: this.totalLength,
-          realHeight: this.runway.realHeight,
           transfer: {
             x: 0,
-            y: this.totalWidth - 450 - this.runway.realHeight,
+            y: 200,
           },
         },
         ...supportParts,
       ]
     },
     markers() {
-      const supportMarkers = []
-      this.supportDistances.reduce((pre, cur, index) => {
-        supportMarkers.push({
-          name: `supportDistanceMarker${index}`,
-          start: {
-            x: pre,
-            y: index % 2 === 0 ? 0 : this.totalWidth,
-          },
-          end: {
-            x: pre + cur,
-            y: index % 2 === 0 ? 0 : this.totalWidth,
-          },
-          position: index % 2 === 0 ? 'outer' : 'inner',
-        })
-        return pre + cur + this.support.realWidth
-      }, this.support.realWidth)
       return [
         {
-          name: 'supportSpanMarker',
+          name: 'supportHeightMarker',
           start: {
             x: 0,
             y: 0,
           },
           end: {
             x: 0,
-            y: this.totalWidth,
+            y: this.totalHeight,
           },
           height: 40,
         },
         {
-          name: 'runwaySpanMarker',
+          name: 'runwayHeightMarker',
           start: {
             x: 0,
-            y: 450 + this.runway.realHeight,
+            y: 200 + this.runway.realHeight,
           },
           end: {
             x: 0,
-            y: this.totalWidth - 450 - this.runway.realHeight,
+            y: this.totalHeight,
           },
         },
-        ...supportMarkers,
       ]
     },
   },
   mounted() {
-    const verticalView = new Blueprint({
-      container: '#verticalView',
+    const sideView = new Blueprint({
+      container: '#sideView',
       width: this.width,
       height: this.height,
       margin: {
@@ -170,7 +148,7 @@ export default {
       markers: this.markers,
     })
 
-    verticalView.render()
+    sideView.render()
   },
 }
 </script>

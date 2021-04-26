@@ -333,9 +333,9 @@ class AlignMarker extends Marker {
   render() {
     //绘制长度尺寸界线
     this.drawingLengthBoundaryLine();
-    //如果文本长度 + 两个箭头的长度 + 80 < 尺寸线长度，则使用正常尺寸线标记；否则使用小尺寸线标注
+    //如果文本长度 + 两个箭头的长度 + 10 < 尺寸线长度，则使用正常尺寸线标记；否则使用小尺寸线标注
     if (
-      this.textSelectionSize.width + (arrowSize + 40) * 2 <
+      this.textSelectionSize.width + (arrowSize + 5) * 2 <
       this.sizeLineLength
     ) {
       this.normalAlignMarker();
