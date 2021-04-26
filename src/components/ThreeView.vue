@@ -70,7 +70,7 @@ export default {
     return {
       totalLength: 18000,
       totalWidth: 6000,
-      totalHeight: 10000,
+      totalHeight: 4000,
       supportSpan: 6000,
       supportDistances: [6000, 6000, 4500],
       beams: [
