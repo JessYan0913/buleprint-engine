@@ -29,7 +29,9 @@ export default {
       default() {
         return {
           image: 'structure_2.svg',
+          realLength: 6000,
           realWidth: 350,
+          realHeight: 4000,
         }
       },
     },
@@ -38,7 +40,8 @@ export default {
       default() {
         return {
           image: 'beam_2.svg',
-          realWidth: 550,
+          realLength: 6000,
+          realWidth: 400,
           realHeight: 400,
         }
       },
@@ -48,7 +51,8 @@ export default {
       default() {
         return {
           image: 'runway_2.svg',
-          realWidth: 6000,
+          realLength: 6000,
+          realWidth: 200,
           realHeight: 400,
         }
       },
@@ -90,10 +94,10 @@ export default {
         {
           name: 'runwayTop',
           image: this.runway.image,
-          realWidth: this.runway.realWidth,
+          realWidth: this.runway.realLength,
           realHeight: this.runway.realHeight,
           repeatX: {
-            space: 0
+            space: 0,   
           },
           transfer: {
             x: 0,

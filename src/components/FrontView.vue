@@ -29,7 +29,9 @@ export default {
       default() {
         return {
           image: 'structure_3.svg',
+          realLength: 6000,
           realWidth: 350,
+          realHeight: 4000,
         }
       },
     },
@@ -38,7 +40,8 @@ export default {
       default() {
         return {
           image: 'beam_3.svg',
-          realWidth: 550,
+          realLength: 6000,
+          realWidth: 400,
           realHeight: 400,
         }
       },
@@ -48,6 +51,7 @@ export default {
       default() {
         return {
           image: 'runway_3.svg',
+          realLength: 6000,
           realWidth: 200,
           realHeight: 400,
         }
