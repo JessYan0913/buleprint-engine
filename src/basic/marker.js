@@ -94,7 +94,7 @@ class Marker {
     this.endY = end.y * scale;
 
     this.text =
-      text || twoPointsDistance(start.x, start.y, end.x, end.y).toFixed(2);
+      text || twoPointsDistance(start.x, start.y, end.x, end.y);
 
     //计算尺寸线的斜率
     this.markerSlope = linearSlope(
