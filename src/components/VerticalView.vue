@@ -18,7 +18,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 500,
+      default: 800,
     },
     creanData: {
       type: Object,
