@@ -2,7 +2,7 @@ import "../assets";
 import { max, min } from "d3-array";
 import { select } from "d3-selection";
 import { mergeArray } from "./utils/array-util";
-import { AlignMarker, defMarkerArrow, SmallSizeMarker } from "./marker";
+import { AlignMarker, defMarkerArrow } from "./marker";
 import Part from "./part";
 
 class Blueprint {
@@ -86,15 +86,6 @@ class Blueprint {
     });
     //绘制标记
     this.markers.forEach((item) => {
-      if (item.type === "small") {
-        const mark = new SmallSizeMarker({
-          ...item,
-          scale: this.scale,
-          container: markerContainer,
-        });
-        mark.render();
-        return;
-      }
       const mark = new AlignMarker({
         ...item,
         scale: this.scale,

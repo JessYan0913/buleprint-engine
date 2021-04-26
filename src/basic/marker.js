@@ -28,12 +28,15 @@ const ArrowType = {
   },
 };
 
+let arrowSize = 16;
+
 /**
  * 定义箭头
  * @param {*} props
  */
 function defMarkerArrow(props) {
-  const { container, size = 16 } = props;
+  const { container, size = arrowSize } = props;
+  arrowSize = size;
   const defs = container.append("defs");
 
   for (const key in ArrowType) {
@@ -90,9 +93,8 @@ class Marker {
     this.endX = end.x * scale;
     this.endY = end.y * scale;
 
-    this.markerDistance = twoPointsDistance(start.x, start.y, end.x, end.y);
-
-    this.text = text || this.markerDistance;
+    this.text =
+      text || twoPointsDistance(start.x, start.y, end.x, end.y).toFixed(2);
 
     //计算尺寸线的斜率
     this.markerSlope = linearSlope(
@@ -181,14 +183,29 @@ class AlignMarker extends Marker {
    */
   constructor(props) {
     super(props);
+    this.sizeLineGroup = this.container.append("g");
+    this.textSelection = this.sizeLineGroup
+      .append("text")
+      .attr("font-family", "Verdana")
+      .attr("startOffset", "50%")
+      .attr("font-size", 12)
+      .text(this.text);
+    this.textSelectionSize = {
+      width: this.textSelection.node().getBBox().width,
+      height: this.textSelection.node().getBBox().width,
+    };
+    this.sizeLineLength = twoPointsDistance(
+      this.startX,
+      this.startY,
+      this.endX,
+      this.endY
+    );
   }
 
-  render() {
-    //绘制长度尺寸界线
-    this.drawingLengthBoundaryLine();
-
-    //绘制尺寸线
-    const sizeLineGroup = this.container.append("g");
+  /**
+   * 正常的对齐标注
+   */
+  normalAlignMarker() {
     //计算尺寸线起点
     const sizeStartPoint = this.calculateTargetPoint(
       this.startX,
@@ -204,7 +221,7 @@ class AlignMarker extends Marker {
 
     //绘制尺寸线
     this.drawingLine(
-      sizeLineGroup,
+      this.sizeLineGroup,
       sizeStartPoint.x,
       sizeStartPoint.y,
       sizeEndPoint.x,
@@ -223,42 +240,20 @@ class AlignMarker extends Marker {
     //计算尺寸线与X的夹脚
     const sizeLineAngle = slope2Angle(this.markerSlope);
     //绘制尺寸文本
-    const text = sizeLineGroup
-      .append("text")
-      .attr("font-family", "Verdana")
+    this.textSelection
       .attr(
         "transform",
         `translate(${textPoint.x},${textPoint.y}) rotate(${
           sizeLineAngle > 0 ? sizeLineAngle + 180 : sizeLineAngle
         })`
       )
-      .attr("text-anchor", "middle")
-      .attr("startOffset", "50%")
-      .attr("font-size", 12)
-      .text(this.text);
-    console.log(
-      twoPointsDistance(this.startX, this.startY, this.endX, this.endY)
-    );
-    console.log(text.node().getBBox().width + 16 * 2 + 40);
+      .attr("text-anchor", "middle");
   }
-}
 
-class SmallSizeMarker extends Marker {
   /**
-   * 小尺寸标注
-   * 可用于标注：没有足够空间时，箭头可画在外面，尺寸数字也可写在外面或引出标注
-   * @param {*} props
+   * 小尺寸的对齐标注
    */
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    //绘制长度尺寸界线
-    this.drawingLengthBoundaryLine();
-
-    //绘制尺寸线
-    const sizeLineGroup = this.container.append("g");
+  smallAlignMarker() {
     //计算尺寸线1的起点
     const size1StartPoint = this.calculateTargetPoint(
       this.startX,
@@ -273,7 +268,7 @@ class SmallSizeMarker extends Marker {
       -16 * 2
     );
     this.drawingLine(
-      sizeLineGroup,
+      this.sizeLineGroup,
       size1StartPoint.x,
       size1StartPoint.y,
       size1EndPoint.x,
@@ -293,29 +288,58 @@ class SmallSizeMarker extends Marker {
       16 * 2
     );
     this.drawingLine(
-      sizeLineGroup,
+      this.sizeLineGroup,
       size2StartPoint.x,
       size2StartPoint.y,
       size2EndPoint.x,
       size2EndPoint.y
     ).attr("marker-start", `url(#${ArrowType.start.id})`);
 
-    //计算尺寸线2的中点
-    const textPoint = midpoint(
-      size2StartPoint.x,
-      size2StartPoint.y,
-      size2EndPoint.x,
-      size2EndPoint.y
-    );
-    sizeLineGroup
-      .append("text")
-      .attr("font-family", "Verdana")
-      .attr("startOffset", "50%")
-      .attr("font-size", 12)
-      .attr("x", textPoint.x)
-      .attr("y", textPoint.y)
-      .text(this.text);
+    let textPoint = {
+      x: 0,
+      y: 0,
+    };
+
+    //计算尺寸线与X的夹脚
+    const sizeLineAngle = slope2Angle(this.markerSlope);
+    if (this.position === "inner" || sizeLineAngle < 0) {
+      textPoint = midpoint(
+        size1StartPoint.x,
+        size1StartPoint.y,
+        size1EndPoint.x,
+        size1EndPoint.y
+      );
+    } else {
+      textPoint = midpoint(
+        size2StartPoint.x,
+        size2StartPoint.y,
+        size2EndPoint.x,
+        size2EndPoint.y
+      );
+    }
+
+    this.textSelection
+      .attr(
+        "transform",
+        `translate(${textPoint.x},${textPoint.y}) rotate(${
+          sizeLineAngle < 0 ? sizeLineAngle + 360 : sizeLineAngle
+        })`
+      );
+  }
+
+  render() {
+    //绘制长度尺寸界线
+    this.drawingLengthBoundaryLine();
+    //如果文本长度 + 两个箭头的长度 + 80 < 尺寸线长度，则使用正常尺寸线标记；否则使用小尺寸线标注
+    if (
+      this.textSelectionSize.width + (arrowSize + 40) * 2 <
+      this.sizeLineLength
+    ) {
+      this.normalAlignMarker();
+    } else {
+      this.smallAlignMarker();
+    }
   }
 }
 
-export { defMarkerArrow, AlignMarker, SmallSizeMarker };
+export { defMarkerArrow, AlignMarker };
