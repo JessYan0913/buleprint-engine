@@ -29,7 +29,9 @@ export default {
       default() {
         return {
           image: 'structure_1.svg',
+          realLength: 6000,
           realWidth: 350,
+          realHeight: 4000
         }
       },
     },
@@ -38,7 +40,9 @@ export default {
       default() {
         return {
           image: 'beam_1.svg',
-          realWidth: 550,
+          realLength: 6000,
+          realWidth: 300,
+          realHeight: 400
         }
       },
     },
@@ -47,7 +51,9 @@ export default {
       default() {
         return {
           image: 'runway_1.svg',
-          realHeight: 200,
+          realLength: 18000,
+          realWidth: 200,
+          realHeight: 400,
         }
       },
     },
@@ -89,7 +95,7 @@ export default {
           name: 'runwayTop',
           image: this.runway.image,
           realWidth: this.totalLength,
-          realHeight: this.runway.realHeight,
+          realHeight: this.runway.realWidth,
           transfer: {
             x: 0,
             y: 450,
@@ -99,10 +105,10 @@ export default {
           name: 'runwayBottom',
           image: this.runway.image,
           realWidth: this.totalLength,
-          realHeight: this.runway.realHeight,
+          realHeight: this.runway.realWidth,
           transfer: {
             x: 0,
-            y: this.totalWidth - 450 - this.runway.realHeight,
+            y: this.totalWidth - 450 - this.runway.realWidth,
           },
         },
         ...supportParts,
@@ -142,11 +148,11 @@ export default {
           name: 'runwaySpanMarker',
           start: {
             x: 0,
-            y: 450 + this.runway.realHeight,
+            y: 450 + this.runway.realWidth,
           },
           end: {
             x: 0,
-            y: this.totalWidth - 450 - this.runway.realHeight,
+            y: this.totalWidth - 450 - this.runway.realWidth,
           },
         },
         ...supportMarkers,
