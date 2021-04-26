@@ -19,6 +19,7 @@
         <vertical-view :creanData="{
           totalLength,
           totalWidth,
+          totalHeight,
           supportSpan,
           supportDistances,
           beams
@@ -34,6 +35,7 @@
         <front-view :creanData="{
           totalLength,
           totalWidth,
+          totalHeight,
           supportSpan,
           supportDistances,
           beams

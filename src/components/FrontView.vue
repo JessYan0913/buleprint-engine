@@ -18,7 +18,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 500,
+      default: 800,
     },
     creanData: {
       type: Object,
@@ -28,7 +28,7 @@ export default {
       type: Object,
       default() {
         return {
-          image: 'structure_1.svg',
+          image: 'structure_3.svg',
           realWidth: 350,
         }
       },
@@ -37,8 +37,9 @@ export default {
       type: Object,
       default() {
         return {
-          image: 'beam_1.svg',
+          image: 'beam_3.svg',
           realWidth: 550,
+          realHeight: 400,
         }
       },
     },
@@ -46,8 +47,9 @@ export default {
       type: Object,
       default() {
         return {
-          image: 'runway_1.svg',
-          realHeight: 200,
+          image: 'runway_3.svg',
+          realWidth: 200,
+          realHeight: 400,
         }
       },
     },
@@ -57,99 +59,53 @@ export default {
   },
   computed: {
     parts() {
-      const supportParts = []
-      const supportDistances = [...this.supportDistances]
-      supportDistances.unshift(0)
-      supportDistances.reduce((pre, cur) => {
-        supportParts.push({
-          name: 'structure',
-          image: this.support.image,
-          realWidth: this.support.realWidth,
-          realHeight: this.supportSpan,
-          transfer: {
-            x: pre + cur,
-            y: 0,
-          },
-        })
-        return pre + cur + this.support.realWidth
-      }, 0)
-      const beamParts = this.beams.map((item, index) => ({
+      const beamParts = this.beams.map((item) => ({
         name: 'beam',
         image: this.beam.image,
-        realWidth: this.beam.realWidth,
-        realHeight: item.length,
+        realWidth: item.length,
+        realHeight: this.beam.realHeight,
         transfer: {
-          x: 3000 * (index * 2.4 + 1),
-          y: (this.totalWidth - item.length) / 2,
+          x: (this.totalWidth - item.length) / 2,
+          y: 450,
         },
       }))
       return [
-        ...beamParts,
         {
-          name: 'runwayTop',
+          name: 'runwayLeft',
           image: this.runway.image,
-          realWidth: this.totalLength,
+          realWidth: this.runway.realWidth,
           realHeight: this.runway.realHeight,
           transfer: {
-            x: 0,
-            y: 450,
+            x: 450,
+            y: 200,
           },
         },
         {
-          name: 'runwayBottom',
+          name: 'runwayRight',
           image: this.runway.image,
-          realWidth: this.totalLength,
+          realWidth: this.runway.realWidth,
           realHeight: this.runway.realHeight,
           transfer: {
-            x: 0,
-            y: this.totalWidth - 450 - this.runway.realHeight,
+            x: this.totalWidth - 450 - this.runway.realWidth,
+            y: 200,
           },
         },
-        ...supportParts,
-      ]
-    },
-    markers() {
-      const supportMarkers = []
-      this.supportDistances.reduce((pre, cur, index) => {
-        supportMarkers.push({
-          name: `supportDistanceMarker${index}`,
-          start: {
-            x: pre,
-            y: index % 2 === 0 ? 0 : this.totalWidth,
-          },
-          end: {
-            x: pre + cur,
-            y: index % 2 === 0 ? 0 : this.totalWidth,
-          },
-          position: index % 2 === 0 ? 'outer' : 'inner',
-        })
-        return pre + cur + this.support.realWidth
-      }, this.support.realWidth)
-      return [
         {
-          name: 'supportSpanMarker',
-          start: {
+          name: 'structure',
+          image: this.support.image,
+          realWidth: this.totalWidth,
+          realHeight: this.totalHeight,
+          transfer: {
             x: 0,
             y: 0,
           },
-          end: {
-            x: 0,
-            y: this.totalWidth,
-          },
-          height: 40,
         },
-        {
-          name: 'runwaySpanMarker',
-          start: {
-            x: 0,
-            y: 450 + this.runway.realHeight,
-          },
-          end: {
-            x: 0,
-            y: this.totalWidth - 450 - this.runway.realHeight,
-          },
-        },
-        ...supportMarkers,
+        ...beamParts
+      ]
+    },
+    markers() {
+      return [
+        
       ]
     },
   },
@@ -158,6 +114,12 @@ export default {
       container: '#frontView',
       width: this.width,
       height: this.height,
+      margin: {
+        top: 60,
+        left: 60,
+        bottom: 60,
+        right: 60,
+      },
       realWidth: this.totalLength,
       realHeight: this.totalWidth,
       parts: this.parts,

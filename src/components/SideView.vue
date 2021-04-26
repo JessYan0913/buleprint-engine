@@ -49,7 +49,7 @@ export default {
         return {
           image: 'runway_2.svg',
           realWidth: 6000,
-          realHeight: 200,
+          realHeight: 400,
         }
       },
     },
@@ -82,7 +82,7 @@ export default {
         realHeight: this.beam.realHeight,
         transfer: {
           x: 3000 * (index * 2.4 + 1),
-          y: (this.totalWidth - item.length) / 2,
+          y: (this.totalWidth - item.length) / 2 + 300,
         },
       }))
       return [
