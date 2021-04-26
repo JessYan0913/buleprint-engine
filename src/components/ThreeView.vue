@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div>
+      <button @click="handleDownloadPdf">下载PDF</button>
+    </div>
     <vue-html2pdf :show-layout="true"
                   :float-layout="false"
                   :enable-download="true"
@@ -7,29 +10,28 @@
                   :paginate-elements-by-height="1400"
                   :pdf-quality="2"
                   :manual-pagination="false"
-                  pdf-format="a4"
+                  pdf-format="a3"
                   pdf-orientation="landscape"
                   pdf-content-width="1400px"
                   ref="html2Pdf"
                   :style="{ marginLeft: '100px' }">
       <div slot="pdf-content">
-        <div id="verticalView">
-        </div>
-        <div id="frontView">
-        </div>
-        <div id="sideView">
-        </div>
+        <vertical-view :creanData="{
+          totalLength,
+          totalWidth,
+          supportSpan,
+          supportDistances,
+          beams
+        }" />
       </div>
     </vue-html2pdf>
-    <div>
-      <button @click="handleDownloadPdf">下载PDF</button>
-    </div>
   </div>
 </template>
 
 <script>
-import Blueprint from '../basic/blueprint'
 import VueHtml2pdf from 'vue-html2pdf'
+import VerticalView from './VerticalView'
+
 /**
  * 二维坐标系以左上角为原点
  * 三维坐标系以俯视图左上角为原点，Z轴指向屏幕外
@@ -41,206 +43,24 @@ export default {
   name: 'ThreeView',
   components: {
     VueHtml2pdf,
+    VerticalView,
   },
-  mounted() {
-    const verticalView = new Blueprint({
-      container: '#verticalView',
-      width: 1000,
-      height: 1000,
-      margin: {
-        top: 100,
-        left: 100,
-        bottom: 100,
-        right: 100,
-      },
-      realWidth: 14761,
-      realHeight: 14050,
-      parts: [
+  data() {
+    return {
+      totalLength: 18000,
+      totalWidth: 6000,
+      totalHeight: 10000,
+      supportSpan: 6000,
+      supportDistances: [6000, 6000, 4500],
+      beams: [
         {
-          name: 'structure',
-          image: 'structure_1.svg',
-          realWidth: 730,
-          realHeight: 14050,
-          repeatX: {
-            space: 6300,
-          },
-          transfer: {
-            x: 0,
-            y: 0,
-          },
+          length: 5000,
         },
         {
-          name: 'beam',
-          image: 'beam_1.svg',
-          realWidth: 1340,
-          realHeight: 12845,
-          transfer: {
-            x: 762,
-            y: 562,
-          },
-        },
-        {
-          name: 'runwayTop',
-          image: 'runway_1.svg',
-          realWidth: 14761,
-          realHeight: 215.98,
-          transfer: {
-            x: 0,
-            y: 1250,
-          },
-        },
-        {
-          name: 'runwayBottom',
-          image: 'runway_1.svg',
-          realWidth: 14761,
-          realHeight: 215.98,
-          transfer: {
-            x: 0,
-            y: 12550,
-          },
+          length: 6000,
         },
       ],
-      markers: [
-        {
-          name: 'runWayLeft',
-          start: {
-            x: 0,
-            y: 1250 + 215.98,
-          },
-          end: {
-            x: 0,
-            y: 12550,
-          },
-          text: '223mm',
-        },
-        {
-          name: 'structureMarkerLeft',
-          start: {
-            x: 0,
-            y: 10,
-          },
-          end: {
-            x: 730,
-            y: 10,
-          },
-          text: '223',
-          type: 'small',
-          height: 40,
-        },
-        {
-          name: 'structureMarkerTop1',
-          start: {
-            x: 6300 + 730,
-            y: 0,
-          },
-          end: {
-            x: 730,
-            y: 0,
-          },
-        },
-        {
-          name: 'structureMarkerTop2',
-          start: {
-            x: 6300 + 730 + 730,
-            y: 14050,
-            
-          },
-          end: {
-            x: 6300 + 730 + 6300 + 730,
-            y: 14050,
-          },
-          position: 'inner',
-        },
-      ],
-    })
-
-    verticalView.render()
-
-    const frontView = new Blueprint({
-      container: '#frontView',
-      width: 500,
-      height: 500,
-      realWidth: 14761.98,
-      realHeight: 14050,
-      margin: {
-        top: 100,
-        left: 100,
-        bottom: 100,
-        right: 100,
-      },
-      parts: [
-        {
-          name: 'structure',
-          image: 'structure_2.svg',
-          realWidth: 730,
-          realHeight: 14050,
-          repeatX: {
-            space: 6300,
-          },
-          transfer: {
-            x: 0,
-            y: 0,
-          },
-        },
-        {
-          name: 'beam',
-          image: 'beam_2.svg',
-          realWidth: 1340,
-          realHeight: 945,
-          transfer: {
-            x: 962,
-            y: 262,
-          },
-        },
-        {
-          name: 'runwayTop',
-          image: 'runway_2.svg',
-          realWidth: 7380.99,
-          realHeight: 215.98,
-          repeatX: {
-            space: 0,
-          },
-          transfer: {
-            x: 0,
-            y: 300,
-          },
-        },
-      ],
-    })
-
-    frontView.render()
-
-    // const sideView = new Blueprint({
-    //   container: '#sideView',
-    //   width: 500,
-    //   height: 500,
-    //   realWidth: 14761.98,
-    //   realHeight: 14050,
-    //   parts: [
-    //     {
-    //       name: 'structure',
-    //       image: 'structure_3.svg',
-    //       realWidth: 14761.98,
-    //       realHeight: 14050,
-    //       transfer: {
-    //         x: 0,
-    //         y: 0,
-    //       },
-    //     },
-    //     {
-    //       name: 'beam',
-    //       image: 'beam_3.svg',
-    //       realWidth: 13461.98,
-    //       realHeight: 700,
-    //       transfer: {
-    //         x: 642,
-    //         y: 482,
-    //       },
-    //     },
-    //   ],
-    // })
-
-    // sideView.render()
+    }
   },
   methods: {
     handleDownloadPdf() {

@@ -175,8 +175,8 @@ class Marker {
 
 class AlignMarker extends Marker {
   /**
-   * 线性尺寸标注
-   * 可用于标注：线性的长度，例如：长度、宽度、高度、弦长等
+   * 对齐尺寸标注
+   * 可用于标注：对齐的长度，例如：长度、宽度、高度、弦长等
    * @param {*} props
    */
   constructor(props) {
@@ -223,17 +223,23 @@ class AlignMarker extends Marker {
     //计算尺寸线与X的夹脚
     const sizeLineAngle = slope2Angle(this.markerSlope);
     //绘制尺寸文本
-    sizeLineGroup
+    const text = sizeLineGroup
       .append("text")
       .attr("font-family", "Verdana")
       .attr(
         "transform",
-        `translate(${textPoint.x},${textPoint.y}) rotate(${sizeLineAngle > 0 ? sizeLineAngle + 180 : sizeLineAngle})`
+        `translate(${textPoint.x},${textPoint.y}) rotate(${
+          sizeLineAngle > 0 ? sizeLineAngle + 180 : sizeLineAngle
+        })`
       )
       .attr("text-anchor", "middle")
       .attr("startOffset", "50%")
       .attr("font-size", 12)
       .text(this.text);
+    console.log(
+      twoPointsDistance(this.startX, this.startY, this.endX, this.endY)
+    );
+    console.log(text.node().getBBox().width + 16 * 2 + 40);
   }
 }
 

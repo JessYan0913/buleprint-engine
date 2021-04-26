@@ -49,7 +49,9 @@ class Blueprint {
       [realHeight]
     );
 
+    //TODO： 最大的宽度 = 部件的宽度 + 移动的 x
     const maxrealWidth = max(widths);
+    //TODO： 最大的高度 = 部件的高度 + 移动的 y
     const maxrealHeight = max(heights);
     this.scale = min([
       this.innerWidth / maxrealWidth,
