@@ -110,18 +110,6 @@ export default {
     markers() {
       return [
         {
-          name: 'supportHeightMarker',
-          start: {
-            x: 0,
-            y: 0,
-          },
-          end: {
-            x: 0,
-            y: this.totalHeight,
-          },
-          height: 40,
-        },
-        {
           name: 'runwayHeightMarker',
           start: {
             x: 0,
@@ -131,6 +119,30 @@ export default {
             x: 0,
             y: this.totalHeight,
           },
+        },
+        {
+          name: 'runwayLengthMarker',
+          start: {
+            x: 0,
+            y: 200,
+          },
+          end: {
+            x: this.totalLength,
+            y: 200,
+          },
+          height: 40
+        },
+        {
+          name: 'runwayHeightMarker',
+          start: {
+            x: this.totalLength,
+            y: 200
+          },
+          end: {
+            x: this.totalLength,
+            y: 200 + this.runway.realHeight
+          },
+          position: 'inner'
         },
       ]
     },

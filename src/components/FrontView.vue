@@ -109,7 +109,29 @@ export default {
     },
     markers() {
       return [
-        
+        {
+          name: 'supportHeightMarker',
+          start: {
+            x: 0,
+            y: 0,
+          },
+          end: {
+            x: 0,
+            y: this.totalHeight,
+          },
+        },
+        {
+          name: 'runwayCantileverMarker',
+          start: {
+            x: this.support.realWidth,
+            y: 200 + this.runway.realHeight
+          },
+          end: {
+            x: 450,
+            y: 200 + this.runway.realHeight
+          },
+          height: 60
+        }
       ]
     },
   },
