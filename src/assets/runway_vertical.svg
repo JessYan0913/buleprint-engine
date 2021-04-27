@@ -1,18 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="80.26" height="2.74" preserveAspectRatio="none">
-  <g id="固定型轨250kg-2000-2" transform="translate(-29.67 -182.87)">
-    <path id="路径_462" data-name="路径 462" d="M29.72,182.92h80.16" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <line id="直线_353" data-name="直线 353" transform="translate(29.72 182.92)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <line id="直线_354" data-name="直线 354" x1="80.16" transform="translate(29.72 185.56)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <line id="直线_355" data-name="直线 355" y2="0.24" transform="translate(109.88 185.32)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <line id="直线_356" data-name="直线 356" y1="0.24" transform="translate(29.72 185.32)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <line id="直线_357" data-name="直线 357" x2="80.16" transform="translate(29.72 182.92)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <line id="直线_358" data-name="直线 358" x1="80.16" transform="translate(29.72 183.16)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <line id="直线_359" data-name="直线 359" y2="0.24" transform="translate(109.88 182.92)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <line id="直线_360" data-name="直线 360" y1="0.24" transform="translate(29.72 182.92)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <path id="路径_463" data-name="路径 463" d="M29.72,185.32h80.16v-2.16" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <line id="直线_361" data-name="直线 361" y1="2.16" transform="translate(29.72 183.16)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <line id="直线_362" data-name="直线 362" x1="80.16" transform="translate(29.72 185.32)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <line id="直线_363" data-name="直线 363" transform="translate(109.88 185.32)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
-    <line id="直线_364" data-name="直线 364" transform="translate(29.72 185.32)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="0.1"/>
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="23.659 735.942 1014.354 11.979" height="12" width="1055" id="svg2" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs6">
+    <clipPath id="clipPath18" clipPathUnits="userSpaceOnUse">
+      <path id="path16" d="M 0,0 H 12727 V 203 H 0 V 0"/>
+    </clipPath>
+  </defs>
+  <g transform="matrix(0.08,0,0,-0.08,21.333333,749.33334)" id="g10">
+    <g id="g12">
+      <g id="g14">
+        <path id="path20" style="fill:none;stroke:#000000;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" d="m 35,155 v 6 h 12667 v -6"/>
+        <path id="path22" style="fill:none;stroke:#000000;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" d="M 12702,29 V 24 H 35 v 5"/>
+        <path id="path24" style="fill:none;stroke:#000000;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" d="M 35,155 H 12702"/>
+        <path id="path26" style="fill:none;stroke:#000000;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" d="m 12702,155 v -6 H 35 v 6"/>
+        <path id="path28" style="fill:none;stroke:#000000;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" d="M 35,149 V 35 h 12667 v 114"/>
+        <path id="path30" style="fill:none;stroke:#000000;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" d="M 12702,35 V 29 H 35 v 6"/>
+      </g>
+    </g>
   </g>
 </svg>
