@@ -149,6 +149,8 @@ export default {
             y: this.totalWidth,
           },
           height: -40,
+          type: 'linear',
+          direction: 'x'
         },
         {
           name: 'runwaySpanMarker',

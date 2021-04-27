@@ -106,8 +106,8 @@ class Marker {
       this.startY
     );
 
-    //尺寸线到尺寸界线顶点的距离
-    this.sizeLineToExtensionLineTop = 4;
+    //尺寸线高度
+    this.sizeLineHeight = this.height > 0 ? this.height - 4 : this.height + 4;
 
     this.sizeLineGroup = this.container.append("g");
     this.textSelection = this.sizeLineGroup
@@ -122,7 +122,7 @@ class Marker {
     };
 
     //是否采用小尺寸标注，如果文本长度 + 两个箭头的长度 + 10 < 尺寸线长度，则使用正常尺寸线标记；否则使用小尺寸线标注
-    this.isSmallSizeMarker =
+    this.isNormalSizeMarker =
       this.textSelectionSize.width + (arrowSize + 5) * 2 < this.sizeLineLength;
   }
 
@@ -242,6 +242,14 @@ class Marker {
       })`
     );
   }
+
+  drawingSizeLine(x1, y1, x2, y2) {
+    if (this.isNormalSizeMarker) {
+      this.drawingNormalSizeLine(x1, y1, x2, y2);
+    } else {
+      this.drawingSmallSizeLine(x1, y1, x2, y2);
+    }
+  }
 }
 
 class AlignMarker extends Marker {
@@ -289,53 +297,123 @@ class AlignMarker extends Marker {
       extensionEndPoint.y
     );
 
-    const sizeLineHeight =
-      this.height > 0
-        ? this.height - this.sizeLineToExtensionLineTop
-        : this.height + this.sizeLineToExtensionLineTop;
+    //计算尺寸线起点
+    const sizeStartPoint = calculateTargetPoint(
+      this.startX,
+      this.startY,
+      this.sizeLineHeight
+    );
+    //计算尺寸线终点
+    const sizeEndPoint = calculateTargetPoint(
+      this.endX,
+      this.endY,
+      this.sizeLineHeight
+    );
 
-    //如果是小尺寸
-    if (this.isSmallSizeMarker) {
-      //计算尺寸线起点
-      const sizeStartPoint = calculateTargetPoint(
-        this.startX,
-        this.startY,
-        sizeLineHeight
-      );
-      //计算尺寸线终点
-      const sizeEndPoint = calculateTargetPoint(
-        this.endX,
-        this.endY,
-        sizeLineHeight
-      );
-
-      this.drawingNormalSizeLine(
-        sizeStartPoint.x,
-        sizeStartPoint.y,
-        sizeEndPoint.x,
-        sizeEndPoint.y
-      );
-    } else {
-      //计算尺寸线1的起点
-      const size1StartPoint = calculateTargetPoint(
-        this.startX,
-        this.startY,
-        sizeLineHeight
-      );
-      //计算尺寸线2的起点
-      const size2StartPoint = calculateTargetPoint(
-        this.endX,
-        this.endY,
-        sizeLineHeight
-      );
-      this.drawingSmallSizeLine(
-        size1StartPoint.x,
-        size1StartPoint.y,
-        size2StartPoint.x,
-        size2StartPoint.y
-      );
-    }
+    this.drawingSizeLine(
+      sizeStartPoint.x,
+      sizeStartPoint.y,
+      sizeEndPoint.x,
+      sizeEndPoint.y
+    );
   }
 }
 
-export { defMarkerArrow, AlignMarker };
+const linearMarkerDirection = (startX, startY, endX, endY) => {
+  const maxX = Math.max(startX, endX);
+  const minX = Math.min(startX, endX);
+  const maxY = Math.max(startY, endY);
+  const minY = Math.min(startY, endY);
+  return {
+    x: ({ y, h }) => {
+      return {
+        x: h < 0 ? minX + h : maxX + h,
+        y: y,
+      };
+    },
+    y: ({ x, h }) => {
+      return {
+        x: x,
+        y: h < 0 ? minY + h : maxY + h,
+      };
+    },
+  };
+};
+
+class LinearMarker extends Marker {
+  constructor(props) {
+    super(props);
+    let { direction } = props;
+    direction = direction.toLowerCase();
+    if (direction === "y" && this.startX === this.endX) {
+      throw new Error(
+        `标记从(${this.startX}, ${this.startY})到(${this.endX}, ${this.endY})无法在Y方向绘制`
+      );
+    }
+    if (direction === "x" && this.startY === this.endY) {
+      throw new Error(
+        `标记从(${this.startX}, ${this.startY})到(${this.endX}, ${this.endY})无法在X方向绘制`
+      );
+    }
+
+    this.direction = linearMarkerDirection(
+      this.startX,
+      this.startY,
+      this.endX,
+      this.endY
+    )[direction];
+  }
+
+  render() {
+    //绘制尺寸界线
+    const extensionLineGroup = this.container.append("g");
+    //从标记起点为起始尺寸界线的起点，并计算尺寸界线的终点
+    const extensionStartPoint = this.direction({
+      x: this.startX,
+      y: this.startY,
+      h: this.height,
+    });
+    this.drawingLine(
+      extensionLineGroup,
+      this.startX,
+      this.startY,
+      extensionStartPoint.x,
+      extensionStartPoint.y
+    );
+    //以标记终点为终点尺寸界线的起点，计算终点尺寸界线的终点
+    const extensionEndPoint = this.direction({
+      x: this.endX,
+      y: this.endY,
+      h: this.height,
+    });
+    this.drawingLine(
+      extensionLineGroup,
+      this.endX,
+      this.endY,
+      extensionEndPoint.x,
+      extensionEndPoint.y
+    );
+
+    //计算尺寸线起点
+    const sizeStartPoint = this.direction({
+      x: this.startX,
+      y: this.startY,
+      h: this.sizeLineHeight,
+    });
+    //计算尺寸线终点
+    const sizeEndPoint = this.direction({
+      x: this.endX,
+      y: this.endY,
+      h: this.sizeLineHeight,
+    });
+
+    this.drawingSizeLine(
+      sizeStartPoint.x,
+      sizeStartPoint.y,
+      sizeEndPoint.x,
+      sizeEndPoint.y
+    );
+  }
+}
+
+export { defMarkerArrow, AlignMarker, LinearMarker };
