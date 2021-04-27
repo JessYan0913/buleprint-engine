@@ -119,6 +119,7 @@ export default {
             x: 0,
             y: this.totalHeight,
           },
+          height: -20
         },
         {
           name: 'runwayLengthMarker',
@@ -130,7 +131,7 @@ export default {
             x: this.totalLength,
             y: 200,
           },
-          height: 40
+          height: -40
         },
         {
           name: 'runwayHeightMarker',
@@ -142,7 +143,7 @@ export default {
             x: this.totalLength,
             y: 200 + this.runway.realHeight
           },
-          position: 'inner'
+          height: 20
         },
       ]
     },

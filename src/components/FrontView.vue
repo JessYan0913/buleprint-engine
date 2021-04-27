@@ -119,6 +119,7 @@ export default {
             x: 0,
             y: this.totalHeight,
           },
+          height: -20
         },
         {
           name: 'runwayCantileverMarker',
@@ -130,7 +131,7 @@ export default {
             x: 450,
             y: 200 + this.runway.realHeight
           },
-          height: 60
+          height: -60
         }
       ]
     },

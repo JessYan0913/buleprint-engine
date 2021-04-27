@@ -1,6 +1,35 @@
 import { isArray } from "./array-util";
 
 /**
+ * 柯里化工具
+ * @param {*} fn
+ * @param {*} args
+ * @returns
+ */
+export function curry(fn, args) {
+  const length = fn.length;
+
+  args = args || [];
+
+  return function() {
+    let _args = args.slice(0),
+      arg,
+      i;
+
+    for (i = 0; i < arguments.length; i++) {
+      arg = arguments[i];
+
+      _args.push(arg);
+    }
+    if (_args.length < length) {
+      return curry.call(this, fn, _args);
+    } else {
+      return fn.apply(this, _args);
+    }
+  };
+}
+
+/**
  * 计算两点间直线的斜率
  * @param {Number} x1
  * @param {Number} y1
@@ -33,13 +62,13 @@ export function twoPointsDistance(x1, y1, x2, y2) {
  * @param {Number} h 距离，当距离为负时，方向相反
  * @returns
  */
-export function linearDistancePoint(slope, x1, y1, h) {
+export const linearDistancePoint = curry(function(slope, x1, y1, h) {
   const p = Math.sqrt(1 + slope * slope);
   return {
     x: h / p + x1,
     y: isNaN((slope * h) / p) ? y1 + h : (slope * h) / p + y1,
   };
-}
+});
 
 /**
  * 计算两点的中点
