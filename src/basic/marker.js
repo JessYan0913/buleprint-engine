@@ -93,8 +93,7 @@ class Marker {
     this.endX = end.x * scale;
     this.endY = end.y * scale;
 
-    this.text =
-      text || twoPointsDistance(start.x, start.y, end.x, end.y);
+    this.text = text || twoPointsDistance(start.x, start.y, end.x, end.y);
 
     //计算尺寸线的斜率
     this.markerSlope = linearSlope(
@@ -318,13 +317,12 @@ class AlignMarker extends Marker {
       );
     }
 
-    this.textSelection
-      .attr(
-        "transform",
-        `translate(${textPoint.x},${textPoint.y}) rotate(${
-          sizeLineAngle < 0 ? sizeLineAngle + 360 : sizeLineAngle
-        })`
-      );
+    this.textSelection.attr(
+      "transform",
+      `translate(${textPoint.x},${textPoint.y}) rotate(${
+        sizeLineAngle < 0 ? sizeLineAngle + 360 : sizeLineAngle
+      })`
+    );
   }
 
   /**

@@ -79,8 +79,8 @@ export function calculateSpaces(space, scale, realLength, totalLength) {
 
 /**
  * 角度转弧度
- * @param {*} angle 
- * @returns 
+ * @param {*} angle
+ * @returns
  */
 export function angle2Radian(angle) {
   //弧度 = π / 180 * 角度
@@ -89,8 +89,8 @@ export function angle2Radian(angle) {
 
 /**
  * 弧度转角度
- * @param {*} radian 
- * @returns 
+ * @param {*} radian
+ * @returns
  */
 export function radian2Angle(radian) {
   //角度 = 180 / π * 弧度
@@ -99,8 +99,8 @@ export function radian2Angle(radian) {
 
 /**
  * 斜率转弧度
- * @param {*} slope 
- * @returns 
+ * @param {*} slope
+ * @returns
  */
 export function slope2Radian(slope) {
   return Math.atan(slope);
@@ -108,8 +108,8 @@ export function slope2Radian(slope) {
 
 /**
  * 斜率转角度
- * @param {*} slope 
- * @returns 
+ * @param {*} slope
+ * @returns
  */
 export function slope2Angle(slope) {
   return radian2Angle(slope2Radian(slope));

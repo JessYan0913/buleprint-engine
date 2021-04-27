@@ -16,30 +16,15 @@
                   ref="html2Pdf"
                   :style="{ marginLeft: '10px' }">
       <div slot="pdf-content">
-        <vertical-view :creanData="{
-          totalLength,
-          totalWidth,
-          totalHeight,
-          supportSpan,
-          supportDistances,
-          beams
-        }" />
-        <side-view :creanData="{
-          totalLength,
-          totalWidth,
-          totalHeight,
-          supportSpan,
-          supportDistances,
-          beams
-        }" />
-        <front-view :creanData="{
-          totalLength,
-          totalWidth,
-          totalHeight,
-          supportSpan,
-          supportDistances,
-          beams
-        }" />
+        <vertical-view :creanData="creanData"
+                       :width="width"
+                       :height="height" />
+        <side-view :creanData="creanData"
+                   :width="width"
+                   :height="height" />
+        <front-view :creanData="creanData"
+                    :width="width"
+                    :height="height" />
       </div>
     </vue-html2pdf>
   </div>
@@ -66,18 +51,29 @@ export default {
     SideView,
     FrontView,
   },
+  props: {
+    creanData: {
+      type: Object,
+      default() {
+        return {
+          totalLength: 18000,
+          totalWidth: 6000,
+          totalHeight: 4000,
+          supportSpan: 6000,
+          supportDistances: [6000, 6000, 4500],
+          beams: [
+            {
+              length: 5600,
+            },
+          ],
+        }
+      },
+    },
+  },
   data() {
     return {
-      totalLength: 18000,
-      totalWidth: 6000,
-      totalHeight: 4000,
-      supportSpan: 6000,
-      supportDistances: [6000, 6000, 4500],
-      beams: [
-        {
-          length: 5600,
-        },
-      ],
+      width: 1000,
+      height: 800,
     }
   },
   methods: {

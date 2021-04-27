@@ -72,11 +72,13 @@ class Part {
   async node() {
     const partSvg = await svg(this.image);
     const partGroup = select(partSvg.documentElement);
-    if (!partGroup.attr('viewBox')) {
+    if (!partGroup.attr("viewBox")) {
       partGroup.attr(
         "viewBox",
-        `0 0 ${partGroup.attr("width").replace('px', '')} ${partGroup.attr("height").replace('px', '')}`
-      )
+        `0 0 ${partGroup.attr("width").replace("px", "")} ${partGroup
+          .attr("height")
+          .replace("px", "")}`
+      );
     }
     partGroup
       .attr("preserveAspectRatio", "none")
