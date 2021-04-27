@@ -255,7 +255,7 @@ class Marker {
 class AlignMarker extends Marker {
   /**
    * 对齐标注
-   * 可用于标注：对齐的长度，例如：长度、宽度、高度、弦长等
+   * 可用于标注：长宽高等，标注线 与 过标注 起点 和 终点的直线平行。
    * @param {*} props
    */
   constructor(props) {
@@ -341,6 +341,11 @@ const linearMarkerDirection = (startX, startY, endX, endY) => {
 };
 
 class LinearMarker extends Marker {
+  /**
+   * 线性标注
+   * 可用于标注：长宽高等，标注线只能位于坐标轴方向（即：x方向或y方向）
+   * @param {*} props 
+   */
   constructor(props) {
     super(props);
     let { direction } = props;
