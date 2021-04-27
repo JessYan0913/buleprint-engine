@@ -28,7 +28,7 @@ export default {
       type: Object,
       default() {
         return {
-          image: 'structure_3.svg',
+          image: 'structure_front.svg',
           realLength: 6000,
           realWidth: 350,
           realHeight: 4000,
@@ -39,7 +39,7 @@ export default {
       type: Object,
       default() {
         return {
-          image: 'beam_3.svg',
+          image: 'beam_front.svg',
           realLength: 6000,
           realWidth: 400,
           realHeight: 400,
@@ -50,7 +50,7 @@ export default {
       type: Object,
       default() {
         return {
-          image: 'runway_3.svg',
+          image: 'runway_front.svg',
           realLength: 6000,
           realWidth: 200,
           realHeight: 400,

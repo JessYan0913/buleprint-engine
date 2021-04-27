@@ -28,7 +28,7 @@ export default {
       type: Object,
       default() {
         return {
-          image: 'structure_2.svg',
+          image: 'structure_side.svg',
           realLength: 6000,
           realWidth: 350,
           realHeight: 4000,
