@@ -16,6 +16,7 @@ class Blueprint {
       width,
       height,
       margin,
+      scale,
       realWidth,
       realHeight,
       parts = [],
@@ -51,10 +52,9 @@ class Blueprint {
 
     const maxrealWidth = max(widths);
     const maxrealHeight = max(heights);
-    this.scale = min([
-      this.innerWidth / maxrealWidth,
-      this.innerHeight / maxrealHeight,
-    ]);
+    this.scale = scale
+      ? scale
+      : min([this.innerWidth / maxrealWidth, this.innerHeight / maxrealHeight]);
   }
 
   /**
