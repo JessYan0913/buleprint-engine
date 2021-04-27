@@ -21,6 +21,7 @@ export function linearSlope(x1, y1, x2, y2) {
  * @returns
  */
 export function twoPointsDistance(x1, y1, x2, y2) {
+  //根据勾股定理计算两点之间的距离
   return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 }
 
