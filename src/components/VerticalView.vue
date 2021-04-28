@@ -145,7 +145,7 @@ export default {
             y: 0,
           },
           end: {
-            x: 0,
+            x: 300,
             y: this.totalWidth,
           },
           height: -40,
