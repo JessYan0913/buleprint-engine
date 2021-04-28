@@ -72,8 +72,7 @@ class Marker {
       container,
     } = props;
     this.name = name;
-    //TODO: 高度可以通过代码计算是否需要抬高，例如：记录同一斜率和同一高度的标记是否已经存在，如果已经存在，则*2
-    //TODO: 判断两条线段是否在同一直线上，并判断两条直线是否重叠
+    //TODO：是否可以自动调整标注线高度，防止标注线重叠
     this.height = height;
     this.repeatX = repaetX;
     this.repeatY = repaetY;
