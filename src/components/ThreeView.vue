@@ -19,12 +19,12 @@
         <vertical-view :creanData="creanData"
                        :width="width"
                        :height="height" />
-        <side-view :creanData="creanData"
+        <!-- <side-view :creanData="creanData"
                    :width="width"
                    :height="height" />
         <front-view :creanData="creanData"
                     :width="width"
-                    :height="height" />
+                    :height="height" /> -->
       </div>
     </vue-html2pdf>
   </div>

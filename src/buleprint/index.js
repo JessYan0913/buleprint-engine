@@ -52,7 +52,8 @@ class Blueprint {
 
     const maxrealWidth = max(widths);
     const maxrealHeight = max(heights);
-    this.scale = scale || Math.min(this.width / maxrealWidth, this.height / maxrealHeight);
+    this.scale =
+      scale || Math.min(this.width / maxrealWidth, this.height / maxrealHeight);
   }
 
   /**
@@ -82,14 +83,14 @@ class Blueprint {
     });
     //绘制标记
     this.markers.forEach((item) => {
-      if (item.type === 'linear') {
+      if (item.type === "linear") {
         const mark = new LinearMarker({
           ...item,
           scale: this.scale,
           container: markerContainer,
         });
         mark.render();
-        return
+        return;
       }
       const mark = new AlignMarker({
         ...item,

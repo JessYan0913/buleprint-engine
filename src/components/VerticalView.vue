@@ -90,7 +90,7 @@ export default {
         },
       }))
       return [
-        ...beamParts,
+        // ...beamParts,
         {
           name: 'runwayTop',
           image: this.runway.image,
@@ -104,20 +104,20 @@ export default {
             y: 450,
           },
         },
-        {
-          name: 'runwayBottom',
-          image: this.runway.image,
-          realWidth: this.runway.realLength,
-          realHeight: this.runway.realWidth,
-          repeatX: {
-            space: 0,
-          },
-          transfer: {
-            x: 0,
-            y: this.totalWidth - 450 - this.runway.realWidth,
-          },
-        },
-        ...supportParts,
+        // {
+        //   name: 'runwayBottom',
+        //   image: this.runway.image,
+        //   realWidth: this.runway.realLength,
+        //   realHeight: this.runway.realWidth,
+        //   repeatX: {
+        //     space: 0,
+        //   },
+        //   transfer: {
+        //     x: 0,
+        //     y: this.totalWidth - 450 - this.runway.realWidth,
+        //   },
+        // },
+        // ...supportParts,
       ]
     },
     markers() {
@@ -182,7 +182,7 @@ export default {
       realWidth: this.totalLength,
       realHeight: this.totalWidth,
       parts: this.parts,
-      markers: this.markers,
+      // markers: this.markers,
     })
 
     verticalView.render()

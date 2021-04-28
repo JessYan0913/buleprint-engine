@@ -1,5 +1,4 @@
 import { svg } from "d3-fetch";
-import { select } from "d3-selection";
 import { calculateSpaces } from "./utils/math-util";
 
 class Part {
@@ -25,13 +24,16 @@ class Part {
     this.realHeight = realHeight;
     this.scale = scale;
     this.container = container;
+    this.repeatX = repeatX;
+    this.repeatY = repeatY;
+
+    //将真实的宽高换算为屏幕上的宽高
+    this.width = realWidth * scale;
+    this.height = realHeight * scale;
 
     //将真实的偏移量换算为屏幕上的偏移
     this.transferX = transfer.x * scale;
     this.transferY = transfer.y * scale;
-
-    this.repeatX = repeatX;
-    this.repeatY = repeatY;
   }
 
   /**
@@ -71,20 +73,7 @@ class Part {
    */
   async node() {
     const partSvg = await svg(this.image);
-    const partGroup = select(partSvg.documentElement);
-    if (!partGroup.attr("viewBox")) {
-      partGroup.attr(
-        "viewBox",
-        `0 0 ${partGroup.attr("width").replace("px", "")} ${partGroup
-          .attr("height")
-          .replace("px", "")}`
-      );
-    }
-    partGroup
-      .attr("preserveAspectRatio", "none")
-      .attr("width", this.scale * this.realWidth)
-      .attr("height", this.scale * this.realHeight);
-    return partGroup.node();
+    return partSvg.documentElement;
   }
 
   /**
@@ -94,10 +83,22 @@ class Part {
    * @param {*} transferY
    */
   drawingPart(selection, transferX, transferY) {
-    this.container
+    const part = this.container
       .append("g")
       .attr("transform", `translate(${transferX} ${transferY})`)
       .append(selection);
+    if (!part.attr("viewBox")) {
+      part.attr(
+        "viewBox",
+        `0 0 ${part.attr("width").replace("px", "")} ${part
+          .attr("height")
+          .replace("px", "")}`
+      );
+    }
+    part
+      .attr("preserveAspectRatio", "none")
+      .attr("width", this.width)
+      .attr("height", this.height);
   }
 
   /**
