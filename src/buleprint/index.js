@@ -1,5 +1,5 @@
 import "../assets";
-import { max, min } from "d3-array";
+import { max } from "d3-array";
 import { select } from "d3-selection";
 import { mergeArray } from "./utils/array-util";
 import { AlignMarker, LinearMarker, defMarkerArrow } from "./marker";
@@ -31,13 +31,13 @@ class Blueprint {
     this.parts = parts;
     this.markers = markers;
 
+    this.svgWidth = width + this.margin.left + this.margin.right;
+    this.svgHeight = height + this.margin.top + this.margin.bottom;
+
     this.svg = select(container)
       .append("svg")
-      .attr("width", width)
-      .attr("height", height);
-
-    this.innerWidth = width - this.margin.left - this.margin.right;
-    this.innerHeight = height - this.margin.top - this.margin.bottom;
+      .attr("width", this.svgWidth)
+      .attr("height", this.svgHeight);
 
     //获取所有宽度
     const widths = mergeArray(
@@ -52,9 +52,7 @@ class Blueprint {
 
     const maxrealWidth = max(widths);
     const maxrealHeight = max(heights);
-    this.scale = scale
-      ? scale
-      : min([this.innerWidth / maxrealWidth, this.innerHeight / maxrealHeight]);
+    this.scale = scale || Math.min(this.width / maxrealWidth, this.height / maxrealHeight);
   }
 
   /**
