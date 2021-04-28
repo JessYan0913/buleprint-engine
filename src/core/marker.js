@@ -72,6 +72,8 @@ class Marker {
       container,
     } = props;
     this.name = name;
+    this.start = start;
+    this.end = end;
     //TODO：是否可以自动调整标注线高度，防止标注线重叠
     this.height = height;
     this.repeatX = repaetX;
@@ -364,12 +366,12 @@ class LinearMarker extends Marker {
     direction = direction.toLowerCase();
     if (direction === "y" && this.startX === this.endX) {
       throw new Error(
-        `标记从(${this.startX}, ${this.startY})到(${this.endX}, ${this.endY})无法在Y方向绘制`
+        `标记从(${this.start.x}, ${this.start.y}) 到 (${this.end.x}, ${this.end.y})无法在Y方向绘制`
       );
     }
     if (direction === "x" && this.startY === this.endY) {
       throw new Error(
-        `标记从(${this.startX}, ${this.startY})到(${this.endX}, ${this.endY})无法在X方向绘制`
+        `标记从(${this.start.x}, ${this.start.y}) 到 (${this.end.x}, ${this.end.y})无法在X方向绘制`
       );
     }
 
