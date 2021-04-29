@@ -362,7 +362,7 @@ class LinearMarker extends Marker {
    */
   constructor(props) {
     super(props);
-    let { direction } = props;
+    let { direction = "x" } = props;
     direction = direction.toLowerCase();
     if (direction === "y" && this.startX === this.endX) {
       throw new Error(
