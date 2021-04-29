@@ -111,6 +111,9 @@ class Blueprint {
     );
   }
 
+  /**
+   * 裁剪SVG到适合的宽度
+   */
   clipSvg() {
     const {
       width: partContainerWidth,
