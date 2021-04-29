@@ -125,10 +125,10 @@ class Blueprint {
     } = this.markerContainer.node().getBBox();
     const maxContainerWidth =
       Math.max(partContainerWidth, markerContainerWidth) +
-      this.margin.right * 2;
+      this.margin.right;
     const maxContainerHeight =
       Math.max(partContainerHeight, markerContainerHeight) +
-      this.margin.bottom * 2;
+      this.margin.bottom;
     this.svg
       .attr("width", maxContainerWidth)
       .attr("height", maxContainerHeight);
