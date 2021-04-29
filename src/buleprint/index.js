@@ -7,11 +7,11 @@ import { Part } from "./part";
 
 /**
  * 计算重复组件距离坐标系的垂直距离
- * @param {*} space 
- * @param {*} transfer 
- * @param {*} realLength 
- * @param {*} totalLength 
- * @returns 
+ * @param {*} space
+ * @param {*} transfer
+ * @param {*} realLength
+ * @param {*} totalLength
+ * @returns
  */
 function calculateSpaces(space, transfer, realLength, totalLength) {
   if (isArray(space)) {
@@ -37,6 +37,7 @@ class Blueprint {
       width,
       height,
       margin,
+      cipt = true,
       scale = 1,
       realWidth,
       realHeight,
@@ -46,6 +47,7 @@ class Blueprint {
     this.container = container;
     this.width = Math.max(width, 0);
     this.height = Math.max(height, 0);
+    this.cipt = cipt;
     this.margin = { top: 40, left: 40, bottom: 40, right: 40, ...margin };
     this.realWidth = Math.max(realWidth, 0);
     this.realHeight = Math.max(realHeight, 0);
@@ -56,12 +58,20 @@ class Blueprint {
     this.svgWidth = width + this.margin.left + this.margin.right;
     this.svgHeight = height + this.margin.top + this.margin.bottom;
 
+    this.calculateScale();
+
     this.svg = select(container)
       .append("svg")
       .attr("width", this.svgWidth)
       .attr("height", this.svgHeight);
 
-    this.calculateScale();
+    this.partContainer = this.svg
+      .append("g")
+      .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+
+    this.markerContainer = this.svg
+      .append("g")
+      .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
   }
 
   calculateScale() {
@@ -101,50 +111,65 @@ class Blueprint {
     );
   }
 
+  clipSvg() {
+    const {
+      width: partContainerWidth,
+      height: partContainerHeight,
+    } = this.partContainer.node().getBBox();
+    const {
+      width: markerContainerWidth,
+      height: markerContainerHeight,
+    } = this.markerContainer.node().getBBox();
+    const maxContainerWidth =
+      Math.max(partContainerWidth, markerContainerWidth) +
+      this.margin.right * 2;
+    const maxContainerHeight =
+      Math.max(partContainerHeight, markerContainerHeight) +
+      this.margin.bottom * 2;
+    this.svg
+      .attr("width", maxContainerWidth)
+      .attr("height", maxContainerHeight);
+  }
+
   /**
    * 渲染平面图
    */
-  render() {
-    const partContainer = this.svg
-      .append("g")
-      .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
-
+  async render() {
     //绘制组件
-    //TODO: 因为这里存在异步，所以在这个方法后获取partContainer的信息是不正确的
-    this.parts.forEach((item) => {
+    for (let index = 0; index < this.parts.length; index++) {
+      const item = this.parts[index];
       const part = new Part({
         ...item,
         scale: this.scale,
-        container: partContainer,
+        container: this.partContainer,
       });
-      part.render(this.realWidth, this.realHeight);
-    });
+      await part.render(this.realWidth, this.realHeight);
+    }
 
-    const markerContainer = this.svg
-      .append("g")
-      .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
     //在尺寸线的容器中添加箭头定义
     defMarkerArrow({
-      container: markerContainer,
+      container: this.markerContainer,
     });
     //绘制标记
     this.markers.forEach((item) => {
+      const markerProps = {
+        ...item,
+        scale: this.scale,
+        container: this.markerContainer,
+      };
       if (item.type === "linear") {
-        const mark = new LinearMarker({
-          ...item,
-          scale: this.scale,
-          container: markerContainer,
-        });
+        const mark = new LinearMarker({ ...markerProps });
         mark.render();
         return;
       }
-      const mark = new AlignMarker({
-        ...item,
-        scale: this.scale,
-        container: markerContainer,
-      });
+      const mark = new AlignMarker({ ...markerProps });
       mark.render();
     });
+
+    //是否裁剪SVG
+    if (this.cipt) {
+      this.clipSvg();
+    }
   }
 }
 

@@ -20,7 +20,7 @@ class Part {
       scale,
       container,
       xRepeatSpaces = [0],
-      yRepeatSpaces = []
+      yRepeatSpaces = [],
     } = props;
     this.name = name;
     this.image = `/img/${image}`;
@@ -62,19 +62,36 @@ class Part {
   /**
    * 绘制组件
    */
-  render() {
+  async render() {
+    const xPartNodes = [];
+    const yPartNodes = [];
+    for (let index = 0; index < this.xRepeatSpaces.length; index++) {
+      const image = await fetchSvg(this.image);
+      xPartNodes.push({
+        space: this.xRepeatSpaces[index],
+        partNode: image,
+      });
+    }
+
+    for (let index = 0; index < this.yRepeatSpaces.length; index++) {
+      const image = await fetchSvg(this.image);
+      yPartNodes.push({
+        space: this.yRepeatSpaces[index],
+        partNode: image,
+      });
+    }
+
     //绘制x方向的该组件
-    this.xRepeatSpaces.forEach(async (xSpace) => {
-      const partNode = await fetchSvg(this.image);
-      const transferX = (this.transferX + xSpace) * this.scale;
+    xPartNodes.forEach(({ space, partNode }) => {
+      const transferX = (this.transferX + space) * this.scale;
       const transferY = this.transferY * this.scale;
       this.drawingPart(() => partNode, transferX, transferY);
     });
+
     //绘制y方向的该组件
-    this.yRepeatSpaces.forEach(async (ySpace) => {
-      const partNode = await fetchSvg(this.image);
+    yPartNodes.forEach(({ space, partNode }) => {
       const transferX = this.transferX * this.scale;
-      const transferY = (this.transferY + ySpace) * this.scale;
+      const transferY = (this.transferY + space) * this.scale;
       this.drawingPart(() => partNode, transferX, transferY);
     });
   }
