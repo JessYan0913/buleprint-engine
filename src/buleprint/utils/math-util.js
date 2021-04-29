@@ -1,5 +1,3 @@
-import { isArray } from "./array-util";
-
 /**
  * 柯里化工具
  * @param {*} fn
@@ -83,27 +81,6 @@ export function midpoint(x1, y1, x2, y2) {
     x: (x1 + x2) / 2,
     y: (y1 + y2) / 2,
   };
-}
-
-/**
- * 计算每个重复组件到坐标系的垂直距离
- * @param {*} space
- * @param {*} scale
- * @param {*} realLength
- * @param {*} totalLength
- * @returns
- */
-export function calculateSpaces(space, scale, realLength, totalLength) {
-  if (isArray(space)) {
-    return space.map((item) => scale * item);
-  }
-  const realSpace = space + realLength;
-  const repeatNum = Math.ceil(totalLength / realSpace);
-  const spaces = [];
-  for (let index = 0; index < repeatNum; index++) {
-    spaces.push(realSpace * scale * index);
-  }
-  return spaces;
 }
 
 /**

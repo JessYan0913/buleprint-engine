@@ -1,5 +1,9 @@
 import { svg } from "d3-fetch";
-import { calculateSpaces } from "./utils/math-util";
+
+async function fetchSvg(image) {
+  const partSvg = await svg(image);
+  return partSvg.documentElement;
+}
 
 class Part {
   /**
@@ -12,11 +16,11 @@ class Part {
       image,
       realWidth,
       realHeight,
-      repeatX = {},
-      repeatY = {},
       transfer = {},
       scale,
       container,
+      xRepeatSpaces = [0],
+      yRepeatSpaces = []
     } = props;
     this.name = name;
     this.image = `/img/${image}`;
@@ -24,56 +28,10 @@ class Part {
     this.realHeight = realHeight;
     this.scale = scale;
     this.container = container;
-    this.repeatX = repeatX;
-    this.repeatY = repeatY;
-
-    //将真实的宽高换算为屏幕上的宽高
-    this.width = realWidth * scale;
-    this.height = realHeight * scale;
-
-    //将真实的偏移量换算为屏幕上的偏移
-    this.transferX = transfer.x * scale;
-    this.transferY = transfer.y * scale;
-  }
-
-  /**
-   * 组件重复时，x方向和y方法的间距
-   * @param {Number} totalWidth
-   * @param {Number} totalHeight
-   * @returns {Array} [xSpaces, ySpaces]
-   */
-  repeatSpaces(totalWidth, totalHeight) {
-    let xSpaces = [];
-    let ySpaces = [];
-    if (this.repeatX) {
-      xSpaces = calculateSpaces(
-        this.repeatX.space,
-        this.scale,
-        this.realWidth,
-        totalWidth
-      );
-    }
-    if (this.repeatY) {
-      ySpaces = calculateSpaces(
-        this.repeatY.space,
-        this.scale,
-        this.realHeight,
-        totalHeight
-      );
-    }
-    if (xSpaces.length === 0 && ySpaces.length === 0) {
-      xSpaces.push(0);
-    }
-    return [xSpaces, ySpaces];
-  }
-
-  /**
-   * 读取svg图，并按照比例缩放
-   * @returns {documentElement} node
-   */
-  async node() {
-    const partSvg = await svg(this.image);
-    return partSvg.documentElement;
+    this.xRepeatSpaces = xRepeatSpaces;
+    this.yRepeatSpaces = yRepeatSpaces;
+    this.transferX = transfer.x;
+    this.transferY = transfer.y;
   }
 
   /**
@@ -97,31 +55,29 @@ class Part {
     }
     part
       .attr("preserveAspectRatio", "none")
-      .attr("width", this.width)
-      .attr("height", this.height);
+      .attr("width", this.realWidth * this.scale)
+      .attr("height", this.realHeight * this.scale);
   }
 
   /**
    * 绘制组件
-   * @param {Number} totalWidth 大组件的整体宽度
-   * @param {Number} totalHeight 大组件的整体高度
    */
-  render(totalWidth, totalHeight) {
-    const repeatSpaces = this.repeatSpaces(totalWidth, totalHeight);
-
+  render() {
     //绘制x方向的该组件
-    repeatSpaces[0].forEach(async (xSpace) => {
-      const partNode = await this.node();
-      const transferX = this.transferX + xSpace;
-      this.drawingPart(() => partNode, transferX, this.transferY);
+    this.xRepeatSpaces.forEach(async (xSpace) => {
+      const partNode = await fetchSvg(this.image);
+      const transferX = (this.transferX + xSpace) * this.scale;
+      const transferY = this.transferY * this.scale;
+      this.drawingPart(() => partNode, transferX, transferY);
     });
     //绘制y方向的该组件
-    repeatSpaces[1].forEach(async (ySpace) => {
-      const partNode = await this.node();
-      const transferY = this.transferY + ySpace;
-      this.drawingPart(() => partNode, this.transferX, transferY);
+    this.yRepeatSpaces.forEach(async (ySpace) => {
+      const partNode = await fetchSvg(this.image);
+      const transferX = this.transferX * this.scale;
+      const transferY = (this.transferY + ySpace) * this.scale;
+      this.drawingPart(() => partNode, transferX, transferY);
     });
   }
 }
 
-export default Part;
+export { fetchSvg, Part };

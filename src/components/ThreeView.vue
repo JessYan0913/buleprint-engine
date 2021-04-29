@@ -19,12 +19,12 @@
         <vertical-view :creanData="creanData"
                        :width="width"
                        :height="height" />
-        <!-- <side-view :creanData="creanData"
+        <side-view :creanData="creanData"
                    :width="width"
                    :height="height" />
         <front-view :creanData="creanData"
                     :width="width"
-                    :height="height" /> -->
+                    :height="height" />
       </div>
     </vue-html2pdf>
   </div>
@@ -56,7 +56,7 @@ export default {
       type: Object,
       default() {
         return {
-          totalLength: 18000,
+          totalLength: 25000,
           totalWidth: 6000,
           totalHeight: 4000,
           supportSpan: 6000,
