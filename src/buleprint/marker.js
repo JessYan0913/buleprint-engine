@@ -62,7 +62,6 @@ class Marker {
   constructor(props) {
     const {
       name,
-      text,
       start = {},
       end = {},
       height = 20,
@@ -87,10 +86,6 @@ class Marker {
     this.endX = end.x * scale;
     this.endY = end.y * scale;
 
-    //标注文本，如果没有传入则计算标注两点间的距离
-    this.text =
-      text || twoPointsDistance(start.x, start.y, end.x, end.y).toFixed(2);
-
     //尺寸线高度
     this.sizeLineHeight = this.height > 0 ? this.height - 4 : this.height + 4;
 
@@ -99,8 +94,7 @@ class Marker {
       .append("text")
       .attr("font-family", "Verdana")
       .attr("startOffset", "50%")
-      .attr("font-size", 12)
-      .text(this.text);
+      .attr("font-size", 12);
     this.textSelectionSize = {
       width: this.textSelection.node().getBBox().width,
       height: this.textSelection.node().getBBox().width,
@@ -242,6 +236,14 @@ class AlignMarker extends Marker {
   constructor(props) {
     super(props);
 
+    const { start = {}, end = {}, text } = props;
+
+    //标注文本，如果没有传入则计算标注两点间的距离
+    this.text =
+      text || twoPointsDistance(start.x, start.y, end.x, end.y).toFixed(2);
+
+    this.textSelection.text(this.text);
+
     //计算尺寸线的斜率
     this.alignMarkerSlope = linearSlope(
       this.endX,
@@ -362,7 +364,7 @@ class LinearMarker extends Marker {
    */
   constructor(props) {
     super(props);
-    let { direction = "x" } = props;
+    let { direction = "x", start = {}, end = {}, text } = props;
     direction = direction.toLowerCase();
     if (direction === "y" && this.startX === this.endX) {
       throw new Error(
@@ -383,6 +385,14 @@ class LinearMarker extends Marker {
       direction === "y"
         ? Math.abs(this.startX - this.endX)
         : Math.abs(this.startY - this.endY);
+
+    //标注文本，如果没有传入则计算标注两点间的距离
+    this.text =
+      text || direction === "y"
+        ? Math.abs(start.x - end.x)
+        : Math.abs(start.y - end.y);
+
+    this.textSelection.text(this.text);
 
     //是否采用小尺寸标注，如果文本长度 + 两个箭头的长度 + 10 < 尺寸线长度，则使用正常尺寸线标记；否则使用小尺寸线标注
     this.isNormalSizeMarker =
