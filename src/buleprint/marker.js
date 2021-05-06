@@ -95,10 +95,6 @@ class Marker {
       .attr("font-family", "Verdana")
       .attr("startOffset", "50%")
       .attr("font-size", 12);
-    this.textSelectionSize = {
-      width: this.textSelection.node().getBBox().width,
-      height: this.textSelection.node().getBBox().width,
-    };
   }
 
   /**
@@ -260,6 +256,11 @@ class AlignMarker extends Marker {
       this.endY
     );
 
+    this.textSelectionSize = {
+      width: this.textSelection.node().getBBox().width,
+      height: this.textSelection.node().getBBox().width,
+    };
+
     //是否采用小尺寸标注，如果文本长度 + 两个箭头的长度 + 10 < 尺寸线长度，则使用正常尺寸线标记；否则使用小尺寸线标注
     this.isNormalSizeMarker =
       this.textSelectionSize.width + (arrowSize + 5) * 2 < this.sizeLineLength;
@@ -393,6 +394,11 @@ class LinearMarker extends Marker {
         : Math.abs(start.y - end.y);
 
     this.textSelection.text(this.text);
+
+    this.textSelectionSize = {
+      width: this.textSelection.node().getBBox().width,
+      height: this.textSelection.node().getBBox().width
+    };
 
     //是否采用小尺寸标注，如果文本长度 + 两个箭头的长度 + 10 < 尺寸线长度，则使用正常尺寸线标记；否则使用小尺寸线标注
     this.isNormalSizeMarker =
