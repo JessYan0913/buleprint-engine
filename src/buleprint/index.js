@@ -141,6 +141,9 @@ class Blueprint {
     //绘制组件
     for (let index = 0; index < this.parts.length; index++) {
       const item = this.parts[index];
+      if (item.hidden) {
+        continue;
+      }
       const part = new Part({
         ...item,
         scale: this.scale,
@@ -155,6 +158,9 @@ class Blueprint {
     });
     //绘制标记
     this.markers.forEach((item) => {
+      if (item.hidden) {
+        return;
+      }
       const markerProps = {
         ...item,
         scale: this.scale,
