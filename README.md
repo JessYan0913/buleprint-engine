@@ -1,4 +1,4 @@
-# terino-drawing-engine
+# Blueprint Engine
 
 ## Project setup
 ```
