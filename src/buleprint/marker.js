@@ -389,15 +389,16 @@ class LinearMarker extends Marker {
 
     //标注文本，如果没有传入则计算标注两点间的距离
     this.text =
-      text || direction === "y"
-        ? Math.abs(start.x - end.x)
-        : Math.abs(start.y - end.y);
+      text ||
+      (direction === "y"
+        ? Math.abs(start.x - end.x).toFixed(2)
+        : Math.abs(start.y - end.y).toFixed(2));
 
     this.textSelection.text(this.text);
 
     this.textSelectionSize = {
       width: this.textSelection.node().getBBox().width,
-      height: this.textSelection.node().getBBox().width
+      height: this.textSelection.node().getBBox().width,
     };
 
     //是否采用小尺寸标注，如果文本长度 + 两个箭头的长度 + 10 < 尺寸线长度，则使用正常尺寸线标记；否则使用小尺寸线标注
