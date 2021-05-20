@@ -1,21 +1,12 @@
 # Blueprint Engine
 
-## Project setup
-```
-npm install
-```
+## 项目计划
+### Part相关
+- 数据绑定到part
+- part增加旋转参数
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
+### Marker相关
+- 实现纯标注（没有尺寸界线）
+- 实现角度标注
+- 实现半径标注
+- 实现直径标注
