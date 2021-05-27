@@ -65,13 +65,9 @@ class Blueprint {
       .attr("width", this.svgWidth)
       .attr("height", this.svgHeight);
 
-    this.partContainer = this.svg
-      .append("g")
-      .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+    this.partContainer = this.svg.append("g").attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
 
-    this.markerContainer = this.svg
-      .append("g")
-      .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+    this.markerContainer = this.svg.append("g").attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
   }
 
   calculateScale() {
@@ -80,58 +76,26 @@ class Blueprint {
     this.parts.forEach((item) => {
       const { repeatX, repeatY, transfer, realWidth, realHeight } = item;
       if (repeatX) {
-        item.xRepeatSpaces = calculateSpaces(
-          repeatX.space,
-          transfer.x,
-          realWidth,
-          this.realWidth
-        );
-        maxrealWidth = Math.max(
-          max(item.xRepeatSpaces) + realWidth,
-          maxrealWidth
-        );
+        item.xRepeatSpaces = calculateSpaces(repeatX.space, transfer.x, realWidth, this.realWidth);
+        maxrealWidth = Math.max(max(item.xRepeatSpaces) + realWidth, maxrealWidth);
       }
       if (repeatY) {
-        item.yRepeatSpaces = calculateSpaces(
-          repeatY.space,
-          transfer.y,
-          realWidth,
-          this.realWidth
-        );
-        maxrealHeight = Math.max(
-          max(item.yRepeatSpaces) + realHeight,
-          maxrealHeight
-        );
+        item.yRepeatSpaces = calculateSpaces(repeatY.space, transfer.y, realWidth, this.realWidth);
+        maxrealHeight = Math.max(max(item.yRepeatSpaces) + realHeight, maxrealHeight);
       }
     });
-    this.scale = Math.min(
-      this.width / maxrealWidth,
-      this.height / maxrealHeight,
-      this.scale
-    );
+    this.scale = Math.min(this.width / maxrealWidth, this.height / maxrealHeight, this.scale);
   }
 
   /**
    * 裁剪SVG到适合的宽度
    */
   clipSvg() {
-    const {
-      width: partContainerWidth,
-      height: partContainerHeight,
-    } = this.partContainer.node().getBBox();
-    const {
-      width: markerContainerWidth,
-      height: markerContainerHeight,
-    } = this.markerContainer.node().getBBox();
-    const maxContainerWidth =
-      Math.max(partContainerWidth, markerContainerWidth) +
-      this.margin.right + 50;
-    const maxContainerHeight =
-      Math.max(partContainerHeight, markerContainerHeight) +
-      this.margin.bottom + 50;
-    this.svg
-      .attr("width", maxContainerWidth)
-      .attr("height", maxContainerHeight);
+    const { width: partContainerWidth, height: partContainerHeight } = this.partContainer.node().getBBox();
+    const { width: markerContainerWidth, height: markerContainerHeight } = this.markerContainer.node().getBBox();
+    const maxContainerWidth = Math.max(partContainerWidth, markerContainerWidth) + this.margin.right + 50;
+    const maxContainerHeight = Math.max(partContainerHeight, markerContainerHeight) + this.margin.bottom + 50;
+    this.svg.attr("width", maxContainerWidth).attr("height", maxContainerHeight);
   }
 
   /**

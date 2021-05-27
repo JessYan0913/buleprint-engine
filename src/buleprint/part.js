@@ -46,12 +46,7 @@ class Part {
       .attr("transform", `translate(${transferX} ${transferY})`)
       .append(selection);
     if (!part.attr("viewBox")) {
-      part.attr(
-        "viewBox",
-        `0 0 ${part.attr("width").replace("px", "")} ${part
-          .attr("height")
-          .replace("px", "")}`
-      );
+      part.attr("viewBox", `0 0 ${part.attr("width").replace("px", "")} ${part.attr("height").replace("px", "")}`);
     }
     part
       .attr("preserveAspectRatio", "none")
