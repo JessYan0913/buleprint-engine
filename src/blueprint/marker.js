@@ -54,22 +54,20 @@ class Marker {
    * @param {*} props
    */
   constructor(props) {
-    const { name, start = {}, end = {}, height = 20, repaetX = {}, repaetY = {}, scale, container } = props;
-    this.name = name;
-    this.start = start;
-    this.end = end;
-    //TODO：是否可以自动调整标注线高度，防止标注线重叠
-    this.height = height;
-    this.repeatX = repaetX;
-    this.repeatY = repaetY;
-    this.scale = scale;
-    this.container = container;
+    if (props === void 0) props = {};
+
+    this.name = props.name;
+    this.start = props.start || {};
+    this.end = props.end || {};
+    this.height = props.height || 20;
+    this.scale = props.scale;
+    this.container = props.container;
 
     //将真实的坐标转换为屏幕上的坐标
-    this.startX = start.x * scale;
-    this.startY = start.y * scale;
-    this.endX = end.x * scale;
-    this.endY = end.y * scale;
+    this.startX = this.start.x * this.scale;
+    this.startY = this.start.y * this.scale;
+    this.endX = this.end.x * this.scale;
+    this.endY = this.end.y * this.scale;
 
     //尺寸线高度
     this.sizeLineHeight = this.height > 0 ? this.height - 4 : this.height + 4;

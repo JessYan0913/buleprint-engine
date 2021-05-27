@@ -5,26 +5,17 @@ import { isArray } from "./utils/array-util";
 import { AlignMarker, LinearMarker, defMarkerArrow } from "./marker";
 import { Part } from "./part";
 
-/**
- * 计算重复组件距离坐标系的垂直距离
- * @param {*} space
- * @param {*} transfer
- * @param {*} realLength
- * @param {*} totalLength
- * @returns
- */
-function calculateSpaces(space, transfer, realLength, totalLength) {
-  if (isArray(space)) {
-    return space;
+const Margin = function Margin(options) {
+  if (typeof options === "number") {
+    this.top = this.left = this.bottom = this.right = options;
+  } else {
+    if (typeof options === void 0) options = {};
+    this.top = options.top || 40;
+    this.left = options.left || 40;
+    this.bottom = options.bottom || 40;
+    this.right = options.right || 40;
   }
-  const realSpace = space + realLength;
-  const repeatNum = Math.ceil((totalLength - transfer) / realSpace);
-  const spaces = [];
-  for (let index = 0; index < repeatNum; index++) {
-    spaces.push(realSpace * index);
-  }
-  return spaces;
-}
+};
 
 class Blueprint {
   /**
@@ -32,59 +23,56 @@ class Blueprint {
    * @param {*} props
    */
   constructor(props) {
-    const {
-      container,
-      width,
-      height,
-      margin,
-      cipt = true,
-      scale = 1,
-      realWidth,
-      realHeight,
-      parts = [],
-      markers = [],
-    } = props;
-    this.container = container;
-    this.width = Math.max(width, 0);
-    this.height = Math.max(height, 0);
-    this.cipt = cipt;
-    this.margin = { top: 40, left: 40, bottom: 40, right: 40, ...margin };
-    this.realWidth = Math.max(realWidth, 0);
-    this.realHeight = Math.max(realHeight, 0);
-    this.parts = parts;
-    this.markers = markers;
-    this.scale = Math.max(scale, 0);
+    if (props === void 0) props = {};
 
-    this.svgWidth = width + this.margin.left + this.margin.right;
-    this.svgHeight = height + this.margin.top + this.margin.bottom;
+    this.container = props.container;
+    this.width = Math.max(props.width || 0, 0);
+    this.height = Math.max(props.height || 0, 0);
+    this.cipt = props.cipt || true;
+    this.margin = new Margin(props.margin);
+    this.realWidth = Math.max(props.realWidth || 0, 0);
+    this.realHeight = Math.max(props.realHeight || 0, 0);
+    this.parts = props.parts || [];
+    this.markers = props.markers || [];
 
-    this.calculateScale();
+    let maxrealWidth = this.realWidth;
+    let maxrealHeight = this.realHeight;
 
-    this.svg = select(container)
+    this.parts.forEach((item) => {
+      const { repeatX, repeatY, transfer, realWidth, realHeight } = item;
+      if (repeatX) {
+        item.xRepeatSpaces = this.calculateSpaces(repeatX.space, transfer.x, realWidth, this.realWidth);
+        maxrealWidth = Math.max(max(item.xRepeatSpaces) + realWidth, maxrealWidth);
+      }
+      if (repeatY) {
+        item.yRepeatSpaces = this.calculateSpaces(repeatY.space, transfer.y, realWidth, this.realWidth);
+        maxrealHeight = Math.max(max(item.yRepeatSpaces) + realHeight, maxrealHeight);
+      }
+    });
+
+    this.scale = Math.min(this.width / maxrealWidth, this.height / maxrealHeight, Math.max(props.scale || 1, 0));
+
+    this.svg = select(this.container)
       .append("svg")
-      .attr("width", this.svgWidth)
-      .attr("height", this.svgHeight);
+      .attr("width", this.width)
+      .attr("height", this.height);
 
     this.partContainer = this.svg.append("g").attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
 
     this.markerContainer = this.svg.append("g").attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
   }
 
-  calculateScale() {
-    let maxrealWidth = this.realWidth;
-    let maxrealHeight = this.realHeight;
-    this.parts.forEach((item) => {
-      const { repeatX, repeatY, transfer, realWidth, realHeight } = item;
-      if (repeatX) {
-        item.xRepeatSpaces = calculateSpaces(repeatX.space, transfer.x, realWidth, this.realWidth);
-        maxrealWidth = Math.max(max(item.xRepeatSpaces) + realWidth, maxrealWidth);
-      }
-      if (repeatY) {
-        item.yRepeatSpaces = calculateSpaces(repeatY.space, transfer.y, realWidth, this.realWidth);
-        maxrealHeight = Math.max(max(item.yRepeatSpaces) + realHeight, maxrealHeight);
-      }
-    });
-    this.scale = Math.min(this.width / maxrealWidth, this.height / maxrealHeight, this.scale);
+  calculateSpaces(space, transfer, realLength, totalLength) {
+    if (isArray(space)) {
+      return space;
+    }
+    const realSpace = space + realLength;
+    const repeatNum = Math.ceil((totalLength - transfer) / realSpace);
+    const spaces = [];
+    for (let index = 0; index < repeatNum; index++) {
+      spaces.push(realSpace * index);
+    }
+    return spaces;
   }
 
   /**
@@ -93,8 +81,10 @@ class Blueprint {
   clipSvg() {
     const { width: partContainerWidth, height: partContainerHeight } = this.partContainer.node().getBBox();
     const { width: markerContainerWidth, height: markerContainerHeight } = this.markerContainer.node().getBBox();
+
     const maxContainerWidth = Math.max(partContainerWidth, markerContainerWidth) + this.margin.right + 50;
     const maxContainerHeight = Math.max(partContainerHeight, markerContainerHeight) + this.margin.bottom + 50;
+
     this.svg.attr("width", maxContainerWidth).attr("height", maxContainerHeight);
   }
 

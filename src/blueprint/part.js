@@ -11,27 +11,18 @@ class Part {
    * @param {*} props
    */
   constructor(props) {
-    const {
-      name,
-      image,
-      realWidth,
-      realHeight,
-      transfer = {},
-      scale,
-      container,
-      xRepeatSpaces = [0],
-      yRepeatSpaces = [],
-    } = props;
-    this.name = name;
-    this.image = `/img/${image}`;
-    this.realWidth = realWidth;
-    this.realHeight = realHeight;
-    this.scale = scale;
-    this.container = container;
-    this.xRepeatSpaces = xRepeatSpaces;
-    this.yRepeatSpaces = yRepeatSpaces;
-    this.transferX = transfer.x;
-    this.transferY = transfer.y;
+    if (props === void 0) props = {};
+
+    this.name = props.name;
+    this.image = `/img/${props.image}`;
+    this.realWidth = props.realWidth;
+    this.realHeight = props.realHeight;
+    this.scale = props.scale;
+    this.container = props.container;
+    this.xRepeatSpaces = props.xRepeatSpaces || [0];
+    this.yRepeatSpaces = props.yRepeatSpaces || [];
+    this.transferX = props.transfer.x;
+    this.transferY = props.transfer.y;
   }
 
   /**
