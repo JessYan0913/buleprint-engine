@@ -103,7 +103,7 @@ class Blueprint {
         scale: this.scale,
         container: this.partContainer,
       });
-      await part.render(this.realWidth, this.realHeight);
+      await part.render();
     }
 
     //在尺寸线的容器中添加箭头定义
