@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Blueprint from '../buleprint'
+import Blueprint from '../blueprint'
 
 export default {
   name: 'VerticalView',
