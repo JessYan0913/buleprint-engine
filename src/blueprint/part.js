@@ -5,7 +5,8 @@ async function fetchSvg(image) {
   return partSvg.documentElement;
 }
 
-const Transfer = function Transfer(options) {
+const Transfer = function Transfer(_part, options) {
+  this.$part = _part;
   if (typeof options === "number") {
     this.x = this.y = options;
   } else {
@@ -16,6 +17,19 @@ const Transfer = function Transfer(options) {
   }
 };
 
+Object.defineProperties(Transfer.prototype, {
+  screenX: {
+    get() {
+      return this.x * this.$part.scale;
+    },
+  },
+  screenY: {
+    get() {
+      return this.y * this.$part.scale;
+    }
+  }
+});
+
 const Part = function Part(props = {}) {
   this.name = props.name;
   this.image = `/img/${props.image}`;
@@ -25,8 +39,7 @@ const Part = function Part(props = {}) {
   this.container = props.container;
   this.xRepeatSpaces = props.xRepeatSpaces || [0];
   this.yRepeatSpaces = props.yRepeatSpaces || [];
-  this.transferX = new Transfer(props.transfer).x;
-  this.transferY = new Transfer(props.transfer).y;
+  this.transfer = new Transfer(this, props.transfer);
 };
 
 Part.prototype.drawingPart = function drawingPart(selection, transferX, transferY) {
@@ -64,15 +77,15 @@ Part.prototype.render = async function render() {
 
   //绘制x方向的该组件
   xPartNodes.forEach(({ space, partNode }) => {
-    const transferX = (this.transferX + space) * this.scale;
-    const transferY = this.transferY * this.scale;
+    const transferX = (this.transfer.x + space) * this.scale;
+    const transferY = this.transfer.screenY;
     this.drawingPart(() => partNode, transferX, transferY);
   });
 
   //绘制y方向的该组件
   yPartNodes.forEach(({ space, partNode }) => {
-    const transferX = this.transferX * this.scale;
-    const transferY = (this.transferY + space) * this.scale;
+    const transferX = this.transfer.screenX;
+    const transferY = (this.transfer.y + space) * this.scale;
     this.drawingPart(() => partNode, transferX, transferY);
   });
 };
