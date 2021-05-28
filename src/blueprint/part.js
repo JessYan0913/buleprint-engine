@@ -6,10 +6,6 @@ async function fetchSvg(image) {
 }
 
 class Part {
-  /**
-   * 拼接视图的零件，已经绘制好的svg图
-   * @param {*} props
-   */
   constructor(props = {}) {
     this.name = props.name;
     this.image = `/img/${props.image}`;
@@ -23,12 +19,6 @@ class Part {
     this.transferY = props.transfer.y;
   }
 
-  /**
-   * 绘制组件到视图中
-   * @param {*} selection
-   * @param {*} transferX
-   * @param {*} transferY
-   */
   drawingPart(selection, transferX, transferY) {
     const part = this.container
       .append("g")
@@ -43,9 +33,6 @@ class Part {
       .attr("height", this.realHeight * this.scale);
   }
 
-  /**
-   * 绘制组件
-   */
   async render() {
     const xPartNodes = [];
     const yPartNodes = [];

@@ -16,8 +16,7 @@ class Margin {
     if (typeof options === "number") {
       this.top = this.left = this.bottom = this.right = options;
     } else {
-      if (typeof options === void 0)
-        options = {};
+      if (typeof options === void 0) options = {};
       this.top = options.top || 40;
       this.left = options.left || 40;
       this.bottom = options.bottom || 40;
@@ -27,10 +26,6 @@ class Margin {
 }
 
 class Blueprint {
-  /**
-   * 平面图
-   * @param {*} props
-   */
   constructor(props = {}) {
     this.container = props.container;
     this.width = Math.max(props.width || 0, 0);
@@ -82,9 +77,6 @@ class Blueprint {
     return spaces;
   }
 
-  /**
-   * 裁剪SVG到适合的宽度
-   */
   clipSvg() {
     const { width: partContainerWidth, height: partContainerHeight } = this.partContainer.node().getBBox();
     const { width: markerContainerWidth, height: markerContainerHeight } = this.markerContainer.node().getBBox();
@@ -95,9 +87,6 @@ class Blueprint {
     this.svg.attr("width", maxContainerWidth).attr("height", maxContainerHeight);
   }
 
-  /**
-   * 渲染平面图
-   */
   async render() {
     //绘制组件
     for (let index = 0; index < this.parts.length; index++) {

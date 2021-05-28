@@ -78,15 +78,6 @@ class Marker {
       .attr("font-size", 12);
   }
 
-  /**
-   * 绘制一条直线
-   * @param {*} container
-   * @param {*} x1
-   * @param {*} y1
-   * @param {*} x2
-   * @param {*} y2
-   * @returns
-   */
   drawingLine(container, x1, y1, x2, y2) {
     const line = container
       .append("line")
@@ -98,14 +89,6 @@ class Marker {
     return line;
   }
 
-  /**
-   * 绘制正常尺寸线
-   * @param {*} startX 尺寸线的起点x
-   * @param {*} startY 尺寸线的起点y
-   * @param {*} endX 尺寸线的终点x
-   * @param {*} endY 尺寸线的终点y
-   * @param {*} slope 尺寸线的斜率
-   */
   drawingNormalSizeLine(startX, startY, endX, endY, slope) {
     //绘制尺寸线
     this.drawingLine(this.sizeLineGroup, startX, startY, endX, endY)
@@ -125,14 +108,6 @@ class Marker {
       .attr("text-anchor", "middle");
   }
 
-  /**
-   * 绘制小尺寸线
-   * @param {*} size1StartX 尺寸线1的起点 x
-   * @param {*} size1StartY 尺寸线1的起点 y
-   * @param {*} size2StartX 尺寸线2的起点 x
-   * @param {*} size2StartY 尺寸线2的起点 y
-   * @param {*} slope 尺寸线的斜率
-   */
   drawingSmallSizeLine(size1StartX, size1StartY, size2StartX, size2StartY, slope) {
     //计算尺寸线1的终点
     const size1EndPoint = linearDistancePoint(slope, size1StartX, size1StartY, -16 * 2);
@@ -169,11 +144,6 @@ class Marker {
 }
 
 class AlignMarker extends Marker {
-  /**
-   * 对齐标注
-   * 可用于标注：长宽高等，标注线 与 过标注 起点 和 终点的直线平行。
-   * @param {*} props
-   */
   constructor(props) {
     super(props);
 
@@ -199,9 +169,6 @@ class AlignMarker extends Marker {
     this.isNormalSizeMarker = this.textSelectionSize.width + (arrowSize + 5) * 2 < this.sizeLineLength;
   }
 
-  /**
-   * 绘制对齐标注
-   */
   render() {
     //计算同一直线上和点A 相距 ±h的点
     const calculateTargetPoint = linearDistancePoint(-1 / this.alignMarkerSlope);
@@ -261,11 +228,6 @@ const linearMarkerDirection = (startX, startY, endX, endY) => {
 };
 
 class LinearMarker extends Marker {
-  /**
-   * 线性标注
-   * 可用于标注：长宽高等，标注线只能位于坐标轴方向（即：x方向或y方向）
-   * @param {*} props
-   */
   constructor(props) {
     super(props);
     let { direction = "x", start = {}, end = {}, text } = props;
