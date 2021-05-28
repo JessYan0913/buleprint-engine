@@ -2,7 +2,7 @@ import "../assets";
 import { max } from "d3-array";
 import { select } from "d3-selection";
 import { isArray } from "./utils/array-util";
-import { AlignMarker, LinearMarker, defMarkerArrow } from "./marker";
+import { AlignMarker, Arrow, LinearMarker } from "./marker";
 import { Part } from "./part";
 import { svg } from "d3-fetch";
 
@@ -61,8 +61,10 @@ const Blueprint = function Blueprint(props = {}) {
   this.partContainer = this.svg.append("g").attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
 
   this.parts = props.parts.map((item) => new Part(this, item));
-  
+
   this.markerContainer = this.svg.append("g").attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+
+  new Arrow(this);
 };
 
 Blueprint.prototype.calculateSpaces = function calculateSpaces(space, transfer, length, totalLength) {
@@ -93,10 +95,6 @@ Blueprint.prototype.render = async function render() {
     const item = this.parts[index];
     await item.render();
   }
-
-  defMarkerArrow({
-    container: this.markerContainer,
-  });
 
   this.markers.forEach((item) => {
     if (item.hidden) {

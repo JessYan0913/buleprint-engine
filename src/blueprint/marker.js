@@ -1,52 +1,56 @@
+import Blueprint from ".";
 import { midpoint, linearSlope, linearDistancePoint, twoPointsDistance, slope2Angle } from "./utils/math-util";
-
-const ArrowType = {
-  //线条开始处的箭头，对应 marker-start 属性
-  start: {
-    id: "markerStartArrow",
-    path: "M24,2 L2,5 L24,8 L20,5 Z",
-    refX: 4,
-    refY: 5,
-  },
-  //线条结束处的箭头，对应 marker-end 属性
-  end: {
-    id: "markerEndArrow",
-    path: "M2,2 L24,5 L2,8 L6,5 Z",
-    refX: 22,
-    refY: 5,
-  },
-};
 
 let arrowSize = 16;
 
-/**
- * 定义箭头
- * @param {*} props
- */
-function defMarkerArrow(props) {
-  const { container, size = arrowSize } = props;
-  arrowSize = size;
-  const defs = container.append("defs");
-
-  for (const key in ArrowType) {
-    if (Object.hasOwnProperty.call(ArrowType, key)) {
-      const { id, path, refX, refY } = ArrowType[key];
-      defs
-        .append("marker")
-        .attr("id", id)
-        .attr("markerUnits", "strokeWidth")
-        .attr("markerWidth", size * 4)
-        .attr("markerHeight", size)
-        .attr("viewBox", "0 0 24 24")
-        .attr("refX", refX)
-        .attr("refY", refY)
-        .attr("orient", "auto")
-        .append("path")
-        .attr("d", path)
-        .attr("fill", "#000");
-    }
+const Arrow = function Arrow(_blueprint, props = {}) {
+  if (!(_blueprint instanceof Blueprint)) {
+    new Error("_blueprint must is Blueprint ");
   }
-}
+
+  if (_blueprint.markerContainer === void 0) {
+    new Error("markerContainer cannot is undefined ");
+  }
+
+  this.$blueprint = _blueprint;
+
+  this.size = props.size || 16;
+  arrowSize = this.size;
+  this.defs = this.$blueprint.markerContainer.append("defs");
+
+  this.defArrow.call(this, Arrow.startArrow);
+  this.defArrow.call(this, Arrow.endArrow);
+};
+
+Arrow.prototype.defArrow = function defArrow({ id, path, refX, refY }) {
+  this.defs
+    .append("marker")
+    .attr("id", id)
+    .attr("markerUnits", "strokeWidth")
+    .attr("markerWidth", this.size * 4)
+    .attr("markerHeight", this.size)
+    .attr("viewBox", "0 0 24 24")
+    .attr("refX", refX)
+    .attr("refY", refY)
+    .attr("orient", "auto")
+    .append("path")
+    .attr("d", path)
+    .attr("fill", "#000");
+};
+
+Arrow.startArrow = {
+  id: "markerStartArrow",
+  path: "M24,2 L2,5 L24,8 L20,5 Z",
+  refX: 4,
+  refY: 5,
+};
+
+Arrow.endArrow = {
+  id: "markerEndArrow",
+  path: "M2,2 L24,5 L2,8 L6,5 Z",
+  refX: 22,
+  refY: 5,
+};
 
 const Marker = function Marker(props = {}) {
   this.name = props.name;
@@ -87,8 +91,8 @@ Marker.prototype.drawingLine = function drawingLine(container, x1, y1, x2, y2) {
 Marker.prototype.drawingNormalSizeLine = function drawingNormalSizeLine(startX, startY, endX, endY, slope) {
   //绘制尺寸线
   this.drawingLine(this.sizeLineGroup, startX, startY, endX, endY)
-    .attr("marker-start", `url(#${ArrowType.start.id})`)
-    .attr("marker-end", `url(#${ArrowType.end.id})`);
+    .attr("marker-start", `url(#${Arrow.startArrow.id})`)
+    .attr("marker-end", `url(#${Arrow.endArrow.id})`);
 
   //计算文本坐标
   const textPoint = midpoint(startX, startY, endX, endY);
@@ -114,14 +118,14 @@ Marker.prototype.drawingSmallSizeLine = function drawingSmallSizeLine(
   const size1EndPoint = linearDistancePoint(slope, size1StartX, size1StartY, -16 * 2);
   this.drawingLine(this.sizeLineGroup, size1StartX, size1StartY, size1EndPoint.x, size1EndPoint.y).attr(
     "marker-start",
-    `url(#${ArrowType.start.id})`
+    `url(#${Arrow.startArrow.id})`
   );
 
   //计算尺寸线2的终点
   const size2EndPoint = linearDistancePoint(slope, size2StartX, size2StartY, 16 * 2);
   this.drawingLine(this.sizeLineGroup, size2StartX, size2StartY, size2EndPoint.x, size2EndPoint.y).attr(
     "marker-start",
-    `url(#${ArrowType.start.id})`
+    `url(#${Arrow.startArrow.id})`
   );
 
   let textPoint = {
@@ -315,6 +319,6 @@ LinearMarker.prototype.render = function render() {
       this.linearMarkerSlope
     );
   }
-}
+};
 
-export { defMarkerArrow, AlignMarker, LinearMarker };
+export { Arrow, AlignMarker, LinearMarker };

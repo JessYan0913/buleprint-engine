@@ -35,7 +35,7 @@ Object.defineProperties(Transfer.prototype, {
 
 const Part = function Part(_blueprint, props = {}) {
   if (!(_blueprint instanceof Blueprint)) {
-    new Error('_blueprint must is Blueprint ')
+    new Error("_blueprint must is Blueprint ");
   }
 
   this.$blueprint = _blueprint;
