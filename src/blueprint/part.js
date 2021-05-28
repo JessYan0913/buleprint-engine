@@ -1,12 +1,13 @@
 import { svg } from "d3-fetch";
+import Blueprint from ".";
 
 async function fetchSvg(image) {
   const partSvg = await svg(image);
   return partSvg.documentElement;
 }
 
-const Transfer = function Transfer(_part, options) {
-  this.$part = _part;
+const Transfer = function Transfer(_scale, options) {
+  this.$scale = _scale;
   if (typeof options === "number") {
     this.x = this.y = options;
   } else {
@@ -19,33 +20,37 @@ const Transfer = function Transfer(_part, options) {
 
 Object.defineProperties(Transfer.prototype, {
   screenX: {
-    writable: false,
+    configurable: false,
     get() {
-      return this.x * this.$part.scale;
+      return this.x * this.$scale;
     },
   },
   screenY: {
-    writable: false,
+    configurable: false,
     get() {
-      return this.y * this.$part.scale;
-    }
-  }
+      return this.y * this.$scale;
+    },
+  },
 });
 
-const Part = function Part(props = {}) {
+const Part = function Part(_blueprint, props = {}) {
+  if (!(_blueprint instanceof Blueprint)) {
+    new Error('_blueprint must is Blueprint ')
+  }
+
+  this.$blueprint = _blueprint;
+
   this.name = props.name;
   this.image = `/img/${props.image}`;
   this.realWidth = props.realWidth;
   this.realHeight = props.realHeight;
-  this.scale = props.scale;
-  this.container = props.container;
   this.xRepeatSpaces = props.xRepeatSpaces || [0];
   this.yRepeatSpaces = props.yRepeatSpaces || [];
   this.transfer = new Transfer(this, props.transfer);
 };
 
 Part.prototype.drawingPart = function drawingPart(selection, transfer) {
-  const part = this.container
+  const part = this.$blueprint.partContainer
     .append("g")
     .attr("transform", `translate(${transfer.screenX} ${transfer.screenY})`)
     .append(selection);
@@ -54,8 +59,8 @@ Part.prototype.drawingPart = function drawingPart(selection, transfer) {
   }
   part
     .attr("preserveAspectRatio", "none")
-    .attr("width", this.realWidth * this.scale)
-    .attr("height", this.realHeight * this.scale);
+    .attr("width", this.realWidth * this.$blueprint.scale)
+    .attr("height", this.realHeight * this.$blueprint.scale);
 };
 
 Part.prototype.render = async function render() {
@@ -79,19 +84,21 @@ Part.prototype.render = async function render() {
 
   //绘制x方向的该组件
   xPartNodes.forEach(({ space, partNode }) => {
-    const transfer = new Transfer(this, {
+    const transfer = new Transfer(this.$blueprint.scale, {
       x: this.transfer.x + space,
-      y: this.transfer.y
-    })
+      y: this.transfer.y,
+      rotate: this.transfer.rotate,
+    });
     this.drawingPart(() => partNode, transfer);
   });
 
   //绘制y方向的该组件
   yPartNodes.forEach(({ space, partNode }) => {
-    const transfer = new Transfer(this, {
+    const transfer = new Transfer(this.$blueprint.scale, {
       x: this.transfer.x,
-      y: this.transfer.y + space
-    })
+      y: this.transfer.y + space,
+      rotate: this.transfer.rotate,
+    });
     this.drawingPart(() => partNode, transfer);
   });
 };

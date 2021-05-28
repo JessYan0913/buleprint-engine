@@ -31,13 +31,15 @@ const Blueprint = function Blueprint(props = {}) {
   this.margin = new Margin(props.margin);
   this.realWidth = Math.max(props.realWidth || 0, 0);
   this.realHeight = Math.max(props.realHeight || 0, 0);
-  this.parts = props.parts || [];
+  // this.parts = props.parts || [];
   this.markers = props.markers || [];
 
   let maxrealWidth = this.realWidth;
   let maxrealHeight = this.realHeight;
 
-  this.parts.forEach((item) => {
+  if (props.parts === void 0) props.parts = [];
+  // TODO：关于比例尺的计算需要重构，存在BUG
+  props.parts.forEach((item) => {
     const { repeatX, repeatY, transfer, realWidth, realHeight } = item;
     if (repeatX) {
       item.xRepeatSpaces = this.calculateSpaces(repeatX.space, transfer.x, realWidth, this.realWidth);
@@ -58,14 +60,16 @@ const Blueprint = function Blueprint(props = {}) {
 
   this.partContainer = this.svg.append("g").attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
 
+  this.parts = props.parts.map((item) => new Part(this, item));
+  
   this.markerContainer = this.svg.append("g").attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
 };
 
-Blueprint.prototype.calculateSpaces = function calculateSpaces(space, transfer, realLength, totalLength) {
+Blueprint.prototype.calculateSpaces = function calculateSpaces(space, transfer, length, totalLength) {
   if (isArray(space)) {
     return space;
   }
-  const realSpace = space + realLength;
+  const realSpace = space + length;
   const repeatNum = Math.ceil((totalLength - transfer) / realSpace);
   const spaces = [];
   for (let index = 0; index < repeatNum; index++) {
@@ -85,25 +89,15 @@ Blueprint.prototype.clipSvg = function clipSvg() {
 };
 
 Blueprint.prototype.render = async function render() {
-  //绘制组件
   for (let index = 0; index < this.parts.length; index++) {
     const item = this.parts[index];
-    if (item.hidden) {
-      continue;
-    }
-    const part = new Part({
-      ...item,
-      scale: this.scale,
-      container: this.partContainer,
-    });
-    await part.render();
+    await item.render();
   }
 
-  //在尺寸线的容器中添加箭头定义
   defMarkerArrow({
     container: this.markerContainer,
   });
-  //绘制标记
+
   this.markers.forEach((item) => {
     if (item.hidden) {
       return;
@@ -122,10 +116,9 @@ Blueprint.prototype.render = async function render() {
     mark.render();
   });
 
-  //是否裁剪SVG
   if (this.cipt) {
     this.clipSvg();
   }
-}
+};
 
 export default Blueprint;

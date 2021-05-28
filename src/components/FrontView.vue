@@ -68,42 +68,45 @@ export default {
         image: this.beam.image,
         realWidth: item.length,
         realHeight: this.beam.realHeight,
+        repeatX: {
+          space: 20000
+        },
         transfer: {
           x: (this.totalWidth - item.length) / 2,
           y: 450,
         },
       }))
       return [
-        {
-          name: 'runwayLeft',
-          image: this.runway.image,
-          realWidth: this.runway.realWidth,
-          realHeight: this.runway.realHeight,
-          transfer: {
-            x: 450,
-            y: 200,
-          },
-        },
-        {
-          name: 'runwayRight',
-          image: this.runway.image,
-          realWidth: this.runway.realWidth,
-          realHeight: this.runway.realHeight,
-          transfer: {
-            x: this.totalWidth - 450 - this.runway.realWidth,
-            y: 200,
-          },
-        },
-        {
-          name: 'structure',
-          image: this.support.image,
-          realWidth: this.totalWidth,
-          realHeight: this.totalHeight,
-          transfer: {
-            x: 0,
-            y: 0,
-          },
-        },
+        // {
+        //   name: 'runwayLeft',
+        //   image: this.runway.image,
+        //   realWidth: this.runway.realWidth,
+        //   realHeight: this.runway.realHeight,
+        //   transfer: {
+        //     x: 450,
+        //     y: 200,
+        //   },
+        // },
+        // {
+        //   name: 'runwayRight',
+        //   image: this.runway.image,
+        //   realWidth: this.runway.realWidth,
+        //   realHeight: this.runway.realHeight,
+        //   transfer: {
+        //     x: this.totalWidth - 450 - this.runway.realWidth,
+        //     y: 200,
+        //   },
+        // },
+        // {
+        //   name: 'structure',
+        //   image: this.support.image,
+        //   realWidth: this.totalWidth,
+        //   realHeight: this.totalHeight,
+        //   transfer: {
+        //     x: 0,
+        //     y: 0,
+        //   },
+        // },
         ...beamParts
       ]
     },
@@ -150,7 +153,7 @@ export default {
       realWidth: this.totalLength,
       realHeight: this.totalWidth,
       parts: this.parts,
-      markers: this.markers,
+      // markers: this.markers,
     })
 
     frontView.render()
