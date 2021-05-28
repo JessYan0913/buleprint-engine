@@ -19,11 +19,13 @@ const Transfer = function Transfer(_part, options) {
 
 Object.defineProperties(Transfer.prototype, {
   screenX: {
+    writable: false,
     get() {
       return this.x * this.$part.scale;
     },
   },
   screenY: {
+    writable: false,
     get() {
       return this.y * this.$part.scale;
     }
@@ -42,10 +44,10 @@ const Part = function Part(props = {}) {
   this.transfer = new Transfer(this, props.transfer);
 };
 
-Part.prototype.drawingPart = function drawingPart(selection, transferX, transferY) {
+Part.prototype.drawingPart = function drawingPart(selection, transfer) {
   const part = this.container
     .append("g")
-    .attr("transform", `translate(${transferX} ${transferY})`)
+    .attr("transform", `translate(${transfer.screenX} ${transfer.screenY})`)
     .append(selection);
   if (!part.attr("viewBox")) {
     part.attr("viewBox", `0 0 ${part.attr("width").replace("px", "")} ${part.attr("height").replace("px", "")}`);
@@ -77,16 +79,20 @@ Part.prototype.render = async function render() {
 
   //绘制x方向的该组件
   xPartNodes.forEach(({ space, partNode }) => {
-    const transferX = (this.transfer.x + space) * this.scale;
-    const transferY = this.transfer.screenY;
-    this.drawingPart(() => partNode, transferX, transferY);
+    const transfer = new Transfer(this, {
+      x: this.transfer.x + space,
+      y: this.transfer.y
+    })
+    this.drawingPart(() => partNode, transfer);
   });
 
   //绘制y方向的该组件
   yPartNodes.forEach(({ space, partNode }) => {
-    const transferX = this.transfer.screenX;
-    const transferY = (this.transfer.y + space) * this.scale;
-    this.drawingPart(() => partNode, transferX, transferY);
+    const transfer = new Transfer(this, {
+      x: this.transfer.x,
+      y: this.transfer.y + space
+    })
+    this.drawingPart(() => partNode, transfer);
   });
 };
 
