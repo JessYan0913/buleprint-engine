@@ -4,27 +4,34 @@ import { select } from "d3-selection";
 import { isArray } from "./utils/array-util";
 import { AlignMarker, LinearMarker, defMarkerArrow } from "./marker";
 import { Part } from "./part";
+import { svg } from "d3-fetch";
 
-const Margin = function Margin(options) {
-  if (typeof options === "number") {
-    this.top = this.left = this.bottom = this.right = options;
-  } else {
-    if (typeof options === void 0) options = {};
-    this.top = options.top || 40;
-    this.left = options.left || 40;
-    this.bottom = options.bottom || 40;
-    this.right = options.right || 40;
+export async function fetchSvg(image) {
+  const partSvg = await svg(image);
+  return partSvg.documentElement;
+}
+
+class Margin {
+  constructor(options) {
+    if (typeof options === "number") {
+      this.top = this.left = this.bottom = this.right = options;
+    } else {
+      if (typeof options === void 0)
+        options = {};
+      this.top = options.top || 40;
+      this.left = options.left || 40;
+      this.bottom = options.bottom || 40;
+      this.right = options.right || 40;
+    }
   }
-};
+}
 
 class Blueprint {
   /**
    * 平面图
    * @param {*} props
    */
-  constructor(props) {
-    if (props === void 0) props = {};
-
+  constructor(props = {}) {
     this.container = props.container;
     this.width = Math.max(props.width || 0, 0);
     this.height = Math.max(props.height || 0, 0);

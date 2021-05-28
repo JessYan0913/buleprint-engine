@@ -53,9 +53,7 @@ class Marker {
    * 三视图的标记
    * @param {*} props
    */
-  constructor(props) {
-    if (props === void 0) props = {};
-
+  constructor(props = {}) {
     this.name = props.name;
     this.start = props.start || {};
     this.end = props.end || {};

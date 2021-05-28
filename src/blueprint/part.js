@@ -10,9 +10,7 @@ class Part {
    * 拼接视图的零件，已经绘制好的svg图
    * @param {*} props
    */
-  constructor(props) {
-    if (props === void 0) props = {};
-
+  constructor(props = {}) {
     this.name = props.name;
     this.image = `/img/${props.image}`;
     this.realWidth = props.realWidth;
