@@ -1,4 +1,3 @@
-import "../assets";
 import { max } from "d3-array";
 import { select } from "d3-selection";
 import { isArray } from "./utils/array";

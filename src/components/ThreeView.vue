@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import '../assets'
 import VueHtml2pdf from 'vue-html2pdf'
 import VerticalView from './VerticalView'
 import SideView from './SideView'

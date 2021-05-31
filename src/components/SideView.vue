@@ -159,12 +159,7 @@ export default {
       container: '#sideView',
       width: this.width,
       height: this.height,
-      margin: {
-        top: 60,
-        left: 60,
-        bottom: 60,
-        right: 60,
-      },
+      margin: 60,
       realWidth: this.totalLength,
       realHeight: this.totalWidth,
       parts: this.parts,
