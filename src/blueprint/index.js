@@ -31,7 +31,6 @@ const Blueprint = function Blueprint(props = {}) {
   this.margin = new Margin(props.margin);
   this.realWidth = Math.max(props.realWidth || 0, 0);
   this.realHeight = Math.max(props.realHeight || 0, 0);
-  // this.parts = props.parts || [];
   this.markers = props.markers || [];
 
   let maxrealWidth = this.realWidth;

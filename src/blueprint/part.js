@@ -1,5 +1,5 @@
 import { svg } from "d3-fetch";
-import Blueprint from ".";
+import { assertTypes } from "./utils/assert";
 
 async function fetchSvg(image) {
   const partSvg = await svg(image);
@@ -34,9 +34,7 @@ Object.defineProperties(Transfer.prototype, {
 });
 
 const Part = function Part(_blueprint, props = {}) {
-  if (!(_blueprint instanceof Blueprint)) {
-    new Error("_blueprint must is Blueprint ");
-  }
+  assertTypes.blueprintAssert("_blueprint", _blueprint);
 
   this.$blueprint = _blueprint;
 

@@ -1,17 +1,12 @@
 import { select } from "d3-selection";
-import Blueprint from ".";
+import assert, { assertTypes } from "./utils/assert";
 import Point, { slope2Angle } from "./utils/geometry";
 
 let arrowSize = 16;
 
 const Arrow = function Arrow(_blueprint, props = {}) {
-  if (!(_blueprint instanceof Blueprint)) {
-    new Error("_blueprint must is Blueprint ");
-  }
-
-  if (_blueprint.markerContainer === void 0) {
-    new Error("markerContainer cannot is undefined ");
-  }
+  assertTypes.blueprintAssert("_blueprint", _blueprint);
+  assert(_blueprint.markerContainer !== void 0, "[blueprint] markerContainer cannot is undefined");
 
   this.$blueprint = _blueprint;
 
@@ -61,12 +56,6 @@ const Marker = function Marker(props = {}) {
   this.scale = props.scale;
   this.container = props.container;
 
-  //将真实的坐标转换为屏幕上的坐标
-  this.startX = this.start.x * this.scale;
-  this.startY = this.start.y * this.scale;
-  this.endX = this.end.x * this.scale;
-  this.endY = this.end.y * this.scale;
-
   const _start = props.start || {};
   const _end = props.end || {};
   this.realStart = new Point(_start.x, _start.y);
@@ -91,15 +80,13 @@ const AlignMarker = function AlignMarker(props = {}) {
 
   const { text } = props;
 
-  //标注文本，如果没有传入则计算标注两点间的距离
   this.text = text || this.realStart.distance(this.realEnd).toFixed(2);
 
-  //计算尺寸线的斜率
   this.alignMarkerSlope = this.end.linearSlope(this.start);
 
-  //标注线长度
   this.sizeLineLength = this.start.distance(this.end);
 
+  this.textSelection.text(this.text);
   this.textSelectionSize = {
     width: this.textSelection.node().getBBox().width,
     height: this.textSelection.node().getBBox().width,
@@ -107,6 +94,7 @@ const AlignMarker = function AlignMarker(props = {}) {
 
   //是否采用小尺寸标注，如果文本长度 + 两个箭头的长度 + 10 < 尺寸线长度，则使用正常尺寸线标记；否则使用小尺寸线标注
   this.isNormalSizeMarker = this.textSelectionSize.width + (arrowSize + 5) * 2 < this.sizeLineLength;
+  this.textSelection.remove();
 };
 
 AlignMarker.prototype = Object.create(Marker.prototype);
@@ -127,34 +115,42 @@ AlignMarker.prototype.render = function render() {
   }
 };
 
+const LinearDirection = {
+  x: "x",
+  y: "y",
+};
+
 const LinearMarker = function LinearMarker(props = {}) {
   Object.getPrototypeOf(LinearMarker).call(this, props);
 
-  let { direction = "x", text } = props;
+  let { direction = LinearDirection.x, text } = props;
   direction = direction.toLowerCase();
-  if (direction === "y" && this.start.x === this.end.x) {
-    throw new Error(`标记从(${this.start.x}, ${this.start.y}) 到 (${this.end.x}, ${this.end.y})无法在Y方向绘制`);
+  if (direction === LinearDirection.y && this.start.x === this.end.x) {
+    throw new Error(`[blueprint] from (${this.start.x}, ${this.start.y}) to (${this.end.x}, ${this.end.y}) cannot be the original size in the Y direction`);
   }
-  if (direction === "x" && this.start.y === this.end.y) {
-    throw new Error(`标记从(${this.start.x}, ${this.start.y}) 到 (${this.end.x}, ${this.end.y})无法在X方向绘制`);
+  if (direction === LinearDirection.x && this.start.y === this.end.y) {
+    throw new Error(`[blueprint] from (${this.start.x}, ${this.start.y}) to (${this.end.x}, ${this.end.y}) cannot be the original size in the X direction`);
   }
 
-  this.linearMarkerSlope = direction === "y" ? 0 : Infinity;
+  this.linearMarkerSlope = direction === LinearDirection.y ? 0 : Infinity;
 
-  this.sizeLineLength = direction === "y" ? Math.abs(this.start.x - this.end.x) : Math.abs(this.start.y - this.end.y);
+  this.sizeLineLength =
+    direction === LinearDirection.y ? Math.abs(this.start.x - this.end.x) : Math.abs(this.start.y - this.end.y);
 
   this.text =
     text ||
-    (direction === "y"
+    (direction === LinearDirection.y
       ? Math.abs(this.realStart.x - this.realEnd.x).toFixed(2)
       : Math.abs(this.realStart.y - this.realEnd.y).toFixed(2));
 
+  this.textSelection.text(this.text);
   this.textSelectionSize = {
     width: this.textSelection.node().getBBox().width,
     height: this.textSelection.node().getBBox().width,
   };
 
   this.isNormalSizeMarker = this.textSelectionSize.width + (arrowSize + 5) * 2 < this.sizeLineLength;
+  this.textSelection.remove();
 
   this.direction = direction;
 };
@@ -164,7 +160,7 @@ LinearMarker.prototype.constructor = LinearMarker;
 Object.setPrototypeOf(LinearMarker, Marker);
 
 LinearMarker.prototype.render = function render() {
-  const extensionPoint = linearExtensionLine(this.container, this.start, this.end, this.direction, this.height)
+  const extensionPoint = linearExtensionLine(this.container, this.start, this.end, this.direction, this.height);
 
   const sizeStartPoint = extensionPoint(this.start, this.sizeLineHeight);
   const sizeEndPoint = extensionPoint(this.end, this.sizeLineHeight);
@@ -177,9 +173,9 @@ LinearMarker.prototype.render = function render() {
 };
 
 function drawingLine(container, point1, point2) {
-  if (!(point1 instanceof Point) || !(point2 instanceof Point)) {
-    throw new Error();
-  }
+  assertTypes.pointAssert("point1", point1);
+  assertTypes.pointAssert("point2", point2);
+
   const line = container
     .append("line")
     .attr("x1", point1.x)
@@ -191,9 +187,9 @@ function drawingLine(container, point1, point2) {
 }
 
 function drawingNormalSizeLine(container, point1, point2, slope, text) {
-  if (!(point1 instanceof Point) || !(point2 instanceof Point)) {
-    throw new Error();
-  }
+  assertTypes.pointAssert("point1", point1);
+  assertTypes.pointAssert("point2", point2);
+
   if (slope === void 0) {
     slope = point1.linearSlope(point2);
   }
@@ -221,9 +217,9 @@ function drawingNormalSizeLine(container, point1, point2, slope, text) {
 }
 
 function drawingSmallSizeLine(container, point1, point2, slope, text) {
-  if (!(point1 instanceof Point) || !(point2 instanceof Point)) {
-    throw new Error();
-  }
+  assertTypes.pointAssert("point1", point1);
+  assertTypes.pointAssert("point2", point2);
+
   if (slope === void 0) {
     slope = point1.linearSlope(point2);
   }
@@ -255,12 +251,11 @@ function drawingSmallSizeLine(container, point1, point2, slope, text) {
 }
 
 function alignExtensionLine(container, point1, point2, height) {
-  if (!(container.constructor.name === select().constructor.name)) {
-    throw new Error();
-  }
-  if (!(point1 instanceof Point) || !(point2 instanceof Point)) {
-    throw new Error();
-  }
+  assert(container.constructor.name === select().constructor.name, "[blueprint] container must is D3js.Selection");
+
+  assertTypes.pointAssert("point1", point1);
+  assertTypes.pointAssert("point2", point2);
+
   const alignMarkerSlope = point2.linearSlope(point1);
   const slope = -1 / alignMarkerSlope;
   const extensionLineGroup = container.append("g");
@@ -272,21 +267,21 @@ function alignExtensionLine(container, point1, point2, height) {
 }
 
 function linearExtensionLine(container, point1, point2, direction, height) {
-  if (!(point1 instanceof Point) || !(point2 instanceof Point)) {
-    throw new Error();
-  }
+  assertTypes.pointAssert("point1", point1);
+  assertTypes.pointAssert("point2", point2);
+
   const maxX = Math.max(point1.x, point2.x);
   const minX = Math.min(point1.x, point2.x);
   const maxY = Math.max(point1.y, point2.y);
   const minY = Math.min(point1.y, point2.y);
   const extersionPoint = {
-    x: (point, h) => {
+    [LinearDirection.x]: (point, h) => {
       if (!(point instanceof Point)) {
         throw new Error();
       }
       return new Point(h < 0 ? minX + h : maxX + h, point.y);
     },
-    y: (point, h) => {
+    [LinearDirection.y]: (point, h) => {
       if (!(point instanceof Point)) {
         throw new Error();
       }
@@ -295,7 +290,7 @@ function linearExtensionLine(container, point1, point2, direction, height) {
   };
   const point1End = extersionPoint[direction](point1, height);
   drawingLine(container, point1, point1End);
-  
+
   const point2End = extersionPoint[direction](point2, height);
   drawingLine(container, point2, point2End);
 
