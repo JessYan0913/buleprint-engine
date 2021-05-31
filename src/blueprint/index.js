@@ -1,7 +1,7 @@
 import "../assets";
 import { max } from "d3-array";
 import { select } from "d3-selection";
-import { isArray } from "./utils/array-util";
+import { isArray } from "./utils/array";
 import { AlignMarker, Arrow, LinearMarker } from "./marker";
 import { Part } from "./part";
 import { svg } from "d3-fetch";
