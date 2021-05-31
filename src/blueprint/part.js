@@ -101,4 +101,4 @@ Part.prototype.render = async function render() {
   });
 };
 
-export { fetchSvg, Part };
+export default Part;

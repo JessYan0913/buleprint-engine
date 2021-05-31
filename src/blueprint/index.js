@@ -2,8 +2,8 @@ import "../assets";
 import { max } from "d3-array";
 import { select } from "d3-selection";
 import { isArray } from "./utils/array";
-import { AlignMarker, Arrow, LinearMarker } from "./marker";
-import { Part } from "./part";
+import Marker, { Arrow } from "./marker";
+import Part from "./part";
 import { svg } from "d3-fetch";
 
 export async function fetchSvg(image) {
@@ -31,12 +31,12 @@ const Blueprint = function Blueprint(props = {}) {
   this.margin = new Margin(props.margin);
   this.realWidth = Math.max(props.realWidth || 0, 0);
   this.realHeight = Math.max(props.realHeight || 0, 0);
-  this.markers = props.markers || [];
 
   let maxrealWidth = this.realWidth;
   let maxrealHeight = this.realHeight;
 
   if (props.parts === void 0) props.parts = [];
+  if (props.markers === void 0) props.markers = [];
   // TODO：关于比例尺的计算需要重构，存在BUG
   props.parts.forEach((item) => {
     const { repeatX, repeatY, transfer, realWidth, realHeight } = item;
@@ -62,6 +62,8 @@ const Blueprint = function Blueprint(props = {}) {
   this.parts = props.parts.map((item) => new Part(this, item));
 
   this.markerContainer = this.svg.append("g").attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+
+  this.markers = props.markers.map((item) => new Marker(this, item))
 
   new Arrow(this);
 };
@@ -96,21 +98,7 @@ Blueprint.prototype.render = async function render() {
   }
 
   this.markers.forEach((item) => {
-    if (item.hidden) {
-      return;
-    }
-    const markerProps = {
-      ...item,
-      scale: this.scale,
-      container: this.markerContainer,
-    };
-    if (item.type === "linear") {
-      const mark = new LinearMarker({ ...markerProps });
-      mark.render();
-      return;
-    }
-    const mark = new AlignMarker({ ...markerProps });
-    mark.render();
+    item.render();
   });
 
   if (this.cipt) {

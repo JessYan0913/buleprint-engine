@@ -48,7 +48,10 @@ Arrow.endArrow = {
   refY: 5,
 };
 
-const Marker = function Marker(props = {}) {
+export { Arrow };
+
+const BaseMarker = function BaseMarker(props = {}) {
+  this.type = props.type;
   this.name = props.name;
   this.start = props.start || {};
   this.end = props.end || {};
@@ -97,9 +100,9 @@ const AlignMarker = function AlignMarker(props = {}) {
   this.textSelection.remove();
 };
 
-AlignMarker.prototype = Object.create(Marker.prototype);
+AlignMarker.prototype = Object.create(BaseMarker.prototype);
 AlignMarker.prototype.constructor = AlignMarker;
-Object.setPrototypeOf(AlignMarker, Marker);
+Object.setPrototypeOf(AlignMarker, BaseMarker);
 
 AlignMarker.prototype.render = function render() {
   alignExtensionLine(this.container, this.start, this.end, this.height);
@@ -126,10 +129,14 @@ const LinearMarker = function LinearMarker(props = {}) {
   let { direction = LinearDirection.x, text } = props;
   direction = direction.toLowerCase();
   if (direction === LinearDirection.y && this.start.x === this.end.x) {
-    throw new Error(`[blueprint] from (${this.start.x}, ${this.start.y}) to (${this.end.x}, ${this.end.y}) cannot be the original size in the Y direction`);
+    throw new Error(
+      `[blueprint] from (${this.start.x}, ${this.start.y}) to (${this.end.x}, ${this.end.y}) cannot be the original size in the Y direction`
+    );
   }
   if (direction === LinearDirection.x && this.start.y === this.end.y) {
-    throw new Error(`[blueprint] from (${this.start.x}, ${this.start.y}) to (${this.end.x}, ${this.end.y}) cannot be the original size in the X direction`);
+    throw new Error(
+      `[blueprint] from (${this.start.x}, ${this.start.y}) to (${this.end.x}, ${this.end.y}) cannot be the original size in the X direction`
+    );
   }
 
   this.linearMarkerSlope = direction === LinearDirection.y ? 0 : Infinity;
@@ -155,9 +162,9 @@ const LinearMarker = function LinearMarker(props = {}) {
   this.direction = direction;
 };
 
-LinearMarker.prototype = Object.create(Marker.prototype);
+LinearMarker.prototype = Object.create(BaseMarker.prototype);
 LinearMarker.prototype.constructor = LinearMarker;
-Object.setPrototypeOf(LinearMarker, Marker);
+Object.setPrototypeOf(LinearMarker, BaseMarker);
 
 LinearMarker.prototype.render = function render() {
   const extensionPoint = linearExtensionLine(this.container, this.start, this.end, this.direction, this.height);
@@ -297,4 +304,20 @@ function linearExtensionLine(container, point1, point2, direction, height) {
   return extersionPoint[direction];
 }
 
-export { Arrow, AlignMarker, LinearMarker };
+const Marker = function(_blueprint, props = {}) {
+  assertTypes.blueprintAssert("_blueprint", _blueprint);
+
+  const Markers = {
+    align: AlignMarker,
+    linear: LinearMarker,
+  };
+
+  const type = props.type;
+  return new (Markers[type] || Markers.align)({
+    ...props,
+    scale: _blueprint.scale,
+    container: _blueprint.markerContainer,
+  });
+};
+
+export default Marker;
