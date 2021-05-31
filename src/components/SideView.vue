@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Blueprint from '../blueprint'
+import Blueprint, { fetchSvg } from '../blueprint'
 
 export default {
   name: 'SideView',
@@ -69,7 +69,9 @@ export default {
       supportDistances.reduce((pre, cur) => {
         supportParts.push({
           name: 'structure',
-          image: this.support.image,
+          image: () => {
+            return fetchSvg(`/img/${this.support.image}`)
+          },
           realWidth: this.support.realWidth,
           realHeight: this.totalHeight,
           transfer: {
@@ -81,7 +83,9 @@ export default {
       }, 0)
       const beamParts = this.beams.map((item, index) => ({
         name: 'beam',
-        image: this.beam.image,
+        image: () => {
+          return fetchSvg(`/img/${this.beam.image}`)
+        },
         realWidth: this.beam.realWidth,
         realHeight: this.beam.realHeight,
         transfer: {
@@ -93,11 +97,13 @@ export default {
         ...beamParts,
         {
           name: 'runwayTop',
-          image: this.runway.image,
+          image: () => {
+            return fetchSvg(`/img/${this.runway.image}`)
+          },
           realWidth: this.runway.realLength,
           realHeight: this.runway.realHeight,
           repeatX: {
-            space: 0,   
+            space: 0,
           },
           transfer: {
             x: 0,
@@ -119,7 +125,7 @@ export default {
             x: 0,
             y: this.totalHeight,
           },
-          height: -20
+          height: -20,
         },
         {
           name: 'runwayLengthMarker',
@@ -131,19 +137,19 @@ export default {
             x: this.totalLength,
             y: 200,
           },
-          height: -40
+          height: -40,
         },
         {
           name: 'runwayHeightMarker',
           start: {
             x: this.totalLength,
-            y: 200
+            y: 200,
           },
           end: {
             x: this.totalLength,
-            y: 200 + this.runway.realHeight
+            y: 200 + this.runway.realHeight,
           },
-          height: 20
+          height: 20,
         },
       ]
     },

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Blueprint from '../blueprint'
+import Blueprint, { fetchSvg } from '../blueprint'
 
 export default {
   name: 'VerticalView',
@@ -69,7 +69,9 @@ export default {
       supportDistances.reduce((pre, cur) => {
         supportParts.push({
           name: 'structure',
-          image: this.support.image,
+          image: () => {
+            return fetchSvg(`/img/${this.support.image}`)
+          },
           realWidth: this.support.realWidth,
           realHeight: this.supportSpan,
           transfer: {
@@ -81,7 +83,9 @@ export default {
       }, 0)
       const beamParts = this.beams.map((item, index) => ({
         name: 'beam',
-        image: this.beam.image,
+        image: () => {
+          return fetchSvg(`/img/${this.beam.image}`)
+        },
         realWidth: this.beam.realWidth,
         realHeight: item.length,
         transfer: {
@@ -93,7 +97,9 @@ export default {
         ...beamParts,
         {
           name: 'runwayTop',
-          image: this.runway.image,
+          image: () => {
+            return fetchSvg(`/img/${this.runway.image}`)
+          },
           realWidth: this.runway.realLength,
           realHeight: this.runway.realWidth,
           repeatX: {
@@ -106,7 +112,9 @@ export default {
         },
         {
           name: 'runwayBottom',
-          image: this.runway.image,
+          image: () => {
+            return fetchSvg(`/img/${this.runway.image}`)
+          },
           realWidth: this.runway.realLength,
           realHeight: this.runway.realWidth,
           repeatX: {
@@ -150,7 +158,7 @@ export default {
           },
           height: -40,
           type: 'linear',
-          direction: 'x'
+          direction: 'x',
         },
         {
           name: 'runwaySpanMarker',

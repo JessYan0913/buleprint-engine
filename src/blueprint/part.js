@@ -1,10 +1,4 @@
-import { svg } from "d3-fetch";
-import { assertTypes } from "./utils/assert";
-
-async function fetchSvg(image) {
-  const partSvg = await svg(image);
-  return partSvg.documentElement;
-}
+import assert, { assertTypes } from "./utils/assert";
 
 const Transfer = function Transfer(_scale, options) {
   this.$scale = _scale;
@@ -39,7 +33,7 @@ const Part = function Part(_blueprint, props = {}) {
   this.$blueprint = _blueprint;
 
   this.name = props.name;
-  this.image = `/img/${props.image}`;
+  this.image = props.image;
   this.realWidth = props.realWidth;
   this.realHeight = props.realHeight;
   this.xRepeatSpaces = props.xRepeatSpaces || [0];
@@ -65,7 +59,14 @@ Part.prototype.render = async function render() {
   const xPartNodes = [];
   const yPartNodes = [];
   for (let index = 0; index < this.xRepeatSpaces.length; index++) {
-    const image = await fetchSvg(this.image);
+    let image = this.image;
+    if (typeof image === "function") {
+      image = await image();
+    }
+    assert(
+      Object.getPrototypeOf(image).constructor.name === "SVGSVGElement",
+      "[blueprint] part's image must is SVGSVGElement"
+    );
     xPartNodes.push({
       space: this.xRepeatSpaces[index],
       partNode: image,
@@ -73,7 +74,14 @@ Part.prototype.render = async function render() {
   }
 
   for (let index = 0; index < this.yRepeatSpaces.length; index++) {
-    const image = await fetchSvg(this.image);
+    let image = this.image;
+    if (typeof image === "function") {
+      image = await image();
+    }
+    assert(
+      Object.getPrototypeOf(image).constructor.name === "SVGSVGElement",
+      "[blueprint] part's image must is SVGSVGElement"
+    );
     yPartNodes.push({
       space: this.yRepeatSpaces[index],
       partNode: image,

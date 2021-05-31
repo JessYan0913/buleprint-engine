@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Blueprint from '../blueprint'
+import Blueprint, { fetchSvg } from '../blueprint'
 
 export default {
   name: 'FrontView',
@@ -65,11 +65,13 @@ export default {
     parts() {
       const beamParts = this.beams.map((item) => ({
         name: 'beam',
-        image: this.beam.image,
+        image: () => {
+          return fetchSvg(`/img/${this.beam.image}`)
+        },
         realWidth: item.length,
         realHeight: this.beam.realHeight,
         repeatX: {
-          space: 20000
+          space: 20000,
         },
         transfer: {
           x: (this.totalWidth - item.length) / 2,
@@ -77,37 +79,43 @@ export default {
         },
       }))
       return [
-        // {
-        //   name: 'runwayLeft',
-        //   image: this.runway.image,
-        //   realWidth: this.runway.realWidth,
-        //   realHeight: this.runway.realHeight,
-        //   transfer: {
-        //     x: 450,
-        //     y: 200,
-        //   },
-        // },
-        // {
-        //   name: 'runwayRight',
-        //   image: this.runway.image,
-        //   realWidth: this.runway.realWidth,
-        //   realHeight: this.runway.realHeight,
-        //   transfer: {
-        //     x: this.totalWidth - 450 - this.runway.realWidth,
-        //     y: 200,
-        //   },
-        // },
-        // {
-        //   name: 'structure',
-        //   image: this.support.image,
-        //   realWidth: this.totalWidth,
-        //   realHeight: this.totalHeight,
-        //   transfer: {
-        //     x: 0,
-        //     y: 0,
-        //   },
-        // },
-        ...beamParts
+        {
+          name: 'runwayLeft',
+          image: () => {
+            return fetchSvg(`/img/${this.runway.image}`)
+          },
+          realWidth: this.runway.realWidth,
+          realHeight: this.runway.realHeight,
+          transfer: {
+            x: 450,
+            y: 200,
+          },
+        },
+        {
+          name: 'runwayRight',
+          image: () => {
+            return fetchSvg(`/img/${this.runway.image}`)
+          },
+          realWidth: this.runway.realWidth,
+          realHeight: this.runway.realHeight,
+          transfer: {
+            x: this.totalWidth - 450 - this.runway.realWidth,
+            y: 200,
+          },
+        },
+        {
+          name: 'structure',
+          image: () => {
+            return fetchSvg(`/img/${this.support.image}`)
+          },
+          realWidth: this.totalWidth,
+          realHeight: this.totalHeight,
+          transfer: {
+            x: 0,
+            y: 0,
+          },
+        },
+        ...beamParts,
       ]
     },
     markers() {
@@ -122,20 +130,20 @@ export default {
             x: 0,
             y: this.totalHeight,
           },
-          height: -20
+          height: -20,
         },
         {
           name: 'runwayCantileverMarker',
           start: {
             x: this.support.realWidth,
-            y: 200 + this.runway.realHeight
+            y: 200 + this.runway.realHeight,
           },
           end: {
             x: 450,
-            y: 200 + this.runway.realHeight
+            y: 200 + this.runway.realHeight,
           },
-          height: -60
-        }
+          height: -60,
+        },
       ]
     },
   },
