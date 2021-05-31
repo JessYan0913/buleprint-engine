@@ -67,15 +67,25 @@ const BaseMarker = function BaseMarker(props = {}) {
   this.start = new Point(this.realStart.x * this.scale, this.realStart.y * this.scale);
   this.end = new Point(this.realEnd.x * this.scale, this.realEnd.y * this.scale);
 
-  //尺寸线高度
   this.sizeLineHeight = this.height > 0 ? this.height - 4 : this.height + 4;
 
   this.sizeLineGroup = this.container.append("g");
-  this.textSelection = this.sizeLineGroup
+};
+
+BaseMarker.prototype.calculateTextSize = function calculateTextSize(text) {
+  const textSelection = this.sizeLineGroup
     .append("text")
     .attr("font-family", "Verdana")
     .attr("startOffset", "50%")
-    .attr("font-size", 12);
+    .attr("font-size", 12)
+    .text(text);
+
+  const textSelectionSize = {
+    width: textSelection.node().getBBox().width,
+    height: textSelection.node().getBBox().width,
+  };
+  textSelection.remove();
+  return textSelectionSize;
 };
 
 const AlignMarker = function AlignMarker(props = {}) {
@@ -89,15 +99,10 @@ const AlignMarker = function AlignMarker(props = {}) {
 
   this.sizeLineLength = this.start.distance(this.end);
 
-  this.textSelection.text(this.text);
-  this.textSelectionSize = {
-    width: this.textSelection.node().getBBox().width,
-    height: this.textSelection.node().getBBox().width,
-  };
+  const textSelectionSize = this.calculateTextSize(this.text);
 
   //是否采用小尺寸标注，如果文本长度 + 两个箭头的长度 + 10 < 尺寸线长度，则使用正常尺寸线标记；否则使用小尺寸线标注
-  this.isNormalSizeMarker = this.textSelectionSize.width + (arrowSize + 5) * 2 < this.sizeLineLength;
-  this.textSelection.remove();
+  this.isNormalSizeMarker = textSelectionSize.width + (arrowSize + 5) * 2 < this.sizeLineLength;
 };
 
 AlignMarker.prototype = Object.create(BaseMarker.prototype);
@@ -150,14 +155,9 @@ const LinearMarker = function LinearMarker(props = {}) {
       ? Math.abs(this.realStart.x - this.realEnd.x).toFixed(2)
       : Math.abs(this.realStart.y - this.realEnd.y).toFixed(2));
 
-  this.textSelection.text(this.text);
-  this.textSelectionSize = {
-    width: this.textSelection.node().getBBox().width,
-    height: this.textSelection.node().getBBox().width,
-  };
+  const textSelectionSize = this.calculateTextSize(this.text);
 
-  this.isNormalSizeMarker = this.textSelectionSize.width + (arrowSize + 5) * 2 < this.sizeLineLength;
-  this.textSelection.remove();
+  this.isNormalSizeMarker = textSelectionSize.width + (arrowSize + 5) * 2 < this.sizeLineLength;
 
   this.direction = direction;
 };
