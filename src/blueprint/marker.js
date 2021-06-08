@@ -50,20 +50,23 @@ Arrow.endArrow = {
 
 export { Arrow };
 
-const BaseMarker = function BaseMarker(props = {}) {
+const BaseMarker = function BaseMarker(_blueprint, props = {}) {
+
+  this.$blueprint = _blueprint;
+
   this.type = props.type;
   this.name = props.name;
   this.height = props.height || 20;
-  this.scale = props.scale;
-  this.container = props.container;
+  this.container = this.$blueprint.markerContainer;
 
   const _start = props.start || {};
   const _end = props.end || {};
   this.realStart = new Point(_start.x, _start.y);
   this.realEnd = new Point(_end.x, _end.y);
 
-  this.start = new Point(this.realStart.x * this.scale, this.realStart.y * this.scale);
-  this.end = new Point(this.realEnd.x * this.scale, this.realEnd.y * this.scale);
+  const _scale = this.$blueprint.scale;
+  this.start = new Point(this.realStart.x * _scale, this.realStart.y * _scale);
+  this.end = new Point(this.realEnd.x * _scale, this.realEnd.y * _scale);
 
   this.sizeLineHeight = this.height > 0 ? this.height - 4 : this.height + 4;
 
@@ -86,8 +89,8 @@ BaseMarker.prototype.calculateTextSize = function calculateTextSize(text) {
   return textSelectionSize;
 };
 
-const AlignMarker = function AlignMarker(props = {}) {
-  Object.getPrototypeOf(AlignMarker).call(this, props);
+const AlignMarker = function AlignMarker(_blueprint, props = {}) {
+  Object.getPrototypeOf(AlignMarker).call(this, _blueprint, props);
 
   const { text } = props;
 
@@ -126,19 +129,19 @@ const LinearDirection = {
   y: "y",
 };
 
-const LinearMarker = function LinearMarker(props = {}) {
-  Object.getPrototypeOf(LinearMarker).call(this, props);
+const LinearMarker = function LinearMarker(_blueprint, props = {}) {
+  Object.getPrototypeOf(LinearMarker).call(this, _blueprint, props);
 
   let { direction = LinearDirection.x, text } = props;
   direction = direction.toLowerCase();
   if (direction === LinearDirection.y && this.start.x === this.end.x) {
     throw new Error(
-      `[blueprint] from (${this.start.x}, ${this.start.y}) to (${this.end.x}, ${this.end.y}) cannot be the original size in the Y direction`
+      `from (${this.start.x}, ${this.start.y}) to (${this.end.x}, ${this.end.y}) cannot be the original size in the Y direction`
     );
   }
   if (direction === LinearDirection.x && this.start.y === this.end.y) {
     throw new Error(
-      `[blueprint] from (${this.start.x}, ${this.start.y}) to (${this.end.x}, ${this.end.y}) cannot be the original size in the X direction`
+      `from (${this.start.x}, ${this.start.y}) to (${this.end.x}, ${this.end.y}) cannot be the original size in the X direction`
     );
   }
 
@@ -311,11 +314,7 @@ const Marker = function(_blueprint, props = {}) {
   };
 
   const type = props.type;
-  return new (Markers[type] || Markers.align)({
-    ...props,
-    scale: _blueprint.scale,
-    container: _blueprint.markerContainer,
-  });
+  return new (Markers[type] || Markers.align)(_blueprint, props);
 };
 
 export default Marker;
