@@ -161,7 +161,7 @@ export default {
       realWidth: this.totalLength,
       realHeight: this.totalWidth,
       parts: this.parts,
-      // markers: this.markers,
+      markers: this.markers,
     })
 
     frontView.render()
