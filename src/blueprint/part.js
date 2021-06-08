@@ -38,13 +38,19 @@ const Part = function Part(_blueprint, props = {}) {
   this.realHeight = props.realHeight;
   this.xRepeatSpaces = props.xRepeatSpaces || [0];
   this.yRepeatSpaces = props.yRepeatSpaces || [];
-  this.transfer = new Transfer(this, props.transfer);
+  this.transfer = new Transfer(this.$blueprint.scale, props.transfer);
 };
 
 Part.prototype.drawingPart = function drawingPart(selection, transfer) {
   const part = this.$blueprint.partContainer
     .append("g")
-    .attr("transform", `translate(${transfer.screenX} ${transfer.screenY})`)
+    .attr("transform", () => {
+      const isNeedRotate = transfer.rotate && (typeof transfer.rotate === "number" || !isNaN(+transfer.rotate));
+      if (isNeedRotate) {
+        return `translate(${transfer.screenX} ${transfer.screenY})rotate(${transfer.rotate})`
+      }
+      return `translate(${transfer.screenX} ${transfer.screenY})`;
+    })
     .append(selection);
   if (!part.attr("viewBox")) {
     part.attr("viewBox", `0 0 ${part.attr("width").replace("px", "")} ${part.attr("height").replace("px", "")}`);
