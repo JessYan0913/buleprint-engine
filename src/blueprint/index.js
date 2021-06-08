@@ -90,10 +90,10 @@ Blueprint.prototype.clipSvg = function clipSvg() {
   this.svg.attr("width", maxContainerWidth).attr("height", maxContainerHeight);
 };
 
-Blueprint.prototype.render = function render() {
+Blueprint.prototype.render = async function render() {
   for (let index = 0; index < this.parts.length; index++) {
     const item = this.parts[index];
-    item.render();
+    await item.render();
   }
 
   this.markers.forEach((item) => {
