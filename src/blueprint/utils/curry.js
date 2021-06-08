@@ -1,9 +1,3 @@
-/**
- * 柯里化工具
- * @param {*} fn
- * @param {*} args
- * @returns
- */
 export default function curry(fn, args) {
   const length = fn.length;
 

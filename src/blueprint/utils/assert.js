@@ -22,7 +22,7 @@ export const assertTypes = {
   },
   numberAssert(key, value) {
     assert(
-      Object.prototype.toString.call(value) === "[object Number]",
+      Object.prototype.toString.call(value) === "[object Number]" || !isNaN(+value),
       makeAssertionMessage(key, value, "number")
     );
   },

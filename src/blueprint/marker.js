@@ -53,8 +53,6 @@ export { Arrow };
 const BaseMarker = function BaseMarker(props = {}) {
   this.type = props.type;
   this.name = props.name;
-  this.start = props.start || {};
-  this.end = props.end || {};
   this.height = props.height || 20;
   this.scale = props.scale;
   this.container = props.container;
