@@ -4,9 +4,9 @@ export default function curry(fn, args) {
   args = args || [];
 
   return function() {
-    let _args = args.slice(0),
-      arg,
-      i;
+    let _args = args.slice(0);
+    let arg;
+    let i;
 
     for (i = 0; i < arguments.length; i++) {
       arg = arguments[i];
