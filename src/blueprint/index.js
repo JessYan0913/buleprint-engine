@@ -84,8 +84,10 @@ Blueprint.prototype.clipSvg = function clipSvg() {
   const { width: partContainerWidth, height: partContainerHeight } = this.partContainer.node().getBBox();
   const { width: markerContainerWidth, height: markerContainerHeight } = this.markerContainer.node().getBBox();
 
-  const maxContainerWidth = Math.max(partContainerWidth, markerContainerWidth) + this.margin.right + 50;
-  const maxContainerHeight = Math.max(partContainerHeight, markerContainerHeight) + this.margin.bottom + 50;
+  const maxContainerWidth =
+    Math.max(partContainerWidth, markerContainerWidth) + Math.max(this.margin.right, this.margin.left) + 50;
+  const maxContainerHeight =
+    Math.max(partContainerHeight, markerContainerHeight) + Math.max(this.margin.bottom, this.margin.top) + 50;
 
   this.svg.attr("width", maxContainerWidth).attr("height", maxContainerHeight);
 };
