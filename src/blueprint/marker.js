@@ -6,7 +6,7 @@ let arrowSize = 16;
 
 const Arrow = function Arrow(_blueprint, props = {}) {
   assertTypes.blueprintAssert("_blueprint", _blueprint);
-  assert(_blueprint.markerContainer !== void 0, "[blueprint] markerContainer cannot is undefined");
+  assert(_blueprint.markerContainer !== void 0, " markerContainer cannot is undefined");
 
   this.$blueprint = _blueprint;
 
@@ -14,8 +14,8 @@ const Arrow = function Arrow(_blueprint, props = {}) {
   arrowSize = this.size;
   this.defs = this.$blueprint.markerContainer.append("defs");
 
-  this.defArrow.call(this, Arrow.startArrow);
-  this.defArrow.call(this, Arrow.endArrow);
+  this.defArrow(Arrow.startArrow);
+  this.defArrow(Arrow.endArrow);
 };
 
 Arrow.prototype.defArrow = function defArrow({ id, path, refX, refY }) {
@@ -51,7 +51,6 @@ Arrow.endArrow = {
 export { Arrow };
 
 const BaseMarker = function BaseMarker(_blueprint, props = {}) {
-
   this.$blueprint = _blueprint;
 
   this.type = props.type;
@@ -102,7 +101,7 @@ const AlignMarker = function AlignMarker(_blueprint, props = {}) {
 
   const textSelectionSize = this.calculateTextSize(this.text);
 
-  //是否采用小尺寸标注，如果文本长度 + 两个箭头的长度 + 10 < 尺寸线长度，则使用正常尺寸线标记；否则使用小尺寸线标注
+  // 是否采用小尺寸标注，如果文本长度 + 两个箭头的长度 + 10 < 尺寸线长度，则使用正常尺寸线标记；否则使用小尺寸线标注
   this.isNormalSizeMarker = textSelectionSize.width + (arrowSize + 5) * 2 < this.sizeLineLength;
 };
 
@@ -259,7 +258,7 @@ function drawingSmallSizeLine(container, point1, point2, slope, text) {
 }
 
 function alignExtensionLine(container, point1, point2, height) {
-  assert(container.constructor.name === select().constructor.name, "[blueprint] container must is D3js.Selection");
+  assert(container.constructor.name === select().constructor.name, " container must is D3js.Selection");
 
   assertTypes.pointAssert("point1", point1);
   assertTypes.pointAssert("point2", point2);

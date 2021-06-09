@@ -62,9 +62,9 @@ const Blueprint = function Blueprint(props = {}) {
 
   this.markerContainer = this.svg.append("g").attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
 
-  this.markers = props.markers.map((item) => new Marker(this, item))
+  this.markers = props.markers.map((item) => new Marker(this, item));
 
-  new Arrow(this);
+  this.arrow = new Arrow(this);
 };
 
 Blueprint.prototype.calculateSpaces = function calculateSpaces(space, transfer, length, totalLength) {

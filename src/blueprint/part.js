@@ -47,7 +47,7 @@ Part.prototype.drawingPart = function drawingPart(selection, transfer) {
     .attr("transform", () => {
       const isNeedRotate = transfer.rotate && (typeof transfer.rotate === "number" || !isNaN(+transfer.rotate));
       if (isNeedRotate) {
-        return `translate(${transfer.screenX} ${transfer.screenY})rotate(${transfer.rotate})`
+        return `translate(${transfer.screenX} ${transfer.screenY})rotate(${transfer.rotate})`;
       }
       return `translate(${transfer.screenX} ${transfer.screenY})`;
     })
@@ -69,10 +69,7 @@ Part.prototype.render = async function render() {
     if (typeof image === "function") {
       image = await image();
     }
-    assert(
-      Object.getPrototypeOf(image).constructor.name === "SVGSVGElement",
-      "[blueprint] part's image must is SVGSVGElement"
-    );
+    assert(Object.getPrototypeOf(image).constructor.name === "SVGSVGElement", " part's image must is SVGSVGElement");
     xPartNodes.push({
       space: this.xRepeatSpaces[index],
       partNode: image,
@@ -84,17 +81,14 @@ Part.prototype.render = async function render() {
     if (typeof image === "function") {
       image = await image();
     }
-    assert(
-      Object.getPrototypeOf(image).constructor.name === "SVGSVGElement",
-      "[blueprint] part's image must is SVGSVGElement"
-    );
+    assert(Object.getPrototypeOf(image).constructor.name === "SVGSVGElement", " part's image must is SVGSVGElement");
     yPartNodes.push({
       space: this.yRepeatSpaces[index],
       partNode: image,
     });
   }
 
-  //绘制x方向的该组件
+  // 绘制x方向的该组件
   xPartNodes.forEach(({ space, partNode }) => {
     const transfer = new Transfer(this.$blueprint.scale, {
       x: this.transfer.x + space,
@@ -104,7 +98,7 @@ Part.prototype.render = async function render() {
     this.drawingPart(() => partNode, transfer);
   });
 
-  //绘制y方向的该组件
+  // 绘制y方向的该组件
   yPartNodes.forEach(({ space, partNode }) => {
     const transfer = new Transfer(this.$blueprint.scale, {
       x: this.transfer.x,
