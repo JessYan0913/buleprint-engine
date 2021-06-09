@@ -14,7 +14,7 @@ const Margin = function Margin(options) {
   if (typeof options === "number") {
     this.top = this.left = this.bottom = this.right = options;
   } else {
-    if (typeof options === void 0) options = {};
+    if (options === void 0) options = {};
     this.top = options.top || 40;
     this.left = options.left || 40;
     this.bottom = options.bottom || 40;

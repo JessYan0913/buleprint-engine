@@ -5,7 +5,7 @@ const Transfer = function Transfer(_scale, options) {
   if (typeof options === "number") {
     this.x = this.y = options;
   } else {
-    if (typeof options === void 0) options = {};
+    if (options === void 0) options = {};
     this.x = options.x || 0;
     this.y = options.y || 0;
     this.rotate = options.rotate;
