@@ -159,6 +159,7 @@ export default {
           height: -40,
           type: 'linear',
           direction: 'x',
+          formatter: (text) => text + ' cm'
         },
         {
           name: 'runwaySpanMarker',

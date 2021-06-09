@@ -67,6 +67,11 @@ const BaseMarker = function BaseMarker(_blueprint, props = {}) {
   this.start = new Point(this.realStart.x * _scale, this.realStart.y * _scale);
   this.end = new Point(this.realEnd.x * _scale, this.realEnd.y * _scale);
 
+  if (props.formatter !== void 0) {
+    assertTypes.functionAssert("formatter", props.formatter);
+    this.formatter = props.formatter;
+  }
+
   this.sizeLineHeight = this.height > 0 ? this.height - 4 : this.height + 4;
 
   this.sizeLineGroup = this.container.append("g");
@@ -91,9 +96,11 @@ BaseMarker.prototype.calculateTextSize = function calculateTextSize(text) {
 const AlignMarker = function AlignMarker(_blueprint, props = {}) {
   Object.getPrototypeOf(AlignMarker).call(this, _blueprint, props);
 
-  const { text } = props;
+  this.text = this.realStart.distance(this.realEnd);
 
-  this.text = text || this.realStart.distance(this.realEnd).toFixed(2);
+  if (this.formatter) {
+    this.text = this.formatter(this.text, this.realStart, this.realEnd);
+  }
 
   this.alignMarkerSlope = this.end.linearSlope(this.start);
 
@@ -131,7 +138,7 @@ const LinearDirection = {
 const LinearMarker = function LinearMarker(_blueprint, props = {}) {
   Object.getPrototypeOf(LinearMarker).call(this, _blueprint, props);
 
-  let { direction = LinearDirection.x, text } = props;
+  let { direction = LinearDirection.x } = props;
   direction = direction.toLowerCase();
   if (direction === LinearDirection.y && this.start.x === this.end.x) {
     throw new Error(
@@ -150,10 +157,13 @@ const LinearMarker = function LinearMarker(_blueprint, props = {}) {
     direction === LinearDirection.y ? Math.abs(this.start.x - this.end.x) : Math.abs(this.start.y - this.end.y);
 
   this.text =
-    text ||
-    (direction === LinearDirection.y
-      ? Math.abs(this.realStart.x - this.realEnd.x).toFixed(2)
-      : Math.abs(this.realStart.y - this.realEnd.y).toFixed(2));
+    direction === LinearDirection.y
+      ? Math.abs(this.realStart.x - this.realEnd.x)
+      : Math.abs(this.realStart.y - this.realEnd.y);
+
+  if (this.formatter) {
+    this.text = this.formatter(this.text, this.realStart, this.realEnd);
+  }
 
   const textSelectionSize = this.calculateTextSize(this.text);
 
