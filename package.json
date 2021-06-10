@@ -10,19 +10,19 @@
     "url": "https://github.com/JessYan0913/buleprint-engine.git"
   },
   "dependencies": {
-    "core-js": "^2.6.5",
-    "d3": "^6.6.1",
-    "lodash": "^4.17.20"
+    "core-js": "2.6.5",
+    "d3": "6.6.1",
+    "lodash": "4.17.20"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "babel-polyfill": "^6.26.0",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
-    "node-sass": "^4.12.0",
-    "postcss-hexrgba": "^2.0.0",
-    "postcss-nested": "^4.1.2",
-    "postcss-responsive-type": "^1.0.0",
+    "babel-eslint": "10.0.1",
+    "babel-polyfill": "6.26.0",
+    "eslint": "5.16.0",
+    "eslint-plugin-vue": "5.0.0",
+    "node-sass": "4.12.0",
+    "postcss-hexrgba": "2.0.0",
+    "postcss-nested": "4.1.2",
+    "postcss-responsive-type": "1.0.0",
     "sass-loader": "8.0.0"
   },
   "eslintConfig": {
