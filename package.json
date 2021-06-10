@@ -1,5 +1,5 @@
 {
-  "name": "blueprint-engine",
+  "name": "entwurf",
   "version": "0.1.0",
   "private": false,
   "scripts": {
@@ -9,10 +9,14 @@
     "type": "git",
     "url": "https://github.com/JessYan0913/buleprint-engine.git"
   },
+  "author": "jessyan",
+  "license": "ISC",
   "dependencies": {
     "core-js": "2.6.5",
     "d3": "6.6.1",
-    "lodash": "4.17.20"
+    "lodash": "4.17.20",
+    "trim-newlines": ">=3.0.1",
+    "ssri": ">=6.0.2"
   },
   "devDependencies": {
     "babel-eslint": "10.0.1",
@@ -35,7 +39,9 @@
     ],
     "rules": {},
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "babel-eslint",
+      "ecmaVersion": 7,
+      "sourceType": "module"
     }
   },
   "postcss": {
