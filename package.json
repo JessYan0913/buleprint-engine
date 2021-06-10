@@ -1,11 +1,13 @@
 {
   "name": "blueprint-engine",
-  "version": "0.1",
-  "private": true,
+  "version": "0.1.0",
+  "private": false,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JessYan0913/buleprint-engine.git"
   },
   "dependencies": {
     "core-js": "^2.6.5",
