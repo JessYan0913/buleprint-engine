@@ -1,13 +1,13 @@
 {
   "name": "entwurf",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": false,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JessYan0913/buleprint-engine"
+    "url": "https://github.com/JessYan0913/entwurf"
   },
   "author": "jessyan",
   "license": "ISC",
