@@ -66,6 +66,7 @@ Part.prototype.render = async function render() {
   const yPartNodes = [];
   for (let index = 0; index < this.xRepeatSpaces.length; index++) {
     let image = this.image;
+    //TODO: 此处需要优化，同样的image，不需要重复的请求获取
     if (typeof image === "function") {
       image = await image();
     }
@@ -78,6 +79,7 @@ Part.prototype.render = async function render() {
 
   for (let index = 0; index < this.yRepeatSpaces.length; index++) {
     let image = this.image;
+     //TODO: 此处需要优化，同样的image，不需要重复的请求获取
     if (typeof image === "function") {
       image = await image();
     }
