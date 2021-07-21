@@ -41,7 +41,7 @@
     "rules": {},
     "parserOptions": {
       "parser": "babel-eslint",
-      "ecmaVersion": 7,
+      "ecmaVersion": 8,
       "sourceType": "module"
     }
   },
